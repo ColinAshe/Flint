@@ -28,27 +28,31 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.activities
-{
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
+package org.flintparticles.threed.activities;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.geom.Vector3DUtils;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The RotateEmitter activity rotates the emitter at a constant rate.
 	 */
-	public class RotateEmitter extends ActivityBase
-	{
-		private var _rotateSpeed:Number = 0;
-		private var _axis:Vector3D;
-		private var _angVel:Quaternion;
-		private var temp:Quaternion;
-		
-		/**
+class RotateEmitter extends ActivityBase
+{
+    public var axis(get, set) : Vector3D;
+    public var rotateSpeed(get, set) : Float;
+
+    private var _rotateSpeed : Float = 0;
+    private var _axis : Vector3D;
+    private var _angVel : Quaternion;
+    private var temp : Quaternion;
+    
+    /**
 		 * The constructor creates a RotateEmitter activity for use by 
 		 * an emitter. To add a RotateEmitter to an emitter, use the
 		 * emitter's addActvity method.
@@ -58,68 +62,70 @@ package org.flintparticles.threeD.activities
 		 * @para angularVelocity The angular velocity for the emitter in 
 		 * radians per second.
 		 */
-		public function RotateEmitter( axis:Vector3D = null, rotateSpeed:Number = 0 )
-		{
-			temp = new Quaternion();
-			_angVel = new Quaternion();
-			this.rotateSpeed = rotateSpeed;
-			if( axis )
-			{
-				this.axis = axis;
-			}
-		}
-		
-		
-		/**
+    public function new(axis : Vector3D = null, rotateSpeed : Float = 0)
+    {
+        super();
+        temp = new Quaternion();
+        _angVel = new Quaternion();
+        this.rotateSpeed = rotateSpeed;
+        if (axis != null) 
+        {
+            this.axis = axis;
+        }
+    }
+    
+    
+    /**
 		 * The axis for the target angular velocity.
 		 */
-		public function get axis():Vector3D
-		{
-			return _axis;
-		}
-		public function set axis( value:Vector3D ):void
-		{
-			_axis = Vector3DUtils.cloneUnit( value );
-			var temp:Vector3D = _axis.clone();
-			temp.scaleBy( _rotateSpeed );
-			setAngularVelocity( temp );
-		}
-		
-		/**
+    private function get_Axis() : Vector3D
+    {
+        return _axis;
+    }
+    private function set_Axis(value : Vector3D) : Vector3D
+    {
+        _axis = Vector3DUtils.cloneUnit(value);
+        var temp : Vector3D = _axis.clone();
+        temp.scaleBy(_rotateSpeed);
+        setAngularVelocity(temp);
+        return value;
+    }
+    
+    /**
 		 * The size of the target angular velocity.
 		 */
-		public function get rotateSpeed():Number
-		{
-			return _rotateSpeed;
-		}
-		public function set rotateSpeed( value:Number ):void
-		{
-			_rotateSpeed = value;
-			if( _axis )
-			{
-				var temp:Vector3D = _axis.clone();
-				temp.scaleBy( _rotateSpeed );
-				setAngularVelocity( temp );
-			}
-		}
-
-		private function setAngularVelocity( value:Vector3D ):void
-		{
-			_angVel.w = 0;
-			_angVel.x = value.x * 0.5;
-			_angVel.y = value.y * 0.5;
-			_angVel.z = value.z * 0.5;
-		}
-		
-		/**
+    private function get_RotateSpeed() : Float
+    {
+        return _rotateSpeed;
+    }
+    private function set_RotateSpeed(value : Float) : Float
+    {
+        _rotateSpeed = value;
+        if (_axis != null) 
+        {
+            var temp : Vector3D = _axis.clone();
+            temp.scaleBy(_rotateSpeed);
+            setAngularVelocity(temp);
+        }
+        return value;
+    }
+    
+    private function setAngularVelocity(value : Vector3D) : Void
+    {
+        _angVel.w = 0;
+        _angVel.x = value.x * 0.5;
+        _angVel.y = value.y * 0.5;
+        _angVel.z = value.z * 0.5;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var e:Emitter3D = Emitter3D( emitter );
-			temp.assign( _angVel );
-			temp.postMultiplyBy( e.rotation );
-			e.rotation.incrementBy( temp.scaleBy( time ) ).normalize();
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var e : Emitter3D = cast((emitter), Emitter3D);
+        temp.assign(_angVel);
+        temp.postMultiplyBy(e.rotation);
+        e.rotation.incrementBy(temp.scaleBy(time)).normalize();
+    }
 }

@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The Friction action applies friction to the particle to slow it down when it's moving.
 	 * The frictional force is constant, irrespective of how fast the particle is moving.
 	 * For forces proportional to the particle's velocity, use one of the drag effects -
@@ -45,11 +46,13 @@ package org.flintparticles.threeD.actions
 	 * @see QuadraticDrag
 	 */
 
-	public class Friction extends ActionBase
-	{
-		private var _friction:Number;
-		
-		/**
+class Friction extends ActionBase
+{
+    public var friction(get, set) : Float;
+
+    private var _friction : Float;
+    
+    /**
 		 * The constructor creates a Friction action for use by 
 		 * an emitter. To add a Friction to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -58,45 +61,47 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @param friction The amount of friction. A higher number produces a stronger frictional force.
 		 */
-		public function Friction( friction:Number = 0 )
-		{
-			this.friction = friction;
-		}
-		
-		/**
+    public function new(friction : Float = 0)
+    {
+        super();
+        this.friction = friction;
+    }
+    
+    /**
 		 * The amount of friction. A higher number produces a stronger frictional force.
 		 */
-		public function get friction():Number
-		{
-			return _friction;
-		}
-		public function set friction( value:Number ):void
-		{
-			_friction = value;
-		}
-		
-		/**
+    private function get_Friction() : Float
+    {
+        return _friction;
+    }
+    private function set_Friction(value : Float) : Float
+    {
+        _friction = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var len2:Number = p.velocity.lengthSquared;
-			if( len2 == 0 )
-			{
-				return;
-			}
-			var scale:Number = 1 - ( _friction * time ) / ( Math.sqrt( len2 ) * p.mass );
-			if( scale < 0 )
-			{
-				p.velocity.x = 0;
-				p.velocity.y = 0;
-				p.velocity.z = 0;
-			}
-			else
-			{
-				p.velocity.scaleBy( scale );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var len2 : Float = p.velocity.lengthSquared;
+        if (len2 == 0) 
+        {
+            return;
+        }
+        var scale : Float = 1 - (_friction * time) / (Math.sqrt(len2) * p.mass);
+        if (scale < 0) 
+        {
+            p.velocity.x = 0;
+            p.velocity.y = 0;
+            p.velocity.z = 0;
+        }
+        else 
+        {
+            p.velocity.scaleBy(scale);
+        }
+    }
 }
+

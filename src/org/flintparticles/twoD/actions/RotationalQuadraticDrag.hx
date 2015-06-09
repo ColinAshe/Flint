@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The RotationalQuadraticDrag action applies drag to the particle to slow it 
 	 * down when it's rotating. The drag force is proportional to the square of the 
 	 * angular velocity of the particle. For other types of rotational drag see the 
@@ -45,11 +46,13 @@ package org.flintparticles.twoD.actions
 	 * @see RotationalLinearDrag
 	 */
 
-	public class RotationalQuadraticDrag extends ActionBase
-	{
-		private var _drag:Number;
-		
-		/**
+class RotationalQuadraticDrag extends ActionBase
+{
+    public var drag(get, set) : Float;
+
+    private var _drag : Float;
+    
+    /**
 		 * The constructor creates a RotationalQuadraticDrag action for use by 
 		 * an emitter. To add a RotationalQuadraticDrag to all particles created 
 		 * by an emitter, use the emitter's addAction method.
@@ -59,24 +62,26 @@ package org.flintparticles.twoD.actions
 		 * @param drag The amount of drag. A higher number produces a stronger drag 
 		 * force.
 		 */
-		public function RotationalQuadraticDrag( drag:Number = 0 )
-		{
-			this.drag = drag;
-		}
-		
-		/**
+    public function new(drag : Float = 0)
+    {
+        super();
+        this.drag = drag;
+    }
+    
+    /**
 		 * The amount of drag. A higher number produces a stronger drag force.
 		 */
-		public function get drag():Number
-		{
-			return _drag;
-		}
-		public function set drag( value:Number ):void
-		{
-			_drag = value;
-		}
-		
-		/**
+    private function get_Drag() : Float
+    {
+        return _drag;
+    }
+    private function set_Drag(value : Float) : Float
+    {
+        _drag = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the rotational drag on the particle and applies it for the 
 		 * period of time indicated.
 		 * 
@@ -89,22 +94,22 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			if( p.angVelocity == 0 )
-			{
-				return;
-			}
-			var scale:Number = 1 - _drag * time * p.angVelocity / p.inertia;
-			if( scale < 0 )
-			{
-				p.angVelocity = 0;
-			}
-			else
-			{
-				p.angVelocity *= scale;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        if (p.angVelocity == 0) 
+        {
+            return;
+        }
+        var scale : Float = 1 - _drag * time * p.angVelocity / p.inertia;
+        if (scale < 0) 
+        {
+            p.angVelocity = 0;
+        }
+        else 
+        {
+            p.angVelocity *= scale;
+        }
+    }
 }
+

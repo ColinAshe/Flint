@@ -28,17 +28,19 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.twoD.zones.Zone2D;	
+package org.flintparticles.twod.actions;
 
-	[DefaultProperty("zone")]
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.twod.zones.Zone2D;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The DeathZone action marks the particle as dead if it is inside
 	 * a specific zone.
 	 * 
@@ -46,12 +48,15 @@ package org.flintparticles.twoD.actions
 	 * all movement has occured.
 	 */
 
-	public class DeathZone extends ActionBase
-	{
-		private var _zone:Zone2D;
-		private var _invertZone:Boolean;
-		
-		/**
+class DeathZone extends ActionBase
+{
+    public var zone(get, set) : Zone2D;
+    public var zoneIsSafe(get, set) : Bool;
+
+    private var _zone : Zone2D;
+    private var _invertZone : Bool;
+    
+    /**
 		 * The constructor creates a DeathZone action for use by an emitter. 
 		 * To add a DeathZone to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -65,39 +70,42 @@ package org.flintparticles.twoD.actions
 		 * and particles outside the zone are killed. If false, particles
 		 * inside the zone are killed.
 		 */
-		public function DeathZone( zone:Zone2D = null, zoneIsSafe:Boolean = false )
-		{
-			priority = -20;
-			this.zone = zone;
-			this.zoneIsSafe = zoneIsSafe;
-		}
-		
-		/**
+    public function new(zone : Zone2D = null, zoneIsSafe : Bool = false)
+    {
+        super();
+        priority = -20;
+        this.zone = zone;
+        this.zoneIsSafe = zoneIsSafe;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone2D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone2D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone2D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone2D) : Zone2D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * If true, the zone is treated as the safe area and particles ouside the 
 		 * zone are killed. If false, particles inside the zone are killed.
 		 */
-		public function get zoneIsSafe():Boolean
-		{
-			return _invertZone;
-		}
-		public function set zoneIsSafe( value:Boolean ):void
-		{
-			_invertZone = value;
-		}
-
-		/**
+    private function get_ZoneIsSafe() : Bool
+    {
+        return _invertZone;
+    }
+    private function set_ZoneIsSafe(value : Bool) : Bool
+    {
+        _invertZone = value;
+        return value;
+    }
+    
+    /**
 		 * Checks whether the particle is inside the zone and kills it if it is
 		 * in the DeathZone region.
 		 * 
@@ -110,24 +118,24 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			const p:Particle2D = Particle2D( particle );
-			const inside:Boolean = _zone.contains( p.x, p.y );
-			if ( _invertZone )
-			{
-				if( !inside )
-				{
-					p.isDead = true;
-				}
-			}
-			else
-			{
-				if ( inside )
-				{
-					p.isDead = true;
-				}
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var inside : Bool = _zone.contains(p.x, p.y);
+        if (_invertZone) 
+        {
+            if (!inside) 
+            {
+                p.isDead = true;
+            }
+        }
+        else 
+        {
+            if (inside) 
+            {
+                p.isDead = true;
+            }
+        }
+    }
 }
+

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FLINT PARTICLE SYSTEM
  * .....................
  * 
@@ -28,18 +28,20 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.renderers
-{
-	import flash.events.Event;	
-	
-	import org.flintparticles.common.emitters.Emitter;	
-	import org.flintparticles.common.events.EmitterEvent;	
-	import org.flintparticles.twoD.particles.Particle2D;
-	
-	import flash.display.Shape;
-	import flash.geom.Rectangle;	
+package org.flintparticles.twod.renderers;
 
-	/**
+import org.flintparticles.twod.renderers.BitmapRenderer;
+
+import flash.events.Event;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.events.EmitterEvent;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.display.Shape;
+import flash.geom.Rectangle;
+
+/**
 	 * The BitmapLineRenderer draws particles as continuous lines on a Bitmap display object.
 	 * This is useful for effects like hair and grass.
 	 * 
@@ -57,40 +59,40 @@ package org.flintparticles.twoD.renderers
 	 * @see org.flintparticles.twoD.renderers.FullStagePixelRenderer
 	 * @see org.flintparticles.common.emitters.Emitter#runAhead()
 	 */
-	public class BitmapLineRenderer extends BitmapRenderer
-	{
-		private var _shape:Shape;
-		/**
+class BitmapLineRenderer extends BitmapRenderer
+{
+    private var _shape : Shape;
+    /**
 		 * The constructor creates a PixelRenderer. After creation it should be
 		 * added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage and should be applied to an Emitter using the Emitter's
 		 * renderer property.
 		 */
-		public function BitmapLineRenderer( canvas:Rectangle, smoothing:Boolean = false )
-		{
-			super( canvas, smoothing );
-			_clearBetweenFrames = false;
-			_shape = new Shape();
-		}
-		
-		/**
+    public function new(canvas : Rectangle, smoothing : Bool = false)
+    {
+        super(canvas, smoothing);
+        _clearBetweenFrames = false;
+        _shape = new Shape();
+    }
+    
+    /**
 		 * Used internally to draw the particles.
 		 */
-		override protected function drawParticle( particle:Particle2D ):void
-		{
-			_shape.graphics.clear();
-			_shape.graphics.lineStyle( particle.scale, particle.color & 0xFFFFFF, particle.color >>> 24 );
-			_shape.graphics.moveTo( particle.previousX -_canvas.x, particle.previousY - _canvas.y );
-			_shape.graphics.lineTo( particle.x -_canvas.x, particle.y - _canvas.y );
-			_bitmapData.draw( _shape );
-		}
-		
-		override protected function emitterUpdated( ev:EmitterEvent ):void
-		{
-			renderParticles( Emitter( ev.target ).particlesArray );
-		}
-		override protected function updateParticles( ev:Event ):void
-		{
-		}
-	}
+    override private function drawParticle(particle : Particle2D) : Void
+    {
+        _shape.graphics.clear();
+        _shape.graphics.lineStyle(particle.scale, particle.color & 0xFFFFFF, particle.color >>> 24);
+        _shape.graphics.moveTo(particle.previousX - _canvas.x, particle.previousY - _canvas.y);
+        _shape.graphics.lineTo(particle.x - _canvas.x, particle.y - _canvas.y);
+        _bitmapData.draw(_shape);
+    }
+    
+    override private function emitterUpdated(ev : EmitterEvent) : Void
+    {
+        renderParticles(cast((ev.target), Emitter).particlesArray);
+    }
+    override private function updateParticles(ev : Event) : Void
+    {
+        
+    }
 }

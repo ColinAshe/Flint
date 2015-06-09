@@ -28,25 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.initializers;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The RotateVelocity Initializer sets the angular velocity of the particle.
 	 * It is usually combined with the Rotate action to rotate the particle
 	 * using this angular velocity.
 	 */
 
-	public class RotateVelocity extends InitializerBase
-	{
-		private var _max:Number;
-		private var _min:Number;
+class RotateVelocity extends InitializerBase
+{
+    public var minAngVelocity(get, set) : Float;
+    public var maxAngVelocity(get, set) : Float;
+    public var angVelocity(get, set) : Float;
 
-		/**
+    private var _max : Float;
+    private var _min : Float;
+    
+    /**
 		 * The constructor creates a RotateVelocity initializer for use by 
 		 * an emitter. To add a RotateVelocity to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -63,66 +68,70 @@ package org.flintparticles.twoD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function RotateVelocity( minAngVelocity:Number = 0, maxAngVelocity:Number = NaN )
-		{
-			this.minAngVelocity = minAngVelocity;
-			this.maxAngVelocity = maxAngVelocity;
-		}
-		
-		/**
+    public function new(minAngVelocity : Float = 0, maxAngVelocity : Float = NaN)
+    {
+        super();
+        this.minAngVelocity = minAngVelocity;
+        this.maxAngVelocity = maxAngVelocity;
+    }
+    
+    /**
 		 * The minimum angular velocity value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get minAngVelocity():Number
-		{
-			return _min;
-		}
-		public function set minAngVelocity( value:Number ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinAngVelocity() : Float
+    {
+        return _min;
+    }
+    private function set_MinAngVelocity(value : Float) : Float
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum angular velocity value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get maxAngVelocity():Number
-		{
-			return _max;
-		}
-		public function set maxAngVelocity( value:Number ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxAngVelocity() : Float
+    {
+        return _max;
+    }
+    private function set_MaxAngVelocity(value : Float) : Float
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minAngVelocity and maxAngVelocity.
 		 * When writing this sets both maxAngVelocity and minAngVelocity to the 
 		 * same angular velocity value.
 		 */
-		public function get angVelocity():Number
-		{
-			return _min == _max ? _min : ( _max + _min ) / 2;
-		}
-		public function set angVelocity( value:Number ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_AngVelocity() : Float
+    {
+        return _min == (_max != 0) ? _min : (_max + _min) / 2;
+    }
+    private function set_AngVelocity(value : Float) : Float
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			if( isNaN( _max ) )
-			{
-				p.angVelocity = _min;
-			}
-			else
-			{
-				p.angVelocity = _min + Math.random() * ( _max - _min );
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        if (Math.isNaN(_max)) 
+        {
+            p.angVelocity = _min;
+        }
+        else 
+        {
+            p.angVelocity = _min + Math.random() * (_max - _min);
+        }
+    }
 }
+

@@ -28,64 +28,66 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.zones 
-{
-	import flash.geom.Vector3D;
+package org.flintparticles.threed.zones;
 
-	/**
+import nme.errors.Error;
+import org.flintparticles.threed.zones.Zone3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The MutiZone zone defines a zone that combines other zones into one larger zone.
 	 */
 
-	public class MultiZone implements Zone3D 
-	{
-		private var _zones : Array;
-		private var _volumes : Array;
-		private var _totalVolume : Number;
-		
-		/**
+class MultiZone implements Zone3D
+{
+    private var _zones : Array<Dynamic>;
+    private var _volumes : Array<Dynamic>;
+    private var _totalVolume : Float;
+    
+    /**
 		 * The constructor defines a MultiZone zone.
 		 */
-		public function MultiZone()
-		{
-			_zones = new Array();
-			_volumes = new Array();
-			_totalVolume = 0;
-		}
-		
-		/**
+    public function new()
+    {
+        _zones = new Array<Dynamic>();
+        _volumes = new Array<Dynamic>();
+        _totalVolume = 0;
+    }
+    
+    /**
 		 * The addZone method is used to add a zone into this MultiZone object.
 		 * 
 		 * @param zone The zone you want to add.
 		 */
-		public function addZone( zone:Zone3D ):void
-		{
-			_zones.push( zone );
-			var volume:Number = zone.getVolume();
-			_volumes.push( volume );
-			_totalVolume += volume;
-		}
-		
-		/**
+    public function addZone(zone : Zone3D) : Void
+    {
+        _zones.push(zone);
+        var volume : Float = zone.getVolume();
+        _volumes.push(volume);
+        _totalVolume += volume;
+    }
+    
+    /**
 		 * The removeZone method is used to remove a zone from this MultiZone object.
 		 * 
 		 * @param zone The zone you want to remove.
 		 */
-		public function removeZone( zone:Zone3D ):void
-		{
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( _zones[i] == zone )
-				{
-					_totalVolume -= _volumes[i];
-					_volumes.splice( i, 1 );
-					_zones.splice( i, 1 );
-					return;
-				}
-			}
-		}
-
-		/**
+    public function removeZone(zone : Zone3D) : Void
+    {
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if (_zones[i] == zone) 
+            {
+                _totalVolume -= _volumes[i];
+                _volumes.splice(i, 1);
+                _zones.splice(i, 1);
+                return;
+            }
+        }
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -94,58 +96,56 @@ package org.flintparticles.threeD.zones
 		 * @param y The y coordinate of the location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		public function contains( p:Vector3D ):Boolean
-		{
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( Zone3D( _zones[i] ).contains( p ) )
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		/**
+    public function contains(p : Vector3D) : Bool
+    {
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if (cast((_zones[i]), Zone3D).contains(p)) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getLocation():Vector3D
-		{
-			var selectZone:Number = Math.random() * _totalVolume;
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( ( selectZone -= _volumes[i] ) <= 0 )
-				{
-					return Zone3D( _zones[i] ).getLocation();
-				}
-			}
-			if( _zones.length == 0 )
-			{
-				throw new Error( "Attempt to use a MultiZone object that contains no Zones" );
-			}
-			else
-			{
-				return Zone3D( _zones[0] ).getLocation();
-			}
-			return null;
-		}
-		
-		/**
+    public function getLocation() : Vector3D
+    {
+        var selectZone : Float = Math.random() * _totalVolume;
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if ((selectZone -= _volumes[i]) <= 0) 
+            {
+                return cast((_zones[i]), Zone3D).getLocation();
+            }
+        }
+        if (_zones.length == 0) 
+        {
+            throw new Error("Attempt to use a MultiZone object that contains no Zones");
+        }
+        else 
+        {
+            return cast((_zones[0]), Zone3D).getLocation();
+        }
+        return null;
+    }
+    
+    /**
 		 * The getArea method returns the size of the zone.
 		 * This method is used by the MultiZone class. Usually, 
 		 * it need not be called directly by the user.
 		 * 
 		 * @return The volume of all the zones combined.
 		 */
-		public function getVolume():Number
-		{
-			return _totalVolume;
-		}
-	}
+    public function getVolume() : Float
+    {
+        return _totalVolume;
+    }
 }
+

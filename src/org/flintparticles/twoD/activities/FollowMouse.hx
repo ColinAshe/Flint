@@ -28,24 +28,27 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.activities
-{
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.twoD.emitters.Emitter2D;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.twod.activities;
 
-	/**
+
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.twod.emitters.Emitter2D;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The FollowMouse activity causes the emitter to follow
 	 * the position of the mouse pointer. The effect is for
 	 * it to emit particles from the mouse pointer location.
 	 */
-	public class FollowMouse extends ActivityBase
-	{
-		private var _renderer:DisplayObject;
-		
-		/**
+class FollowMouse extends ActivityBase
+{
+    public var renderer(get, set) : DisplayObject;
+
+    private var _renderer : DisplayObject;
+    
+    /**
 		 * The constructor creates a FollowMouse activity for use by 
 		 * an emitter. To add a FollowMouse to an emitter, use the
 		 * emitter's addActvity method.
@@ -55,32 +58,34 @@ package org.flintparticles.twoD.activities
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addActivity()
 		 */
-		public function FollowMouse( renderer:DisplayObject = null )
-		{
-			this.renderer = renderer;
-		}
-		
-		/**
+    public function new(renderer : DisplayObject = null)
+    {
+        super();
+        this.renderer = renderer;
+    }
+    
+    /**
 		 * The display object whose coordinate system the mouse position is converted to. This
 		 * is usually the renderer for the particle system created by the emitter.
 		 */
-		public function get renderer():DisplayObject
-		{
-			return _renderer;
-		}
-		public function set renderer( value:DisplayObject ):void
-		{
-			_renderer = value;
-		}
-		
-		/**
+    private function get_Renderer() : DisplayObject
+    {
+        return _renderer;
+    }
+    private function set_Renderer(value : DisplayObject) : DisplayObject
+    {
+        _renderer = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var e:Emitter2D = Emitter2D( emitter );
-			e.x = _renderer.mouseX;
-			e.y = _renderer.mouseY;
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        e.x = _renderer.mouseX;
+        e.y = _renderer.mouseY;
+    }
 }
+

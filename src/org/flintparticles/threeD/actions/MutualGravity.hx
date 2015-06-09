@@ -28,37 +28,42 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The MutualGravity Action applies forces to attract each particle towards 
 	 * the other particles.
 	 * 
 	 * <p>This action has a priority of 10, so that it executes 
 	 * before other actions.</p>
 	 */
-	public class MutualGravity extends ActionBase
-	{
-		private var _power:Number;
-		private var _maxDistance:Number;
-		private var _maxDistanceSq:Number;
-		private var _epsilonSq:Number;
-		private var _gravityConst:Number = 1000; // scale sthe power
-		
-		/*
+class MutualGravity extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var maxDistance(get, set) : Float;
+    public var epsilon(get, set) : Float;
+
+    private var _power : Float;
+    private var _maxDistance : Float;
+    private var _maxDistanceSq : Float;
+    private var _epsilonSq : Float;
+    private var _gravityConst : Float = 1000;  // scale sthe power  
+    
+    /*
 		 * Temporary variables created as class members to avoid creating new objects all the time
 		 */
-		private var d:Vector3D;
-		
-		/**
+    private var d : Vector3D;
+    
+    /**
 		 * The constructor creates a MutualGravity action for use by 
 		 * an emitter. To add a MutualGravity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -71,111 +76,117 @@ package org.flintparticles.threeD.actions
 		 * since often only the closest other particles have a significant effect on the 
 		 * motion of a particle.
 		 */
-		public function MutualGravity( power:Number = 0, maxDistance:Number = 0, epsilon:Number = 1 )
-		{
-			priority = 10;
-			d = new Vector3D();
-			this.power = power;
-			this.maxDistance = maxDistance;
-			this.epsilon = epsilon;
-		}
-		
-		/**
+    public function new(power : Float = 0, maxDistance : Float = 0, epsilon : Float = 1)
+    {
+        super();
+        priority = 10;
+        d = new Vector3D();
+        this.power = power;
+        this.maxDistance = maxDistance;
+        this.epsilon = epsilon;
+    }
+    
+    /**
 		 * The strength of the gravity force.
 		 */
-		public function get power():Number
-		{
-			return _power / _gravityConst;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value * _gravityConst;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power / _gravityConst;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value * _gravityConst;
+        return value;
+    }
+    
+    /**
 		 * The maximum distance between particles for the gravitational
 		 * effect to be calculated. You can speed up this action by reducing the maxDistance
 		 * since often only the closest other particles have a significant effect on the 
 		 * motion of a particle.
 		 */
-		public function get maxDistance():Number
-		{
-			return _maxDistance;
-		}
-		public function set maxDistance( value:Number ):void
-		{
-			_maxDistance = value;
-			_maxDistanceSq = value * value;
-		}
-		
-		/**
+    private function get_MaxDistance() : Float
+    {
+        return _maxDistance;
+    }
+    private function set_MaxDistance(value : Float) : Float
+    {
+        _maxDistance = value;
+        _maxDistanceSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * The minimum distance for which the gravity force is calculated. 
 		 * Particles closer than this distance experience the gravity as it they were 
 		 * this distance away. This stops the gravity effect blowing up as distances get 
 		 * small.
 		 */
-		public function get epsilon():Number
-		{
-			return Math.sqrt( _epsilonSq );
-		}
-		public function set epsilon( value:Number ):void
-		{
-			_epsilonSq = value * value;
-		}
-
-		/**
+    private function get_Epsilon() : Float
+    {
+        return Math.sqrt(_epsilonSq);
+    }
+    private function set_Epsilon(value : Float) : Float
+    {
+        _epsilonSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter3D( emitter ).spaceSort = true;
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter3D).spaceSort = true;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			if( particle.mass == 0 )
-			{
-				return;
-			}
-			var p:Particle3D = Particle3D( particle );
-			var e:Emitter3D = Emitter3D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle3D;
-			var i:int;
-			var len:int = particles.length;
-			var factor:Number;
-			var distance:Number;
-			var distanceSq:Number;
-			for( i = p.sortID + 1; i < len; ++i )
-			{
-				other = particles[i];
-				if( other.mass == 0 )
-				{
-					continue;
-				}
-				if( ( d.x = other.position.x - p.position.x ) > _maxDistance ) break;
-				d.y = other.position.y - p.position.y;
-				if( d.y > _maxDistance || d.y < -_maxDistance ) continue;
-				d.z = other.position.z - p.position.z;
-				if( d.z > _maxDistance || d.z < -_maxDistance ) continue;
-				distanceSq = d.lengthSquared;
-				if( distanceSq <= _maxDistanceSq && distanceSq > 0 )
-				{
-					distance = Math.sqrt( distanceSq );
-					if( distanceSq < _epsilonSq )
-					{
-						distanceSq = _epsilonSq;
-					}
-					factor = ( _power * time ) / ( distanceSq * distance );
-					d.scaleBy( factor * other.mass );
-					p.velocity.incrementBy( d );
-					d.scaleBy( p.mass / other.mass );
-					other.velocity.decrementBy( d );
-				} 
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (particle.mass == 0) 
+        {
+            return;
+        }
+        var p : Particle3D = cast((particle), Particle3D);
+        var e : Emitter3D = cast((emitter), Emitter3D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle3D;
+        var i : Int;
+        var len : Int = particles.length;
+        var factor : Float;
+        var distance : Float;
+        var distanceSq : Float;
+        for (i in p.sortID + 1...len){
+            other = particles[i];
+            if (other.mass == 0) 
+            {
+                {++i;continue;
+                }
+            }
+            if ((d.x = other.position.x - p.position.x) > _maxDistance)                 break;
+            d.y = other.position.y - p.position.y;
+            if (d.y > _maxDistance || d.y < -_maxDistance)                 {++i;continue;
+            };
+            d.z = other.position.z - p.position.z;
+            if (d.z > _maxDistance || d.z < -_maxDistance)                 {++i;continue;
+            };
+            distanceSq = d.lengthSquared;
+            if (distanceSq <= _maxDistanceSq && distanceSq > 0) 
+            {
+                distance = Math.sqrt(distanceSq);
+                if (distanceSq < _epsilonSq) 
+                {
+                    distanceSq = _epsilonSq;
+                }
+                factor = (_power * time) / (distanceSq * distance);
+                d.scaleBy(factor * other.mass);
+                p.velocity.incrementBy(d);
+                d.scaleBy(p.mass / other.mass);
+                other.velocity.decrementBy(d);
+            }
+        }
+    }
 }
+

@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The Friction action applies friction to the particle to slow it down when 
 	 * it's moving. The frictional force is constant, irrespective of how fast 
 	 * the particle is moving. For forces proportional to the particle's velocity, 
@@ -45,11 +46,13 @@ package org.flintparticles.twoD.actions
 	 * @see QuadraticDrag
 	 */
 
-	public class Friction extends ActionBase
-	{
-		private var _friction:Number;
-		
-		/**
+class Friction extends ActionBase
+{
+    public var friction(get, set) : Float;
+
+    private var _friction : Float;
+    
+    /**
 		 * The constructor creates a Friction action for use by an emitter. 
 		 * To add a Friction to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -59,25 +62,27 @@ package org.flintparticles.twoD.actions
 		 * @param friction The amount of friction. A higher number produces a 
 		 * stronger frictional force.
 		 */
-		public function Friction( friction:Number = 0 )
-		{
-			this.friction = friction;
-		}
-		
-		/**
+    public function new(friction : Float = 0)
+    {
+        super();
+        this.friction = friction;
+    }
+    
+    /**
 		 * The amount of friction. A higher number produces a stronger frictional 
 		 * force.
 		 */
-		public function get friction():Number
-		{
-			return _friction;
-		}
-		public function set friction( value:Number ):void
-		{
-			_friction = value;
-		}
-		
-		/**
+    private function get_Friction() : Float
+    {
+        return _friction;
+    }
+    private function set_Friction(value : Float) : Float
+    {
+        _friction = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the effect of the friction on the particle over the
 		 * period of time indicated and adjusts the particle's velocity
 		 * accordingly.
@@ -91,25 +96,25 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var len2:Number = p.velX * p.velX + p.velY * p.velY;
-			if( len2 == 0 )
-			{
-				return;
-			}
-			var scale:Number = 1 - ( _friction * time ) / ( Math.sqrt( len2 ) * p.mass );
-			if( scale < 0 )
-			{
-				p.velX = 0;
-				p.velY = 0;
-			}
-			else
-			{
-				p.velX *= scale;
-				p.velY *= scale;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var len2 : Float = p.velX * p.velX + p.velY * p.velY;
+        if (len2 == 0) 
+        {
+            return;
+        }
+        var scale : Float = 1 - (_friction * time) / (Math.sqrt(len2) * p.mass);
+        if (scale < 0) 
+        {
+            p.velX = 0;
+            p.velY = 0;
+        }
+        else 
+        {
+            p.velX *= scale;
+            p.velY *= scale;
+        }
+    }
 }
+

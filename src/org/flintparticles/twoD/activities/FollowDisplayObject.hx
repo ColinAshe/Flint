@@ -28,27 +28,31 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.activities
-{
-	import org.flintparticles.common.utils.DisplayObjectUtils;
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.twoD.emitters.Emitter2D;
+package org.flintparticles.twod.activities;
 
-	import flash.display.DisplayObject;
-	import flash.geom.Point;
 
-	/**
+import org.flintparticles.common.utils.DisplayObjectUtils;
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.twod.emitters.Emitter2D;
+
+import flash.display.DisplayObject;
+import flash.geom.Point;
+
+/**
 	 * The FollowDisplayObject activity causes the emitter to follow
 	 * the position and rotation of a DisplayObject. The purpose is for the emitter
 	 * to emit particles from the location of the DisplayObject.
 	 */
-	public class FollowDisplayObject extends ActivityBase
-	{
-		private var _renderer:DisplayObject;
-		private var _displayObject:DisplayObject;
-		
-		/**
+class FollowDisplayObject extends ActivityBase
+{
+    public var renderer(get, set) : DisplayObject;
+    public var displayObject(get, set) : DisplayObject;
+
+    private var _renderer : DisplayObject;
+    private var _displayObject : DisplayObject;
+    
+    /**
 		 * The constructor creates a FollowDisplayObject activity for use by 
 		 * an emitter. To add a FollowDisplayObject to an emitter, use the
 		 * emitter's addActvity method.
@@ -58,52 +62,55 @@ package org.flintparticles.twoD.activities
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addActivity()
 		 */
-		public function FollowDisplayObject( displayObject:DisplayObject = null, renderer:DisplayObject = null )
-		{
-			this.displayObject = displayObject;
-			this.renderer = renderer;
-		}
-		
-		/**
+    public function new(displayObject : DisplayObject = null, renderer : DisplayObject = null)
+    {
+        super();
+        this.displayObject = displayObject;
+        this.renderer = renderer;
+    }
+    
+    /**
 		 * The DisplayObject whose coordinate system the DisplayObject's position is converted to. This
 		 * is usually the renderer for the particle system created by the emitter.
 		 */
-		public function get renderer():DisplayObject
-		{
-			return _renderer;
-		}
-		public function set renderer( value:DisplayObject ):void
-		{
-			_renderer = value;
-		}
-		
-		/**
+    private function get_Renderer() : DisplayObject
+    {
+        return _renderer;
+    }
+    private function set_Renderer(value : DisplayObject) : DisplayObject
+    {
+        _renderer = value;
+        return value;
+    }
+    
+    /**
 		 * The display object that the emitter follows.
 		 */
-		public function get displayObject():DisplayObject
-		{
-			return _displayObject;
-		}
-		public function set displayObject( value:DisplayObject ):void
-		{
-			_displayObject = value;
-		}
-		
-		/**
+    private function get_DisplayObject() : DisplayObject
+    {
+        return _displayObject;
+    }
+    private function set_DisplayObject(value : DisplayObject) : DisplayObject
+    {
+        _displayObject = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var e:Emitter2D = Emitter2D( emitter );
-			var p:Point = new Point( 0, 0 );
-			p = _displayObject.localToGlobal( p );
-			p = _renderer.globalToLocal( p );
-			var r:Number = 0;
-			r = DisplayObjectUtils.localToGlobalRotation( _displayObject, r );
-			r = DisplayObjectUtils.globalToLocalRotation( _renderer, r );
-			e.x = p.x;
-			e.y = p.y;
-			e.rotation = r;
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        var p : Point = new Point(0, 0);
+        p = _displayObject.localToGlobal(p);
+        p = _renderer.globalToLocal(p);
+        var r : Float = 0;
+        r = DisplayObjectUtils.localToGlobalRotation(_displayObject, r);
+        r = DisplayObjectUtils.globalToLocalRotation(_renderer, r);
+        e.x = p.x;
+        e.y = p.y;
+        e.rotation = r;
+    }
 }
+

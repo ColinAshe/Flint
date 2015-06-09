@@ -28,31 +28,38 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
+package org.flintparticles.common.counters;
 
-	import flash.utils.getTimer;
 
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+
+
+/**
 	 * The PerformanceAdjusted counter causes the emitter to emit particles 
 	 * continuously at a steady rate. It then adjusts this rate downwards if 
 	 * the frame rate is below a target frame rate, until it reaches an emission
 	 * rate at which the system can maintain the target frame rate.
 	 */
-	public class PerformanceAdjusted implements Counter
-	{
-		private var _timeToNext:Number;
-		private var _rateMin:Number;
-		private var _rateMax:Number;
-		private var _target:Number;
-		private var _rate:Number;
-		private var _times:Vector.<int>;
-		private var _timeToRateCheck:Number;
-		private var _running:Boolean;
-		
-		/**
+class PerformanceAdjusted implements Counter
+{
+    public var rateMin(get, set) : Float;
+    public var rateMax(get, set) : Float;
+    public var targetFrameRate(get, set) : Float;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _timeToNext : Float;
+    private var _rateMin : Float;
+    private var _rateMax : Float;
+    private var _target : Float;
+    private var _rate : Float;
+    private var _times : Array<Int>;
+    private var _timeToRateCheck : Float;
+    private var _running : Bool;
+    
+    /**
 		 * The constructor creates a PerformanceAdjusted counter for use by an 
 		 * emitter. To add a PerformanceAdjusted counter to an emitter use the 
 		 * emitter's counter property.
@@ -68,78 +75,81 @@ package org.flintparticles.common.counters
 		 * if your movie's frame rate is 30fps and you want to target this rate, 
 		 * set the target rate to 26fps.
 		 */
-		public function PerformanceAdjusted( rateMin:Number = 0, rateMax:Number = 0, targetFrameRate:Number = 24 )
-		{
-			_running = false;
-			_rateMin = rateMin;
-			_rate = _rateMax = rateMax;
-			_target = targetFrameRate;
-			_times = new Vector.<int>();
-			_timeToRateCheck = 0;
-		}
-		
-		/**
+    public function new(rateMin : Float = 0, rateMax : Float = 0, targetFrameRate : Float = 24)
+    {
+        _running = false;
+        _rateMin = rateMin;
+        _rate = _rateMax = rateMax;
+        _target = targetFrameRate;
+        _times = new Array<Int>();
+        _timeToRateCheck = 0;
+    }
+    
+    /**
 		 * The minimum number of particles to emit per second. The counter
 		 * will never drop the rate below this value.
 		 */
-		public function get rateMin():Number
-		{
-			return _rateMin;
-		}
-		public function set rateMin( value:Number ):void
-		{
-			_rateMin = value;
-			_timeToRateCheck = 0;
-		}
-		
-		/**
+    private function get_RateMin() : Float
+    {
+        return _rateMin;
+    }
+    private function set_RateMin(value : Float) : Float
+    {
+        _rateMin = value;
+        _timeToRateCheck = 0;
+        return value;
+    }
+    
+    /**
 		 * The maximum number of particles to emit per second. the counter
 		 * will start at this rate and adjust downwards if the frame rate is
 		 * below the target frame rate.
 		 */
-		public function get rateMax():Number
-		{
-			return _rateMax;
-		}
-		public function set rateMax( value:Number ):void
-		{
-			_rate = _rateMax = value;
-			_timeToRateCheck = 0;
-		}
-		
-		/**
+    private function get_RateMax() : Float
+    {
+        return _rateMax;
+    }
+    private function set_RateMax(value : Float) : Float
+    {
+        _rate = _rateMax = value;
+        _timeToRateCheck = 0;
+        return value;
+    }
+    
+    /**
 		 * The frame rate that the counter should aim for. Always set this 
 		 * slightly below your actual frame rate since flash will drop frames 
 		 * occasionally even when performance is fine. So, for example, if your 
 		 * movie's frame rate is 30fps and you want to target this rate, set the 
 		 * target rate to 26fps.
 		 */
-		public function get targetFrameRate():Number
-		{
-			return _target;
-		}
-		public function set targetFrameRate( value:Number ):void
-		{
-			_target = value;
-		}
-		
-		/**
+    private function get_TargetFrameRate() : Float
+    {
+        return _target;
+    }
+    private function set_TargetFrameRate(value : Float) : Float
+    {
+        _target = value;
+        return value;
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -151,19 +161,19 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_running = true;
-			newTimeToNext();
-			return 0;
-		}
-		
-		private function newTimeToNext():void
-		{
-			_timeToNext = 1 / _rate;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        newTimeToNext();
+        return 0;
+    }
+    
+    private function newTimeToNext() : Void
+    {
+        _timeToNext = 1 / _rate;
+    }
+    
+    /**
 		 * Uses the time and current rate to calculate how many particles the 
 		 * emitter should emit now. Also monitors the frame rate and adjusts
 		 * the emission rate down if the frame rate drops below the target.
@@ -177,62 +187,61 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			if( !_running )
-			{
-				return 0;
-			}
-			
-			if( _rate > _rateMin && ( _timeToRateCheck -= time ) <= 0 )
-			{
-				// adjust rate
-				var t:Number;
-				if ( _times.push( t = getTimer() ) > 9 )
-				{
-					var frameRate:Number = Math.round( 10000 / ( t - _times.shift() ) );
-					if( frameRate < _target )
-					{
-						_rate = Math.floor( ( _rate + _rateMin ) * 0.5 );
-						_times.length = 0;
-						
-						if( !( _timeToRateCheck = Particle( emitter.particlesArray[0] ).lifetime ) )
-						{
-							_timeToRateCheck = 2;
-						}
-					}
-				}
-			}
-			
-			var emitTime:Number = time;
-			var count:uint = 0;
-			emitTime -= _timeToNext;
-			while ( emitTime >= 0 )
-			{
-				++count;
-				newTimeToNext();
-				emitTime -= _timeToNext;
-			}
-			_timeToNext = -emitTime;
-			
-			return count;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running) 
+        {
+            return 0;
+        }
+        
+        if (_rate > _rateMin && (_timeToRateCheck -= time) <= 0) 
+        {
+            // adjust rate
+            var t : Float;
+            if (_times.push(t = Math.round(haxe.Timer.stamp() * 1000)) > 9) 
+            {
+                var frameRate : Float = Math.round(10000 / (t - _times.shift()));
+                if (frameRate < _target) 
+                {
+                    _rate = Math.floor((_rate + _rateMin) * 0.5);
+                    _times.length = 0;
+                    
+                    if (!(_timeToRateCheck = cast((emitter.particlesArray[0]), Particle).lifetime)) 
+                    {
+                        _timeToRateCheck = 2;
+                    }
+                }
+            }
+        }
+        
+        var emitTime : Float = time;
+        var count : Int = 0;
+        emitTime -= _timeToNext;
+        while (emitTime >= 0)
+        {
+            ++count;
+            newTimeToNext();
+            emitTime -= _timeToNext;
+        }
+        _timeToNext = -emitTime;
+        
+        return count;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles. For this counter
 		 * this will always be false.
 		 */
-		public function get complete():Boolean
-		{
-			return false;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return false;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
 }

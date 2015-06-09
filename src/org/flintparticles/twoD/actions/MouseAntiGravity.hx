@@ -28,11 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import flash.display.DisplayObject;		
+package org.flintparticles.twod.actions;
 
-	/**
+import org.flintparticles.twod.actions.MouseGravity;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The MouseAntiGravity action applies a force on the particle to push it 
 	 * away from the mouse. The force applied is inversely proportional to the 
 	 * square of the distance from the particle to the mouse. MouseAntiGravity is
@@ -41,9 +43,9 @@ package org.flintparticles.twoD.actions
 	 * @see MouseGravity
 	 */
 
-	public class MouseAntiGravity extends MouseGravity
-	{
-		/**
+class MouseAntiGravity extends MouseGravity
+{
+    /**
 		 * The constructor creates a MouseAntiGravity action for use by an emitter.
 		 * To add a MouseAntiGravity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -62,21 +64,22 @@ package org.flintparticles.twoD.actions
 		 * they were this distance away. This stops the gravity effect blowing up 
 		 * as distances get small.
 		 */
-		public function MouseAntiGravity( power:Number = 0, renderer:DisplayObject = null, epsilon:Number = 1 )
-		{
-			super( power, renderer, epsilon );
-		}
-		
-		/**
+    public function new(power : Float = 0, renderer : DisplayObject = null, epsilon : Float = 1)
+    {
+        super(power, renderer, epsilon);
+    }
+    
+    /**
 		 * The strength of the anti-gravity force.
 		 */
-		override public function get power():Number
-		{
-			return -super.power;
-		}
-		override public function set power( value:Number ):void
-		{
-			super.power = -value;
-		}
-	}
+    override private function get_Power() : Float
+    {
+        return -super.power;
+    }
+    override private function set_Power(value : Float) : Float
+    {
+        super.power = -value;
+        return value;
+    }
 }
+

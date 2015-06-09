@@ -28,155 +28,158 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.particles
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
-	import org.flintparticles.threeD.geom.Quaternion;
+package org.flintparticles.threed.particles;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+import org.flintparticles.threed.geom.Quaternion;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The Particle3D class extends the Particle class to include state properties 
 	 * that are relevant to particles in 3D space.
 	 */
-	public class Particle3D extends Particle
-	{
-		/**
+class Particle3D extends Particle
+{
+    public var inertia(get, never) : Float;
+
+    /**
 		 * The position of the particle (in the renderer's units).
 		 */
-		public var position:Vector3D;
-		/**
+    public var position : Vector3D;
+    /**
 		 * The velocity of the particle (in the renderer's units per second).
 		 */
-		public var velocity:Vector3D;
-		
-		/**
+    public var velocity : Vector3D;
+    
+    /**
 		 * The rotation of the particle, represented as a unit quaternion.
 		 */
-		public var rotation:Quaternion;
-		
-		/**
+    public var rotation : Quaternion;
+    
+    /**
 		 * The rate of rotation of the particle, represented as a vector in the direction of 
 		 * the axis of rotation and whose magnitude indicates the number of rotations per second.
 		 */
-		public var angVelocity:Vector3D;
-		
-		/**
+    public var angVelocity : Vector3D;
+    
+    /**
 		 * The axis in the particle's own coordinate space that
 		 * indicates the direction that the particle is facing.
 		 */
-		public var faceAxis:Vector3D;
-
-		private var _previousMass:Number;
-		private var _previousRadius:Number;
-		private var _inertia:Number;
-		
-		/**
+    public var faceAxis : Vector3D;
+    
+    private var _previousMass : Float;
+    private var _previousRadius : Float;
+    private var _inertia : Float;
+    
+    /**
 		 * The moment of inertia of the particle about its center point
 		 */
-		public function get inertia():Number
-		{
-			if( mass != _previousMass || collisionRadius != _previousRadius )
-			{
-				_inertia = mass * collisionRadius * collisionRadius * 0.4;
-				_previousMass = mass;
-				_previousRadius = collisionRadius;
-			}
-			return _inertia;
-		}
-
-		/**
+    private function get_Inertia() : Float
+    {
+        if (mass != _previousMass || collisionRadius != _previousRadius) 
+        {
+            _inertia = mass * collisionRadius * collisionRadius * 0.4;
+            _previousMass = mass;
+            _previousRadius = collisionRadius;
+        }
+        return _inertia;
+    }
+    
+    /**
 		 * The position of the particle in the emitter's x-axis spacial sorted array
 		 */
-		public var sortID:int = -1;
-		
-		/**
+    public var sortID : Int = -1;
+    
+    /**
 		 * Position vector projected into screen space. Used by renderers.
 		 */
-		public var projectedPosition:Vector3D;
-		
-		/**
+    public var projectedPosition : Vector3D;
+    
+    /**
 		 * z depth of particle in renderer's camera space
 		 */
-		public var zDepth:Number = 0;
-		
-		/**
+    public var zDepth : Float = 0;
+    
+    /**
 		 * Creates a Particle3D. Alternatively particles can be reused by using an
 		 * instance of the Particle3DCreator class to create them. Usually the 
 		 * emitter will create the particles and the user doesn't need to create 
 		 * them.
 		 */
-		public function Particle3D()
-		{
-			super();
-			position = new Vector3D( 0, 0, 0, 1 );
-			projectedPosition = new Vector3D( 0, 0, 0, 1 );
-			faceAxis = new Vector3D( 1, 0, 0 );
-			velocity = new Vector3D();
-			rotation = new Quaternion( 1, 0, 0, 0 );
-			angVelocity = new Vector3D();
-		}
-		
-		/**
+    public function new()
+    {
+        super();
+        position = new Vector3D(0, 0, 0, 1);
+        projectedPosition = new Vector3D(0, 0, 0, 1);
+        faceAxis = new Vector3D(1, 0, 0);
+        velocity = new Vector3D();
+        rotation = new Quaternion(1, 0, 0, 0);
+        angVelocity = new Vector3D();
+    }
+    
+    /**
 		 * Sets the particles properties to their default values.
 		 */
-		override public function initialize():void
-		{
-			super.initialize();
-			
-			position.x = 0;
-			position.y = 0;
-			position.z = 0;
-			
-			projectedPosition.x = 0;
-			projectedPosition.y = 0;
-			projectedPosition.z = 0;
-			
-			faceAxis.x = 1;
-			faceAxis.y = 0;
-			faceAxis.z = 0;
-			
-			velocity.x = 0;
-			velocity.y = 0;
-			velocity.z = 0;
-
-			rotation.w = 1;
-			rotation.x = 0;
-			rotation.y = 0;
-			rotation.z = 0;
-
-			angVelocity.x = 0;
-			angVelocity.y = 0;
-			angVelocity.z = 0;
-			
-			sortID = -1;
-			zDepth = 0;
-		}
-
-		/**
+    override public function initialize() : Void
+    {
+        super.initialize();
+        
+        position.x = 0;
+        position.y = 0;
+        position.z = 0;
+        
+        projectedPosition.x = 0;
+        projectedPosition.y = 0;
+        projectedPosition.z = 0;
+        
+        faceAxis.x = 1;
+        faceAxis.y = 0;
+        faceAxis.z = 0;
+        
+        velocity.x = 0;
+        velocity.y = 0;
+        velocity.z = 0;
+        
+        rotation.w = 1;
+        rotation.x = 0;
+        rotation.y = 0;
+        rotation.z = 0;
+        
+        angVelocity.x = 0;
+        angVelocity.y = 0;
+        angVelocity.z = 0;
+        
+        sortID = -1;
+        zDepth = 0;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function clone( factory:ParticleFactory = null ):Particle
-		{
-			var p:Particle3D;
-			if( factory )
-			{
-				p = factory.createParticle() as Particle3D;
-			}
-			else
-			{
-				p = new Particle3D();
-			}
-			cloneInto( p );
-			p.position = position.clone();
-			p.projectedPosition = projectedPosition.clone();
-			p.faceAxis = faceAxis.clone();
-			p.velocity = velocity.clone();
-			p.rotation = rotation.clone();
-			p.angVelocity = angVelocity.clone();
-			p.zDepth = zDepth;
-			return p;
-		}
-	}
+    override public function clone(factory : ParticleFactory = null) : Particle
+    {
+        var p : Particle3D;
+        if (factory != null) 
+        {
+            p = try cast(factory.createParticle(), Particle3D) catch(e:Dynamic) null;
+        }
+        else 
+        {
+            p = new Particle3D();
+        }
+        cloneInto(p);
+        p.position = position.clone();
+        p.projectedPosition = projectedPosition.clone();
+        p.faceAxis = faceAxis.clone();
+        p.velocity = velocity.clone();
+        p.rotation = rotation.clone();
+        p.angVelocity = angVelocity.clone();
+        p.zDepth = zDepth;
+        return p;
+    }
 }
+

@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.events.ParticleEvent;	
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;	
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.events.ParticleEvent;
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The BoundingBox action confines each particle to a box. The 
 	 * box is aligned to the coordinate system axes. The 
 	 * particle bounces back off the side of the box when it reaches 
@@ -47,17 +48,25 @@ package org.flintparticles.threeD.actions
 	 * all movement has occured.
 	 */
 
-	public class BoundingBox extends ActionBase
-	{
-		private var _minX : Number;
-		private var _maxX : Number;
-		private var _minY : Number;
-		private var _maxY : Number;
-		private var _minZ : Number;
-		private var _maxZ : Number;
-		private var _bounce : Number;
+class BoundingBox extends ActionBase
+{
+    public var minX(get, set) : Float;
+    public var maxX(get, set) : Float;
+    public var minY(get, set) : Float;
+    public var maxY(get, set) : Float;
+    public var minZ(get, set) : Float;
+    public var maxZ(get, set) : Float;
+    public var bounce(get, set) : Float;
 
-		/**
+    private var _minX : Float;
+    private var _maxX : Float;
+    private var _minY : Float;
+    private var _maxY : Float;
+    private var _minZ : Float;
+    private var _maxZ : Float;
+    private var _bounce : Float;
+    
+    /**
 		 * The constructor creates a BoundingBox action for use by an emitter. 
 		 * To add a BoundingBox to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -75,106 +84,114 @@ package org.flintparticles.threeD.actions
 		 * A value between 0 and 1 causes the particle to loose enegy in the collision. A value 
 		 * greater than 1 causes the particle to gain energy in the collision.
 		 */
-		public function BoundingBox( minX:Number = 0, maxX:Number = 0, minY:Number = 0, maxY:Number = 0, minZ:Number = 0, maxZ:Number = 0, bounce:Number = 1 )
-		{
-			priority = -20;
-			this.minX = minX;
-			this.maxX = maxX;
-			this.minY = minY;
-			this.maxY = maxY;
-			this.minZ = minZ;
-			this.maxZ = maxZ;
-			this.bounce = bounce;
-		}
-		
-		/**
+    public function new(minX : Float = 0, maxX : Float = 0, minY : Float = 0, maxY : Float = 0, minZ : Float = 0, maxZ : Float = 0, bounce : Float = 1)
+    {
+        super();
+        priority = -20;
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+        this.minZ = minZ;
+        this.maxZ = maxZ;
+        this.bounce = bounce;
+    }
+    
+    /**
 		 * The minX coordinate of the box.
 		 */
-		public function get minX():Number
-		{
-			return _minX;
-		}
-		public function set minX( value:Number ):void
-		{
-			_minX = value;
-		}
-
-		/**
+    private function get_MinX() : Float
+    {
+        return _minX;
+    }
+    private function set_MinX(value : Float) : Float
+    {
+        _minX = value;
+        return value;
+    }
+    
+    /**
 		 * The maxX coordinate of the box.
 		 */
-		public function get maxX():Number
-		{
-			return _maxX;
-		}
-		public function set maxX( value:Number ):void
-		{
-			_maxX = value;
-		}
-
-		/**
+    private function get_MaxX() : Float
+    {
+        return _maxX;
+    }
+    private function set_MaxX(value : Float) : Float
+    {
+        _maxX = value;
+        return value;
+    }
+    
+    /**
 		 * The minY coordinate of the box.
 		 */
-		public function get minY():Number
-		{
-			return _minY;
-		}
-		public function set minY( value:Number ):void
-		{
-			_minY = value;
-		}
-
-		/**
+    private function get_MinY() : Float
+    {
+        return _minY;
+    }
+    private function set_MinY(value : Float) : Float
+    {
+        _minY = value;
+        return value;
+    }
+    
+    /**
 		 * The maxY coordinate of the box.
 		 */
-		public function get maxY():Number
-		{
-			return _maxY;
-		}
-		public function set maxY( value:Number ):void
-		{
-			_maxY = value;
-		}
-
-		/**
+    private function get_MaxY() : Float
+    {
+        return _maxY;
+    }
+    private function set_MaxY(value : Float) : Float
+    {
+        _maxY = value;
+        return value;
+    }
+    
+    /**
 		 * The minZ coordinate of the box.
 		 */
-		public function get minZ():Number
-		{
-			return _minZ;
-		}
-		public function set minZ( value:Number ):void
-		{
-			_minZ = value;
-		}
-
-		/**
+    private function get_MinZ() : Float
+    {
+        return _minZ;
+    }
+    private function set_MinZ(value : Float) : Float
+    {
+        _minZ = value;
+        return value;
+    }
+    
+    /**
 		 * The maxZ coordinate of the box.
 		 */
-		public function get maxZ():Number
-		{
-			return _maxZ;
-		}
-		public function set maxZ( value:Number ):void
-		{
-			_maxZ = value;
-		}
-
-		/**
+    private function get_MaxZ() : Float
+    {
+        return _maxZ;
+    }
+    private function set_MaxZ(value : Float) : Float
+    {
+        _maxZ = value;
+        return value;
+    }
+    
+    /**
 		 * The coefficient of restitution when the particles bounce off the
 		 * sides of the box. A value of 1 gives a pure pure elastic collision, with no energy loss. 
 		 * A value between 0 and 1 causes the particle to loose enegy in the collision. A value 
 		 * greater than 1 causes the particle to gain energy in the collision.
 		 */
-		public function get bounce():Number
-		{
-			return _bounce;
-		}
-		public function set bounce( value:Number ):void
-		{
-			_bounce = value;
-		}
-
-		/**
+    private function get_Bounce() : Float
+    {
+        return _bounce;
+    }
+    private function set_Bounce(value : Float) : Float
+    {
+        _bounce = value;
+        return value;
+    }
+    
+    /**
 		 * Tests whether the particle is at the edge of the box and, if so,
 		 * adjusts its velocity to bounce in back towards the center of the
 		 * box.
@@ -188,65 +205,65 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var radius:Number = p.collisionRadius;
-			var position:Number;
-			if ( p.velocity.x > 0 && ( position = p.position.x + radius ) >= _maxX )
-			{
-				p.velocity.x = -p.velocity.x * _bounce;
-				p.position.x += 2 * ( _maxX - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			else if ( p.velocity.x < 0 && ( position = p.position.x - radius ) <= _minX )
-			{
-				p.velocity.x = -p.velocity.x * _bounce;
-				p.position.x += 2 * ( _minX - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			if ( p.velocity.y > 0 && ( position = p.position.y + radius ) >= _maxY )
-			{
-				p.velocity.y = -p.velocity.y * _bounce;
-				p.position.y += 2 * ( _maxY - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			else if ( p.velocity.y < 0 && ( position = p.position.y - radius ) <= _minY )
-			{
-				p.velocity.y = -p.velocity.y * _bounce;
-				p.position.y += 2 * ( _minY - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			if ( p.velocity.z > 0 && ( position = p.position.z + radius ) >= _maxZ )
-			{
-				p.velocity.z = -p.velocity.z * _bounce;
-				p.position.z += 2 * ( _maxZ - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			else if ( p.velocity.z < 0 && ( position = p.position.z - radius ) <= _minZ )
-			{
-				p.velocity.z = -p.velocity.z * _bounce;
-				p.position.z += 2 * ( _minZ - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var radius : Float = p.collisionRadius;
+        var position : Float;
+        if (p.velocity.x > 0 && (position = p.position.x + radius) >= _maxX) 
+        {
+            p.velocity.x = -p.velocity.x * _bounce;
+            p.position.x += 2 * (_maxX - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        else if (p.velocity.x < 0 && (position = p.position.x - radius) <= _minX) 
+        {
+            p.velocity.x = -p.velocity.x * _bounce;
+            p.position.x += 2 * (_minX - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        if (p.velocity.y > 0 && (position = p.position.y + radius) >= _maxY) 
+        {
+            p.velocity.y = -p.velocity.y * _bounce;
+            p.position.y += 2 * (_maxY - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        else if (p.velocity.y < 0 && (position = p.position.y - radius) <= _minY) 
+        {
+            p.velocity.y = -p.velocity.y * _bounce;
+            p.position.y += 2 * (_minY - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        if (p.velocity.z > 0 && (position = p.position.z + radius) >= _maxZ) 
+        {
+            p.velocity.z = -p.velocity.z * _bounce;
+            p.position.z += 2 * (_maxZ - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        else if (p.velocity.z < 0 && (position = p.position.z - radius) <= _minZ) 
+        {
+            p.velocity.z = -p.velocity.z * _bounce;
+            p.position.z += 2 * (_minZ - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+    }
 }
+

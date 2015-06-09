@@ -28,23 +28,25 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.renderers
-{
-	import org.flintparticles.common.renderers.SpriteRendererBase;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.renderers;
 
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
-	import flash.filters.BitmapFilter;
-	import flash.geom.Matrix;
-	import flash.geom.Matrix3D;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.geom.Vector3D;
+import org.flintparticles.threed.renderers.Camera;
 
-	/**
+import org.flintparticles.common.renderers.SpriteRendererBase;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.DisplayObject;
+import flash.filters.BitmapFilter;
+import flash.geom.Matrix;
+import flash.geom.Matrix3D;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import flash.geom.Vector3D;
+
+/**
 	 * The BitmapRenderer is a native Flint 3D renderer that draws particles
 	 * onto a single Bitmap display object. The particles are drawn face-on to the
 	 * camera, with perspective applied to position and scale the particles.
@@ -72,64 +74,72 @@ package org.flintparticles.threeD.renderers
 	 * display objects in its display list. To enable mouse events for the renderer
 	 * or its children set the mouseEnabled or mouseChildren properties to true.</p>
 	 */
-	public class BitmapRenderer extends SpriteRendererBase
-	{
-		protected static var ZERO_POINT:Point = new Point( 0, 0 );
+class BitmapRenderer extends SpriteRendererBase
+{
+    public var zSort(get, set) : Bool;
+    public var camera(get, set) : Camera;
+    public var preFilters(get, set) : Array<Dynamic>;
+    public var postFilters(get, set) : Array<Dynamic>;
+    public var canvas(get, set) : Rectangle;
+    public var smoothing(get, set) : Bool;
+    public var bitmapData(get, never) : BitmapData;
 
-		protected var toDegrees:Number = 180 / Math.PI;
-		
-		/**
+    private static var ZERO_POINT : Point = new Point(0, 0);
+    
+    private var toDegrees : Float = 180 / Math.PI;
+    
+    /**
 		 * @private
 		 */
-		protected var _zSort:Boolean;
-		/**
+    private var _zSort : Bool;
+    /**
 		 * @private
 		 */
-		protected var _camera:Camera;
-
-		/**
+    private var _camera : Camera;
+    
+    /**
 		 * @private
 		 */
-		protected var _bitmap:Bitmap;
-		
-		/**
+    private var _bitmap : Bitmap;
+    
+    /**
 		 * @private
 		 */
-		protected var _bitmapData:BitmapData;
-		/**
+    private var _bitmapData : BitmapData;
+    /**
 		 * @private
 		 */
-		protected var _preFilters:Array;
-		/**
+    private var _preFilters : Array<Dynamic>;
+    /**
 		 * @private
 		 */
-		protected var _postFilters:Array;
-		/**
+    private var _postFilters : Array<Dynamic>;
+    /**
 		 * @private
 		 */
-		protected var _colorMap:Array;
-		/**
+    private var _colorMap : Array<Dynamic>;
+    /**
 		 * @private
 		 */
-		protected var _smoothing:Boolean;
-		/**
+    private var _smoothing : Bool;
+    /**
 		 * @private
 		 */
-		protected var _canvas:Rectangle;
-		/**
+    private var _canvas : Rectangle;
+    /**
 		 * @private
 		 */
-		protected var _halfWidth:Number;
-		/**
+    private var _halfWidth : Float;
+    /**
 		 * @private
 		 */
-		protected var _halfHeight:Number;
-		/**
+    private var _halfHeight : Float;
+    /**
 		 * @private
 		 */
-		protected var _rawCameraTransform:Vector.<Number>;
-
-		/**
+    private var _rawCameraTransform : Array<Float>;
+    
+    /**
 		 * The constructor creates a BitmapRenderer. After creation it should be
 		 * added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage.
@@ -149,45 +159,47 @@ package org.flintparticles.threeD.renderers
 		 * 
 		 * @see org.flintparticles.twoD.emitters.Emitter#renderer
 		 */
-		public function BitmapRenderer( canvas:Rectangle, zSort:Boolean = true, smoothing:Boolean = false )
-		{
-			super();
-			_zSort = zSort;
-			_camera = new Camera();
-			mouseEnabled = false;
-			mouseChildren = false;
-			_smoothing = smoothing;
-			_preFilters = new Array();
-			_postFilters = new Array();
-			_canvas = canvas;
-			createBitmap();
-		}
-		
-		/**
+    public function new(canvas : Rectangle, zSort : Bool = true, smoothing : Bool = false)
+    {
+        super();
+        _zSort = zSort;
+        _camera = new Camera();
+        mouseEnabled = false;
+        mouseChildren = false;
+        _smoothing = smoothing;
+        _preFilters = new Array<Dynamic>();
+        _postFilters = new Array<Dynamic>();
+        _canvas = canvas;
+        createBitmap();
+    }
+    
+    /**
 		 * Indicates whether the particles should be sorted in distance order for display.
 		 */
-		public function get zSort():Boolean
-		{
-			return _zSort;
-		}
-		public function set zSort( value:Boolean ):void
-		{
-			_zSort = value;
-		}
-		
-		/**
+    private function get_ZSort() : Bool
+    {
+        return _zSort;
+    }
+    private function set_ZSort(value : Bool) : Bool
+    {
+        _zSort = value;
+        return value;
+    }
+    
+    /**
 		 * The camera controls the view for the renderer
 		 */
-		public function get camera():Camera
-		{
-			return _camera;
-		}
-		public function set camera( value:Camera ):void
-		{
-			_camera = value;
-		}
-		
-		/**
+    private function get_Camera() : Camera
+    {
+        return _camera;
+    }
+    private function set_Camera(value : Camera) : Camera
+    {
+        _camera = value;
+        return value;
+    }
+    
+    /**
 		 * The addFilter method adds a BitmapFilter to the renderer. These filters
 		 * are applied each frame, before or after the new particle positions are 
 		 * drawn, instead of wiping the display clear. Use of a blur filter, for 
@@ -198,163 +210,165 @@ package org.flintparticles.threeD.renderers
 		 * @param postRender If false, the filter is applied before drawing the particles
 		 * in their new positions. If true the filter is applied after drawing the particles.
 		 */
-		public function addFilter( filter:BitmapFilter, postRender:Boolean = false ):void
-		{
-			if( postRender )
-			{
-				_postFilters.push( filter );
-			}
-			else
-			{
-				_preFilters.push( filter );
-			}
-		}
-		
-		/**
+    public function addFilter(filter : BitmapFilter, postRender : Bool = false) : Void
+    {
+        if (postRender) 
+        {
+            _postFilters.push(filter);
+        }
+        else 
+        {
+            _preFilters.push(filter);
+        }
+    }
+    
+    /**
 		 * Removes a BitmapFilter object from the Renderer.
 		 * 
 		 * @param filter The BitmapFilter to remove
 		 * 
 		 * @see addFilter()
 		 */
-		public function removeFilter( filter:BitmapFilter ):void
-		{
-			for( var i:int = 0; i < _preFilters.length; ++i )
-			{
-				if( _preFilters[i] == filter )
-				{
-					_preFilters.splice( i, 1 );
-					return;
-				}
-			}
-			for( i = 0; i < _postFilters.length; ++i )
-			{
-				if( _postFilters[i] == filter )
-				{
-					_postFilters.splice( i, 1 );
-					return;
-				}
-			}
-		}
-		
-		/**
+    public function removeFilter(filter : BitmapFilter) : Void
+    {
+        for (i in 0..._preFilters.length){
+            if (_preFilters[i] == filter) 
+            {
+                _preFilters.splice(i, 1);
+                return;
+            }
+        }
+        for (i in 0..._postFilters.length){
+            if (_postFilters[i] == filter) 
+            {
+                _postFilters.splice(i, 1);
+                return;
+            }
+        }
+    }
+    
+    /**
 		 * The array of all filters being applied before rendering.
 		 */
-		public function get preFilters():Array
-		{
-			return _preFilters.slice();
-		}
-		public function set preFilters( value:Array ):void
-		{
-			var filter:BitmapFilter;
-			for each( filter in _preFilters )
-			{
-				removeFilter( filter );
-			}
-			for each( filter in value )
-			{
-				addFilter( filter, false );
-			}
-		}
-
-		/**
+    private function get_PreFilters() : Array<Dynamic>
+    {
+        return _preFilters.substring();
+    }
+    private function set_PreFilters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        var filter : BitmapFilter;
+        for (filter in _preFilters)
+        {
+            removeFilter(filter);
+        }
+        for (filter in value)
+        {
+            addFilter(filter, false);
+        }
+        return value;
+    }
+    
+    /**
 		 * The array of all filters being applied before rendering.
 		 */
-		public function get postFilters():Array
-		{
-			return _postFilters.slice();
-		}
-		public function set postFilters( value:Array ):void
-		{
-			var filter:BitmapFilter;
-			for each( filter in _postFilters )
-			{
-				removeFilter( filter );
-			}
-			for each( filter in value )
-			{
-				addFilter( filter, true );
-			}
-		}
-		
-		/**
+    private function get_PostFilters() : Array<Dynamic>
+    {
+        return _postFilters.substring();
+    }
+    private function set_PostFilters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        var filter : BitmapFilter;
+        for (filter in _postFilters)
+        {
+            removeFilter(filter);
+        }
+        for (filter in value)
+        {
+            addFilter(filter, true);
+        }
+        return value;
+    }
+    
+    /**
 		 * Sets a palette map for the renderer. See the paletteMap method in flash's BitmapData object for
 		 * information about how palette maps work. The palette map will be applied to the full canvas of the 
 		 * renderer after all filters have been applied and the particles have been drawn.
 		 */
-		public function setPaletteMap( red : Array = null , green : Array = null , blue : Array = null, alpha : Array = null ) : void
-		{
-			_colorMap = new Array(4);
-			_colorMap[0] = alpha;
-			_colorMap[1] = red;
-			_colorMap[2] = green;
-			_colorMap[3] = blue;
-		}
-		/**
+    public function setPaletteMap(red : Array<Dynamic> = null, green : Array<Dynamic> = null, blue : Array<Dynamic> = null, alpha : Array<Dynamic> = null) : Void
+    {
+        _colorMap = new Array<Dynamic>(4);
+        _colorMap[0] = alpha;
+        _colorMap[1] = red;
+        _colorMap[2] = green;
+        _colorMap[3] = blue;
+    }
+    /**
 		 * Clears any palette map that has been set for the renderer.
 		 */
-		public function clearPaletteMap() : void
-		{
-			_colorMap = null;
-		}
-		
-		/**
+    public function clearPaletteMap() : Void
+    {
+        _colorMap = null;
+    }
+    
+    /**
 		 * Create the Bitmap and BitmapData objects
 		 */
-		protected function createBitmap():void
-		{
-			if( !_canvas )
-			{
-				return;
-			}
-			if( _bitmap && _bitmapData )
-			{
-				_bitmapData.dispose();
-				_bitmapData = null;
-			}
-			if( _bitmap )
-			{
-				removeChild( _bitmap );
-				_bitmap = null;
-			}
-			_bitmap = new Bitmap( null, "auto", _smoothing);
-			_bitmapData = new BitmapData( Math.ceil( _canvas.width ), Math.ceil( _canvas.height ), true, 0 );
-			_bitmap.bitmapData = _bitmapData;
-			addChild( _bitmap );
-			_bitmap.x = _canvas.x;
-			_bitmap.y = _canvas.y;
-			_halfWidth = _bitmapData.width * 0.5;
-			_halfHeight = _bitmapData.height * 0.5;
-		}
-		
-		/**
+    private function createBitmap() : Void
+    {
+        if (_canvas == null) 
+        {
+            return;
+        }
+        if (_bitmap != null && _bitmapData != null) 
+        {
+            _bitmapData.dispose();
+            _bitmapData = null;
+        }
+        if (_bitmap != null) 
+        {
+            removeChild(_bitmap);
+            _bitmap = null;
+        }
+        _bitmap = new Bitmap(null, "auto", _smoothing);
+        _bitmapData = new BitmapData(Math.ceil(_canvas.width), Math.ceil(_canvas.height), true, 0);
+        _bitmap.bitmapData = _bitmapData;
+        addChild(_bitmap);
+        _bitmap.x = _canvas.x;
+        _bitmap.y = _canvas.y;
+        _halfWidth = _bitmapData.width * 0.5;
+        _halfHeight = _bitmapData.height * 0.5;
+    }
+    
+    /**
 		 * The canvas is the area within the renderer on which particles can be drawn.
 		 * Particles outside this area will not be drawn.
 		 */
-		public function get canvas():Rectangle
-		{
-			return _canvas;
-		}
-		public function set canvas( value:Rectangle ):void
-		{
-			_canvas = value;
-			createBitmap();
-		}
-
-		public function get smoothing():Boolean
-		{
-			return _smoothing;
-		}
-		public function set smoothing( value:Boolean ):void
-		{
-			_smoothing = value;
-			if( _bitmap )
-			{
-				_bitmap.smoothing = value;
-			}
-		}
-
-		/**
+    private function get_Canvas() : Rectangle
+    {
+        return _canvas;
+    }
+    private function set_Canvas(value : Rectangle) : Rectangle
+    {
+        _canvas = value;
+        createBitmap();
+        return value;
+    }
+    
+    private function get_Smoothing() : Bool
+    {
+        return _smoothing;
+    }
+    private function set_Smoothing(value : Bool) : Bool
+    {
+        _smoothing = value;
+        if (_bitmap != null) 
+        {
+            _bitmap.smoothing = value;
+        }
+        return value;
+    }
+    
+    /**
 		 * This method draws the particles in the bitmap image, positioning and
 		 * scaling them according to their positions relative to the camera 
 		 * viewport.
@@ -364,71 +378,67 @@ package org.flintparticles.threeD.renderers
 		 * 
 		 * @param particles The particles to be rendered.
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			if( !_bitmap )
-			{
-				return;
-			}
-			_rawCameraTransform = _camera.transform.rawData;
-			var i:int;
-			var len:int;
-			var particle:Particle3D;
-			_bitmapData.lock();
-			len = _preFilters.length;
-			for( i = 0; i < len; ++i )
-			{
-				_bitmapData.applyFilter( _bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _preFilters[i] );
-			}
-			if( len == 0 && _postFilters.length == 0 )
-			{
-				_bitmapData.fillRect( _bitmapData.rect, 0 );
-			}
-			len = particles.length;
-			for( i = 0; i < len; ++i )
-			{
-				particle = Particle3D( particles[i] );
-				var p:Vector3D = particle.position;
-				var pp:Vector3D = particle.projectedPosition;
-				
-				//The following is very much more efficient than
-				//particle.projectedPosition = camera.transform.transformVector( particle.position );
-				pp.x = _rawCameraTransform[0] * p.x + _rawCameraTransform[4] * p.y + _rawCameraTransform[8] * p.z + _rawCameraTransform[12] * p.w;
-				pp.y = _rawCameraTransform[1] * p.x + _rawCameraTransform[5] * p.y + _rawCameraTransform[9] * p.z + _rawCameraTransform[13] * p.w;
-				pp.z = _rawCameraTransform[2] * p.x + _rawCameraTransform[6] * p.y + _rawCameraTransform[10] * p.z + _rawCameraTransform[14] * p.w;
-				pp.w = _rawCameraTransform[3] * p.x + _rawCameraTransform[7] * p.y + _rawCameraTransform[11] * p.z + _rawCameraTransform[15] * p.w;
-
-				particle.zDepth = pp.z;
-			}
-			if( _zSort )
-			{
-				particles.sort( sortOnZ );
-			}
-			for( i = 0; i < len; ++i )
-			{
-				drawParticle( Particle3D( particles[i] ) );
-			}
-			len = _postFilters.length;
-			for( i = 0; i < len; ++i )
-			{
-				_bitmapData.applyFilter( _bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _postFilters[i] );
-			}
-			if( _colorMap )
-			{
-				_bitmapData.paletteMap( _bitmapData, _bitmapData.rect, ZERO_POINT, _colorMap[1] , _colorMap[2] , _colorMap[3] , _colorMap[0] );
-			}
-			_bitmapData.unlock();
-		}
-		
-		/**
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        if (_bitmap == null) 
+        {
+            return;
+        }
+        _rawCameraTransform = _camera.transform.rawData;
+        var i : Int;
+        var len : Int;
+        var particle : Particle3D;
+        _bitmapData.lock();
+        len = _preFilters.length;
+        for (i in 0...len){
+            _bitmapData.applyFilter(_bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _preFilters[i]);
+        }
+        if (len == 0 && _postFilters.length == 0) 
+        {
+            _bitmapData.fillRect(_bitmapData.rect, 0);
+        }
+        len = particles.length;
+        for (i in 0...len){
+            particle = cast((particles[i]), Particle3D);
+            var p : Vector3D = particle.position;
+            var pp : Vector3D = particle.projectedPosition;
+            
+            //The following is very much more efficient than
+            //particle.projectedPosition = camera.transform.transformVector( particle.position );
+            pp.x = _rawCameraTransform[0] * p.x + _rawCameraTransform[4] * p.y + _rawCameraTransform[8] * p.z + _rawCameraTransform[12] * p.w;
+            pp.y = _rawCameraTransform[1] * p.x + _rawCameraTransform[5] * p.y + _rawCameraTransform[9] * p.z + _rawCameraTransform[13] * p.w;
+            pp.z = _rawCameraTransform[2] * p.x + _rawCameraTransform[6] * p.y + _rawCameraTransform[10] * p.z + _rawCameraTransform[14] * p.w;
+            pp.w = _rawCameraTransform[3] * p.x + _rawCameraTransform[7] * p.y + _rawCameraTransform[11] * p.z + _rawCameraTransform[15] * p.w;
+            
+            particle.zDepth = pp.z;
+        }
+        if (_zSort) 
+        {
+            particles.sort(sortOnZ);
+        }
+        for (i in 0...len){
+            drawParticle(cast((particles[i]), Particle3D));
+        }
+        len = _postFilters.length;
+        for (i in 0...len){
+            _bitmapData.applyFilter(_bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _postFilters[i]);
+        }
+        if (_colorMap != null) 
+        {
+            _bitmapData.paletteMap(_bitmapData, _bitmapData.rect, ZERO_POINT, _colorMap[1], _colorMap[2], _colorMap[3], _colorMap[0]);
+        }
+        _bitmapData.unlock();
+    }
+    
+    /**
 		 * @private
 		 */
-		protected function sortOnZ( p1:Particle3D, p2:Particle3D ):int
-		{
-			return p2.zDepth - p1.zDepth;
-		}
-
-		/**
+    private function sortOnZ(p1 : Particle3D, p2 : Particle3D) : Int
+    {
+        return p2.zDepth - p1.zDepth;
+    }
+    
+    /**
 		 * Used internally here and in derived classes to render a single particle.
 		 * Each particle is positioned and perspective scaling applied here.
 		 * 
@@ -437,62 +447,61 @@ package org.flintparticles.threeD.renderers
 		 * 
 		 * @param particle The particle to draw on the bitmap.
 		 */
-		protected function drawParticle( particle:Particle3D ):void
-		{
-			var pos:Vector3D = particle.projectedPosition;
-			if( pos.z < _camera.nearPlaneDistance || pos.z > _camera.farPlaneDistance )
-			{
-				return;
-			}
-			var scale:Number = particle.scale * _camera.projectionDistance / pos.z;
-			pos.project();
-			
-			var rot:Number = 0;
-			var f:Vector3D;
-			if( particle.rotation.equals( Quaternion.IDENTITY ) )
-			{
-				f = particle.faceAxis;
-			}
-			else
-			{
-				var m:Matrix3D = particle.rotation.toMatrixTransformation();
-				f = m.transformVector( particle.faceAxis );
-			}
-			var facing:Vector3D = new Vector3D();
-			
-			// The following is very much more efficient than
-			// facing = camera.transform.transformVector( f );
-			facing.x = _rawCameraTransform[0] * f.x + _rawCameraTransform[4] * f.y + _rawCameraTransform[8] * f.z + _rawCameraTransform[12] * f.w;
-			facing.y = _rawCameraTransform[1] * f.x + _rawCameraTransform[5] * f.y + _rawCameraTransform[9] * f.z + _rawCameraTransform[13] * f.w;
-			facing.z = _rawCameraTransform[2] * f.x + _rawCameraTransform[6] * f.y + _rawCameraTransform[10] * f.z + _rawCameraTransform[14] * f.w;
-			facing.w = _rawCameraTransform[3] * f.x + _rawCameraTransform[7] * f.y + _rawCameraTransform[11] * f.z + _rawCameraTransform[15] * f.w;
-			
-			if( facing.x != 0 || facing.y != 0 )
-			{
-				rot = Math.atan2( facing.y, facing.x );
-			}
-
-			var matrix:Matrix;
-			if( rot )
-			{
-				var cos:Number = scale * Math.cos( rot );
-				var sin:Number = scale * Math.sin( rot );
-				matrix = new Matrix( cos, sin, -sin, cos, pos.x + _halfWidth, pos.y + _halfHeight );
-			}
-			else
-			{
-				matrix = new Matrix( scale, 0, 0, scale, pos.x + _halfWidth, pos.y + _halfHeight );
-			}
-
-			_bitmapData.draw( particle.image, matrix, particle.colorTransform, DisplayObject( particle.image ).blendMode, null, _smoothing );
-		}
-		
-		/**
+    private function drawParticle(particle : Particle3D) : Void
+    {
+        var pos : Vector3D = particle.projectedPosition;
+        if (pos.z < _camera.nearPlaneDistance || pos.z > _camera.farPlaneDistance) 
+        {
+            return;
+        }
+        var scale : Float = particle.scale * _camera.projectionDistance / pos.z;
+        pos.project();
+        
+        var rot : Float = 0;
+        var f : Vector3D;
+        if (particle.rotation.equals(Quaternion.IDENTITY)) 
+        {
+            f = particle.faceAxis;
+        }
+        else 
+        {
+            var m : Matrix3D = particle.rotation.toMatrixTransformation();
+            f = m.transformVector(particle.faceAxis);
+        }
+        var facing : Vector3D = new Vector3D();
+        
+        // The following is very much more efficient than
+        // facing = camera.transform.transformVector( f );
+        facing.x = _rawCameraTransform[0] * f.x + _rawCameraTransform[4] * f.y + _rawCameraTransform[8] * f.z + _rawCameraTransform[12] * f.w;
+        facing.y = _rawCameraTransform[1] * f.x + _rawCameraTransform[5] * f.y + _rawCameraTransform[9] * f.z + _rawCameraTransform[13] * f.w;
+        facing.z = _rawCameraTransform[2] * f.x + _rawCameraTransform[6] * f.y + _rawCameraTransform[10] * f.z + _rawCameraTransform[14] * f.w;
+        facing.w = _rawCameraTransform[3] * f.x + _rawCameraTransform[7] * f.y + _rawCameraTransform[11] * f.z + _rawCameraTransform[15] * f.w;
+        
+        if (facing.x != 0 || facing.y != 0) 
+        {
+            rot = Math.atan2(facing.y, facing.x);
+        }
+        
+        var matrix : Matrix;
+        if (rot != 0) 
+        {
+            var cos : Float = scale * Math.cos(rot);
+            var sin : Float = scale * Math.sin(rot);
+            matrix = new Matrix(cos, sin, -sin, cos, pos.x + _halfWidth, pos.y + _halfHeight);
+        }
+        else 
+        {
+            matrix = new Matrix(scale, 0, 0, scale, pos.x + _halfWidth, pos.y + _halfHeight);
+        }
+        
+        _bitmapData.draw(particle.image, matrix, particle.colorTransform, cast((particle.image), DisplayObject).blendMode, null, _smoothing);
+    }
+    
+    /**
 		 * The bitmap data of the renderer.
 		 */
-		public function get bitmapData() : BitmapData
-		{
-			return _bitmapData;
-		}
-	}
+    private function get_BitmapData() : BitmapData
+    {
+        return _bitmapData;
+    }
 }

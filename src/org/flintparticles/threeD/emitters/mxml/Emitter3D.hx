@@ -27,59 +27,63 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.emitters.mxml 
-{
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	
-	import mx.core.IMXMLObject;	
+package org.flintparticles.threed.emitters.mxml;
 
-	/**
+
+import org.flintparticles.threed.emitters.Emitter3D;
+
+import mx.core.IMXMLObject;
+
+/**
 	 * @inheritDoc
 	 * 
 	 * <p>This version of the emitter exposes additional properties to MXML and is intended for use 
 	 * in MXML documents.</p>
 	 */
-	public class Emitter3D extends org.flintparticles.threeD.emitters.Emitter3D implements IMXMLObject 
-	{
-		public function Emitter3D()
-		{
-			super( );
-		}
-		
-		/**
+class Emitter3D extends org.flintparticles.threed.emitters.Emitter3D implements IMXMLObject
+{
+    public function new()
+    {
+        super();
+    }
+    
+    /**
 		 * Makes the emitter skip forwards a period of time at teh start. Use this property
 		 * when you want the emitter to look like it's been running for a while.
 		 */
-		[Inspectable]
-		public var runAheadTime:Number = 0;
-		
-		/**
+    @:meta(Inspectable())
+
+    public var runAheadTime : Float = 0;
+    
+    /**
 		 * The frame=-rate to use when running the emitter ahead at the start.
 		 * 
 		 * @see #runAheadTime
 		 */
-		[Inspectable]
-		public var runAheadFrameRate:Number = 10;
-		
-		/**
+    @:meta(Inspectable())
+
+    public var runAheadFrameRate : Float = 10;
+    
+    /**
 		 * Indicates if the emitter should start automatically or wait for the start methood to be called.
 		 */
-		[Inspectable]
-		public var autoStart:Boolean = true;
+    @:meta(Inspectable())
 
-		/**
+    public var autoStart : Bool = true;
+    
+    /**
 		 * @private
-		 */		
-		public function initialized(document:Object, id:String):void
-		{
-			if( autoStart )
-			{
-				start();
-			}
-			if( runAheadTime )
-			{
-				runAhead( runAheadTime, runAheadFrameRate );
-			}
-		}
-	}
+		 */
+    public function initialized(document : Dynamic, id : String) : Void
+    {
+        if (autoStart) 
+        {
+            start();
+        }
+        if (runAheadTime != 0) 
+        {
+            runAhead(runAheadTime, runAheadFrameRate);
+        }
+    }
 }
+

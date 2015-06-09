@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;	
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The SpeedLimit action limits the particle's maximum speed to the specified
 	 * speed. The behaviour can be switched to instead limit the minimum speed to
 	 * the specified speed.
@@ -44,13 +45,16 @@ package org.flintparticles.threeD.actions
 	 * have occured.</p>
 	 */
 
-	public class SpeedLimit extends ActionBase
-	{
-		private var _limit:Number;
-		private var _limitSq:Number;
-		private var _isMinimum:Boolean;
-		
-		/**
+class SpeedLimit extends ActionBase
+{
+    public var limit(get, set) : Float;
+    public var isMinimum(get, set) : Bool;
+
+    private var _limit : Float;
+    private var _limitSq : Float;
+    private var _isMinimum : Bool;
+    
+    /**
 		 * The constructor creates a SpeedLimit action for use by 
 		 * an emitter. To add a SpeedLimit to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -62,50 +66,53 @@ package org.flintparticles.threeD.actions
 		 * are accelerated to the speed limit, otherwise particles travelling faster
 		 * than the speed limit are decelerated to the speed limit.
 		 */
-		public function SpeedLimit( speed:Number = Number.MAX_VALUE, isMinimum:Boolean = false )
-		{
-			priority = -5;
-			this.limit = speed;
-			this.isMinimum = isMinimum;
-		}
-		
-		/**
+    public function new(speed : Float = Float.MAX_VALUE, isMinimum : Bool = false)
+    {
+        super();
+        priority = -5;
+        this.limit = speed;
+        this.isMinimum = isMinimum;
+    }
+    
+    /**
 		 * The speed limit
 		 */
-		public function get limit():Number
-		{
-			return _limit;
-		}
-		public function set limit( value:Number ):void
-		{
-			_limit = value;
-			_limitSq = value * value;
-		}
-		
-		/**
+    private function get_Limit() : Float
+    {
+        return _limit;
+    }
+    private function set_Limit(value : Float) : Float
+    {
+        _limit = value;
+        _limitSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * Whether the speed is a minimum (true) or maximum (false) speed.
 		 */
-		public function get isMinimum():Boolean
-		{
-			return _isMinimum;
-		}
-		public function set isMinimum( value:Boolean ):void
-		{
-			_isMinimum = value;
-		}
-
-		/**
+    private function get_IsMinimum() : Bool
+    {
+        return _isMinimum;
+    }
+    private function set_IsMinimum(value : Bool) : Bool
+    {
+        _isMinimum = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var speedSq:Number = p.velocity.lengthSquared;
-			if ( ( _isMinimum && speedSq < _limitSq ) || ( !_isMinimum && speedSq > _limitSq ) )
-			{
-				var scale:Number = _limit / Math.sqrt( speedSq );
-				p.velocity.scaleBy( scale );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var speedSq : Float = p.velocity.lengthSquared;
+        if ((_isMinimum && speedSq < _limitSq) || (!_isMinimum && speedSq > _limitSq)) 
+        {
+            var scale : Float = _limit / Math.sqrt(speedSq);
+            p.velocity.scaleBy(scale);
+        }
+    }
 }
+

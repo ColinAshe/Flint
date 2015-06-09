@@ -28,29 +28,36 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The TurnTowardsPoint action causes the particle to constantly adjust its direction
 	 * so that it travels towards a particular point.
 	 */
 
-	public class TurnTowardsPoint extends ActionBase
-	{
-		private var _point:Vector3D;
-		private var _power:Number;
-		private var _velDirection:Vector3D;
-		private var _toTarget:Vector3D;
-		
-		/**
+class TurnTowardsPoint extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var point(get, set) : Vector3D;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var z(get, set) : Float;
+
+    private var _point : Vector3D;
+    private var _power : Float;
+    private var _velDirection : Vector3D;
+    private var _toTarget : Vector3D;
+    
+    /**
 		 * The constructor creates a TurnTowardsPoint action for use by 
 		 * an emitter. To add a TurnTowardsPoint to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -60,105 +67,111 @@ package org.flintparticles.threeD.actions
 		 * @param power The strength of the turn action. Higher values produce a sharper turn.
 		 * @param point The point towards which the particle turns.
 		 */
-		public function TurnTowardsPoint( point:Vector3D = null, power:Number = 0 )
-		{
-			_velDirection = new Vector3D();
-			_toTarget = new Vector3D();
-			this.power = power;
-			this.point = point ? point : new Vector3D();
-		}
-		
-		/**
+    public function new(point : Vector3D = null, power : Float = 0)
+    {
+        super();
+        _velDirection = new Vector3D();
+        _toTarget = new Vector3D();
+        this.power = power;
+        this.point = (point != null) ? point : new Vector3D();
+    }
+    
+    /**
 		 * The strength of theturn action. Higher values produce a sharper turn.
 		 */
-		public function get power():Number
-		{
-			return _power;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value;
+        return value;
+    }
+    
+    /**
 		 * The point that the particle turns towards.
 		 */
-		public function get point():Vector3D
-		{
-			return _point;
-		}
-		public function set point( value:Vector3D ):void
-		{
-			_point = Vector3DUtils.clonePoint( value );
-		}
-		
-		/**
+    private function get_Point() : Vector3D
+    {
+        return _point;
+    }
+    private function set_Point(value : Vector3D) : Vector3D
+    {
+        _point = Vector3DUtils.clonePoint(value);
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the point that the particle turns towards.
 		 */
-		public function get x():Number
-		{
-			return _point.x;
-		}
-		public function set x( value:Number ):void
-		{
-			_point.x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _point.x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _point.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of  the point that the particle turns towards.
 		 */
-		public function get y():Number
-		{
-			return _point.y;
-		}
-		public function set y( value:Number ):void
-		{
-			_point.y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _point.y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _point.y = value;
+        return value;
+    }
+    
+    /**
 		 * The z coordinate of the point that the particle turns towards.
 		 */
-		public function get z():Number
-		{
-			return _point.z;
-		}
-		public function set z( value:Number ):void
-		{
-			_point.z = value;
-		}
-		
-		/**
+    private function get_Z() : Float
+    {
+        return _point.z;
+    }
+    private function set_Z(value : Float) : Float
+    {
+        _point.z = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			
-			var pos:Vector3D = p.position;
-			_toTarget.x = _point.x - pos.x;
-			_toTarget.y = _point.y - pos.y;
-			_toTarget.z = _point.z - pos.z;
-			
-			if( _toTarget.x == 0 &&  _toTarget.y == 0  && _toTarget.z == 0 )
-			{
-				return;
-			}
-			_toTarget.normalize();
-			
-			var vel:Vector3D = p.velocity;
-			var velLength:Number = vel.length;
-			
-			_velDirection.x = vel.x / velLength;
-			_velDirection.y = vel.y / velLength;
-			_velDirection.z = vel.z / velLength;
-			
-			var acc:Number = power * time;
-			_velDirection.scaleBy( _toTarget.dotProduct( _velDirection ) );
-			_toTarget.decrementBy( _velDirection );
-			_toTarget.scaleBy( acc / _toTarget.length );
-			p.velocity.incrementBy( _toTarget );
-			p.velocity.scaleBy( velLength / p.velocity.length );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        
+        var pos : Vector3D = p.position;
+        _toTarget.x = _point.x - pos.x;
+        _toTarget.y = _point.y - pos.y;
+        _toTarget.z = _point.z - pos.z;
+        
+        if (_toTarget.x == 0 && _toTarget.y == 0 && _toTarget.z == 0) 
+        {
+            return;
+        }
+        _toTarget.normalize();
+        
+        var vel : Vector3D = p.velocity;
+        var velLength : Float = vel.length;
+        
+        _velDirection.x = vel.x / velLength;
+        _velDirection.y = vel.y / velLength;
+        _velDirection.z = vel.z / velLength;
+        
+        var acc : Float = power * time;
+        _velDirection.scaleBy(_toTarget.dotProduct(_velDirection));
+        _toTarget.decrementBy(_velDirection);
+        _toTarget.scaleBy(acc / _toTarget.length);
+        p.velocity.incrementBy(_toTarget);
+        p.velocity.scaleBy(velLength / p.velocity.length);
+    }
 }
+

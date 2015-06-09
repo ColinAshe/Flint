@@ -28,30 +28,38 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.zones 
-{
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.common.utils.FastWeightedArray;
-	
-	import flash.display.BitmapData;
-	import flash.geom.Point;	
+package org.flintparticles.twod.zones;
 
-	/**
+import org.flintparticles.twod.zones.Zone2D;
+
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.common.utils.FastWeightedArray;
+
+import flash.display.BitmapData;
+import flash.geom.Point;
+
+/**
 	 * The BitmapData zone defines a shaped zone based on a BitmapData object.
 	 * The zone contains all pixels in the bitmap that are not transparent -
 	 * i.e. they have an alpha value greater than zero.
 	 */
 
-	public class BitmapDataZone implements Zone2D 
-	{
-		private var _bitmapData : BitmapData;
-		private var _offsetX : Number;
-		private var _offsetY : Number;
-		private var _scaleX : Number;
-		private var _scaleY : Number;
-		private var _validPoints : FastWeightedArray;
-		
-		/**
+class BitmapDataZone implements Zone2D
+{
+    public var bitmapData(get, set) : BitmapData;
+    public var offsetX(get, set) : Float;
+    public var offsetY(get, set) : Float;
+    public var scaleX(get, set) : Float;
+    public var scaleY(get, set) : Float;
+
+    private var _bitmapData : BitmapData;
+    private var _offsetX : Float;
+    private var _offsetY : Float;
+    private var _scaleX : Float;
+    private var _scaleY : Float;
+    private var _validPoints : FastWeightedArray;
+    
+    /**
 		 * The constructor creates a BitmapDataZone object.
 		 * 
 		 * @param bitmapData The bitmapData object that defines the zone.
@@ -62,148 +70,150 @@ package org.flintparticles.twoD.zones
 		 * @param scaleX A scale factor to stretch the bitmap horizontally
 		 * @param scaleY A scale factor to stretch the bitmap vertically
 		 */
-		public function BitmapDataZone( bitmapData : BitmapData = null, offsetX : Number = 0, offsetY : Number = 0, scaleX:Number = 1, scaleY:Number = 1 )
-		{
-			_bitmapData = bitmapData;
-			_offsetX = offsetX;
-			_offsetY = offsetY;
-			_scaleX = scaleX;
-			_scaleY = scaleY;
-			invalidate();
-		}
-		
-		/**
+    public function new(bitmapData : BitmapData = null, offsetX : Float = 0, offsetY : Float = 0, scaleX : Float = 1, scaleY : Float = 1)
+    {
+        _bitmapData = bitmapData;
+        _offsetX = offsetX;
+        _offsetY = offsetY;
+        _scaleX = scaleX;
+        _scaleY = scaleY;
+        invalidate();
+    }
+    
+    /**
 		 * The bitmapData object that defines the zone.
 		 */
-		public function get bitmapData() : BitmapData
-		{
-			return _bitmapData;
-		}
-		public function set bitmapData( value : BitmapData ) : void
-		{
-			_bitmapData = value;
-			invalidate();
-		}
-
-		/**
+    private function get_BitmapData() : BitmapData
+    {
+        return _bitmapData;
+    }
+    private function set_BitmapData(value : BitmapData) : BitmapData
+    {
+        _bitmapData = value;
+        invalidate();
+        return value;
+    }
+    
+    /**
 		 * A horizontal offset to apply to the pixels in the BitmapData object 
 		 * to reposition the zone
 		 */
-		public function get offsetX() : Number
-		{
-			return _offsetX;
-		}
-		public function set offsetX( value : Number ) : void
-		{
-			_offsetX = value;
-		}
-
-		/**
+    private function get_OffsetX() : Float
+    {
+        return _offsetX;
+    }
+    private function set_OffsetX(value : Float) : Float
+    {
+        _offsetX = value;
+        return value;
+    }
+    
+    /**
 		 * A vertical offset to apply to the pixels in the BitmapData object 
 		 * to reposition the zone
 		 */
-		public function get offsetY() : Number
-		{
-			return _offsetY;
-		}
-		public function set offsetY( value : Number ) : void
-		{
-			_offsetY = value;
-		}
-
-		/**
+    private function get_OffsetY() : Float
+    {
+        return _offsetY;
+    }
+    private function set_OffsetY(value : Float) : Float
+    {
+        _offsetY = value;
+        return value;
+    }
+    
+    /**
 		 * A scale factor to stretch the bitmap horizontally
 		 */
-		public function get scaleX() : Number
-		{
-			return _scaleX;
-		}
-		public function set scaleX( value : Number ) : void
-		{
-			_scaleX = value;
-		}
-
-		/**
+    private function get_ScaleX() : Float
+    {
+        return _scaleX;
+    }
+    private function set_ScaleX(value : Float) : Float
+    {
+        _scaleX = value;
+        return value;
+    }
+    
+    /**
 		 * A scale factor to stretch the bitmap vertically
 		 */
-		public function get scaleY() : Number
-		{
-			return _scaleY;
-		}
-		public function set scaleY( value : Number ) : void
-		{
-			_scaleY = value;
-		}
-
-		/**
+    private function get_ScaleY() : Float
+    {
+        return _scaleY;
+    }
+    private function set_ScaleY(value : Float) : Float
+    {
+        _scaleY = value;
+        return value;
+    }
+    
+    /**
 		 * This method forces the zone to revaluate itself. It should be called whenever the 
 		 * contents of the BitmapData object change. However, it is an intensive method and 
 		 * calling it frequently will likely slow your code down.
 		 */
-		public function invalidate():void
-		{
-			if( ! _bitmapData )
-			{
-				return;
-			}
-			_validPoints = new FastWeightedArray();
-			for( var x : int = 0; x < _bitmapData.width ; ++x )
-			{
-				for( var y : int = 0; y < _bitmapData.height ; ++y )
-				{
-					var pixel : uint = _bitmapData.getPixel32( x, y );
-					var ratio : Number = ( pixel >> 24 & 0xFF ) / 0xFF;
-					if ( ratio != 0 )
-					{
-						_validPoints.add( new Point( x, y ), ratio );
-					}
-				}
-			}
-		}
-
-		/**
+    public function invalidate() : Void
+    {
+        if (_bitmapData == null) 
+        {
+            return;
+        }
+        _validPoints = new FastWeightedArray();
+        for (x in 0..._bitmapData.width){
+            for (y in 0..._bitmapData.height){
+                var pixel : Int = _bitmapData.getPixel32(x, y);
+                var ratio : Float = (pixel >> 24 & 0xFF) / 0xFF;
+                if (ratio != 0) 
+                {
+                    _validPoints.add(new Point(x, y), ratio);
+                }
+            }
+        }
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the zone.
 		 * 
 		 * @param point The location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		public function contains( x : Number, y : Number ) : Boolean
-		{
-			if( x >= _offsetX && x <= _offsetX + _bitmapData.width * scaleX
-				&& y >= _offsetY && y <= _offsetY + _bitmapData.height * scaleY )
-			{
-				var pixel : uint = _bitmapData.getPixel32( Math.round( ( x - _offsetX ) / _scaleX ), Math.round( ( y - _offsetY ) / _scaleY ) );
-				return ( pixel >> 24 & 0xFF ) != 0;
-			}
-			return false;
-		}
-
-		/**
+    public function contains(x : Float, y : Float) : Bool
+    {
+        if (x >= _offsetX && x <= _offsetX + _bitmapData.width * scaleX && y >= _offsetY && y <= _offsetY + _bitmapData.height * scaleY) 
+        {
+            var pixel : Int = _bitmapData.getPixel32(Math.round((x - _offsetX) / _scaleX), Math.round((y - _offsetY) / _scaleY));
+            return (pixel >> 24 & 0xFF) != 0;
+        }
+        return false;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the zone.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getLocation() : Point
-		{
-			var p:Point = Point( _validPoints.getRandomValue() ).clone();
-			p.x = p.x * _scaleX + _offsetX;
-			p.y = p.y * _scaleY + _offsetY;
-			return p; 
-		}
-		
-		/**
+    public function getLocation() : Point
+    {
+        var p : Point = cast((_validPoints.getRandomValue()), Point).clone();
+        p.x = p.x * _scaleX + _offsetX;
+        p.y = p.y * _scaleY + _offsetY;
+        return p;
+    }
+    
+    /**
 		 * The getArea method returns the size of the zone.
 		 * It's used by the MultiZone class to manage the balancing between the
 		 * different zones.
 		 * 
 		 * @return the size of the zone.
 		 */
-		public function getArea() : Number
-		{
-			return _validPoints.totalRatios * _scaleX * _scaleY;
-		}
-
-		/**
+    public function getArea() : Float
+    {
+        return _validPoints.totalRatios * _scaleX * _scaleY;
+    }
+    
+    /**
 		 * Manages collisions between a particle and the zone. The particle will collide with the edges of
 		 * the zone, from the inside or outside. In the interests of speed, these collisions do not take 
 		 * account of the collisionRadius of the particle and they do not calculate an accurate bounce
@@ -215,20 +225,20 @@ package org.flintparticles.twoD.zones
 		 * 
 		 * @return Whether a collision occured.
 		 */
-		public function collideParticle(particle:Particle2D, bounce:Number = 1):Boolean
-		{
-			if( contains( particle.x, particle.y ) != contains( particle.previousX, particle.previousY ) )
-			{
-				particle.x = particle.previousX;
-				particle.y = particle.previousY;
-				particle.velX = - bounce * particle.velX;
-				particle.velY = - bounce * particle.velY;
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
+    public function collideParticle(particle : Particle2D, bounce : Float = 1) : Bool
+    {
+        if (contains(particle.x, particle.y) != contains(particle.previousX, particle.previousY)) 
+        {
+            particle.x = particle.previousX;
+            particle.y = particle.previousY;
+            particle.velX = -bounce * particle.velX;
+            particle.velY = -bounce * particle.velY;
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
 }
+

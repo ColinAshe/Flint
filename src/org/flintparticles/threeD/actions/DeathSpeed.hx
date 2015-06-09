@@ -28,26 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;	
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The DeathSpeed action marks the particle as dead if it is travelling faster 
 	 * than the specified speed. The behaviour can be switched to instead mark as 
 	 * dead particles travelling slower than the specified speed.
 	 */
 
-	public class DeathSpeed extends ActionBase
-	{
-		private var _limit:Number;
-		private var _limitSq:Number;
-		private var _isMinimum:Boolean;
-		
-		/**
+class DeathSpeed extends ActionBase
+{
+    public var speed(get, set) : Float;
+    public var isMinimum(get, set) : Bool;
+
+    private var _limit : Float;
+    private var _limitSq : Float;
+    private var _isMinimum : Bool;
+    
+    /**
 		 * The constructor creates a DeathSpeed action for use by an emitter. 
 		 * To add a DeathSpeed to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -59,38 +63,41 @@ package org.flintparticles.threeD.actions
 		 * are killed, otherwise particles travelling faster than the speed limit are
 		 * killed.
 		 */
-		public function DeathSpeed( speed:Number = Number.MAX_VALUE, isMinimum:Boolean = false )
-		{
-			this.speed = speed;
-			this.isMinimum = isMinimum;
-		}
-		
-		/**
+    public function new(speed : Float = Float.MAX_VALUE, isMinimum : Bool = false)
+    {
+        super();
+        this.speed = speed;
+        this.isMinimum = isMinimum;
+    }
+    
+    /**
 		 * The speed limit beyond which the particle dies.
 		 */
-		public function get speed():Number
-		{
-			return _limit;
-		}
-		public function set speed( value:Number ):void
-		{
-			_limit = value;
-			_limitSq = value * value;
-		}
-		
-		/**
+    private function get_Speed() : Float
+    {
+        return _limit;
+    }
+    private function set_Speed(value : Float) : Float
+    {
+        _limit = value;
+        _limitSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * Whether the speed is a minimum (true) or maximum (false) speed.
 		 */
-		public function get isMinimum():Boolean
-		{
-			return _isMinimum;
-		}
-		public function set isMinimum( value:Boolean ):void
-		{
-			_isMinimum = value;
-		}
-		
-		/**
+    private function get_IsMinimum() : Bool
+    {
+        return _isMinimum;
+    }
+    private function set_IsMinimum(value : Bool) : Bool
+    {
+        _isMinimum = value;
+        return value;
+    }
+    
+    /**
 		 * Checks the particle's speed and marks it as dead if it is moving faster 
 		 * than the speed limit, if this is a mximum speed limit, or slower than is 
 		 * this is a minimum speed limit.
@@ -104,14 +111,14 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var speedSq:Number = p.velocity.lengthSquared;
-			if ( ( _isMinimum && speedSq < _limitSq ) || ( !_isMinimum && speedSq > _limitSq ) )
-			{
-				p.isDead = true;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var speedSq : Float = p.velocity.lengthSquared;
+        if ((_isMinimum && speedSq < _limitSq) || (!_isMinimum && speedSq > _limitSq)) 
+        {
+            p.isDead = true;
+        }
+    }
 }
+

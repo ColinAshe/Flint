@@ -28,25 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The TurnTowardsPoint action causes the particle to constantly adjust its 
 	 * direction so that it travels towards a particular point.
 	 */
 
-	public class TurnTowardsPoint extends ActionBase
-	{
-		private var _x:Number;
-		private var _y:Number;
-		private var _power:Number;
-		
-		/**
+class TurnTowardsPoint extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+
+    private var _x : Float;
+    private var _y : Float;
+    private var _power : Float;
+    
+    /**
 		 * The constructor creates a TurnTowardsPoint action for use by an emitter. 
 		 * To add a TurnTowardsPoint to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -57,50 +62,54 @@ package org.flintparticles.twoD.actions
 		 * @param x The x coordinate of the point towards which the particle turns.
 		 * @param y The y coordinate of the point towards which the particle turns.
 		 */
-		public function TurnTowardsPoint( x:Number = 0, y:Number = 0, power:Number = 0 )
-		{
-			this.power = power;
-			this.x = x;
-			this.y = y;
-		}
-		
-		/**
+    public function new(x : Float = 0, y : Float = 0, power : Float = 0)
+    {
+        super();
+        this.power = power;
+        this.x = x;
+        this.y = y;
+    }
+    
+    /**
 		 * The strength of the turn action. Higher values produce a sharper turn.
 		 */
-		public function get power():Number
-		{
-			return _power;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the point that the particle turns towards.
 		 */
-		public function get x():Number
-		{
-			return _x;
-		}
-		public function set x( value:Number ):void
-		{
-			_x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the point that the particle turns towards.
 		 */
-		public function get y():Number
-		{
-			return _y;
-		}
-		public function set y( value:Number ):void
-		{
-			_y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _y = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the direction to the focus point and turns the particle towards 
 		 * this direction.
 		 * 
@@ -113,31 +122,31 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var velLength:Number = Math.sqrt( p.velX * p.velX + p.velY * p.velY );
-			var dx:Number = p.velX / velLength;
-			var dy:Number = p.velY / velLength;
-			var acc:Number = power * time;
-			var targetX:Number = _x - p.x;
-			var targetY:Number = _y - p.y;
-			var len:Number = Math.sqrt( targetX * targetX + targetY * targetY );
-			if( len == 0 )
-			{
-				return;
-			}
-			targetX /= len;
-			targetY /= len;
-			var dot:Number = targetX * dx + targetY * dy;
-			var perpX:Number = targetX - dx * dot;
-			var perpY:Number = targetY - dy * dot;
-			var factor:Number = acc / Math.sqrt( perpX * perpX + perpY * perpY );
-			p.velX += perpX * factor;
-			p.velY += perpY * factor;
-			factor = velLength / Math.sqrt( p.velX * p.velX + p.velY * p.velY );
-			p.velX *= factor;
-			p.velY *= factor;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var velLength : Float = Math.sqrt(p.velX * p.velX + p.velY * p.velY);
+        var dx : Float = p.velX / velLength;
+        var dy : Float = p.velY / velLength;
+        var acc : Float = power * time;
+        var targetX : Float = _x - p.x;
+        var targetY : Float = _y - p.y;
+        var len : Float = Math.sqrt(targetX * targetX + targetY * targetY);
+        if (len == 0) 
+        {
+            return;
+        }
+        targetX /= len;
+        targetY /= len;
+        var dot : Float = targetX * dx + targetY * dy;
+        var perpX : Float = targetX - dx * dot;
+        var perpY : Float = targetY - dy * dot;
+        var factor : Float = acc / Math.sqrt(perpX * perpX + perpY * perpY);
+        p.velX += perpX * factor;
+        p.velY += perpY * factor;
+        factor = velLength / Math.sqrt(p.velX * p.velX + p.velY * p.velY);
+        p.velX *= factor;
+        p.velY *= factor;
+    }
 }
+

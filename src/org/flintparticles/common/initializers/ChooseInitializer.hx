@@ -28,15 +28,19 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.WeightedArray;	
+package org.flintparticles.common.initializers;
 
-	[DefaultProperty("initializers")]
-	
-	/**
+import org.flintparticles.common.initializers.Initializer;
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.WeightedArray;
+
+@:meta(DefaultProperty(name="initializers"))
+
+
+/**
 	 * The ChooseInitializer initializer selects one of multiple initializers, using 
 	 * optional weighting values to produce an uneven distribution for the choice, 
 	 * and applies it to the particle. This is often used with the InitializerGroup 
@@ -45,13 +49,16 @@ package org.flintparticles.common.initializers
 	 * @see org.flintparticles.common.initializers.InitializerGroup
 	 */
 
-	public class ChooseInitializer extends InitializerBase
-	{
-		private var _initializers:WeightedArray;
-		private var _mxmlInitializers:Array;
-		private var _mxmlWeights:Array;
-		
-		/**
+class ChooseInitializer extends InitializerBase
+{
+    public var initializers(never, set) : Array<Dynamic>;
+    public var weights(never, set) : Array<Dynamic>;
+
+    private var _initializers : WeightedArray;
+    private var _mxmlInitializers : Array<Dynamic>;
+    private var _mxmlWeights : Array<Dynamic>;
+    
+    /**
 		 * The constructor creates a ChooseInitializer initializer for use by 
 		 * an emitter. To add a ChooseInitializer to 
 		 * an emitter, use the emitter's addInitializer method.
@@ -62,93 +69,94 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function ChooseInitializer( initializers:Array = null, weights:Array = null )
-		{
-			_initializers = new WeightedArray();
-			if( initializers == null )
-			{
-				return;
-			}
-			init( initializers, weights );
-		}
-		
-		override public function addedToEmitter( emitter:Emitter ):void
-		{
-			if( _mxmlInitializers )
-			{
-				init( _mxmlInitializers, _mxmlWeights );
-				_mxmlInitializers = null;
-				_mxmlWeights = null;
-			}
-		}
-		
-		private function init( initializers:Array = null, weights:Array = null ):void
-		{
-			_initializers.clear();
-			var len:int = initializers.length;
-			var i:int;
-			if( weights != null && weights.length == len )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					_initializers.add( initializers[i], weights[i] );
-				}
-			}
-			else
-			{
-				for( i = 0; i < len; ++i )
-				{
-					_initializers.add( initializers[i], 1 );
-				}
-			}
-		}
-		
-		public function addInitializer( initializer:Initializer, weight:Number = 1 ):void
-		{
-			_initializers.add( initializer, weight );
-		}
-		
-		public function removeInitializer( initializer:Initializer ):void
-		{
-			_initializers.remove( initializer );
-		}
-		
-		public function set initializers( value:Array ):void
-		{
-			_mxmlInitializers = value;
-			checkStartValues();
-		}
-		
-		public function set weights( value:Array ):void
-		{
-			if( value.length == 1 && value[0] is String )
-			{
-				_mxmlWeights = String( value[0] ).split( "," );
-			}
-			else
-			{
-				_mxmlWeights = value;
-			}
-			checkStartValues();
-		}
-		
-		private function checkStartValues():void
-		{
-			if( _mxmlInitializers && _mxmlWeights )
-			{
-				init( _mxmlInitializers, _mxmlWeights );
-				_mxmlInitializers = null;
-				_mxmlWeights = null;
-			}
-		}
-		
-		/**
+    public function new(initializers : Array<Dynamic> = null, weights : Array<Dynamic> = null)
+    {
+        super();
+        _initializers = new WeightedArray();
+        if (initializers == null) 
+        {
+            return;
+        }
+        init(initializers, weights);
+    }
+    
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        if (_mxmlInitializers != null) 
+        {
+            init(_mxmlInitializers, _mxmlWeights);
+            _mxmlInitializers = null;
+            _mxmlWeights = null;
+        }
+    }
+    
+    private function init(initializers : Array<Dynamic> = null, weights : Array<Dynamic> = null) : Void
+    {
+        _initializers.clear();
+        var len : Int = initializers.length;
+        var i : Int;
+        if (weights != null && weights.length == len) 
+        {
+            for (i in 0...len){
+                _initializers.add(initializers[i], weights[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                _initializers.add(initializers[i], 1);
+            }
+        }
+    }
+    
+    public function addInitializer(initializer : Initializer, weight : Float = 1) : Void
+    {
+        _initializers.add(initializer, weight);
+    }
+    
+    public function removeInitializer(initializer : Initializer) : Void
+    {
+        _initializers.remove(initializer);
+    }
+    
+    private function set_Initializers(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        _mxmlInitializers = value;
+        checkStartValues();
+        return value;
+    }
+    
+    private function set_Weights(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        if (value.length == 1 && Std.is(value[0], String)) 
+        {
+            _mxmlWeights = Std.string(value[0]).split(",");
+        }
+        else 
+        {
+            _mxmlWeights = value;
+        }
+        checkStartValues();
+        return value;
+    }
+    
+    private function checkStartValues() : Void
+    {
+        if (_mxmlInitializers != null && _mxmlWeights != null) 
+        {
+            init(_mxmlInitializers, _mxmlWeights);
+            _mxmlInitializers = null;
+            _mxmlWeights = null;
+        }
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var initializer:Initializer = _initializers.getRandomValue();
-			initializer.initialize( emitter, particle );
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var initializer : Initializer = _initializers.getRandomValue();
+        initializer.initialize(emitter, particle);
+    }
 }
+

@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.away3d.v3.initializers
-{
-	import away3d.sprites.MovieClipSprite;
-	
-	import org.flintparticles.common.initializers.ImageInitializerBase;
-	import org.flintparticles.common.utils.WeightedArray;
-	import org.flintparticles.common.utils.construct;	
+package org.flintparticles.integration.away3d.v3.initializers;
 
-	/**
+
+import away3d.sprites.MovieClipSprite;
+
+import org.flintparticles.common.initializers.ImageInitializerBase;
+import org.flintparticles.common.utils.WeightedArray;
+import org.flintparticles.common.utils.Construct;
+
+/**
 	 * The A3D3DisplayObjectClasses Initializer sets the DisplayObject to use to draw
 	 * the particle in a 3D scene. It is used with the Away3D renderer when
 	 * particles should be represented by one of a number of display objects.
@@ -48,11 +49,11 @@ package org.flintparticles.integration.away3d.v3.initializers
 	 * <p>This class includes an object pool for reusing objects when particles die.</p>
 	 */
 
-	public class A3D3DisplayObjectClasses extends ImageInitializerBase
-	{
-		private var _images:WeightedArray;
-		
-		/**
+class A3D3DisplayObjectClasses extends ImageInitializerBase
+{
+    private var _images : WeightedArray;
+    
+    /**
 		 * The constructor creates a A3D3DisplayObjectClasses initializer for use by 
 		 * an emitter. To add a A3D3DisplayObjectClasses to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -67,78 +68,78 @@ package org.flintparticles.integration.away3d.v3.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function A3D3DisplayObjectClasses( images:Array, weights:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( usePool );
-			_images = new WeightedArray;
-			var len:int = images.length;
-			var i:int;
-			if( weights != null && weights.length == len )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], weights[i] );
-				}
-			}
-			else
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], 1 );
-				}
-			}
-			if( fillPool > 0 )
-			{
-				this.fillPool( fillPool );
-			}
-		}
-		
-		public function addImage( image:*, weight:Number = 1 ):void
-		{
-			if( image is Array )
-			{
-				var parameters:Array = ( image as Array ).concat();
-				var img:Class = parameters.shift();
-				_images.add( new Pair( img, parameters ), weight );
-			}
-			else
-			{
-				_images.add( new Pair( image, [] ), weight );
-			}
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		public function removeImage( image:* ):void
-		{
-			_images.remove( image );
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		/**
+    public function new(images : Array<Dynamic>, weights : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(usePool);
+        _images = new WeightedArray();
+        var len : Int = images.length;
+        var i : Int;
+        if (weights != null && weights.length == len) 
+        {
+            for (i in 0...len){
+                addImage(images[i], weights[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                addImage(images[i], 1);
+            }
+        }
+        if (fillPool > 0) 
+        {
+            this.fillPool(fillPool);
+        }
+    }
+    
+    public function addImage(image : Dynamic, weight : Float = 1) : Void
+    {
+        if (Std.is(image, Array)) 
+        {
+            var parameters : Array<Dynamic> = (try cast(image, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).concat();
+            var img : Class<Dynamic> = parameters.shift();
+            _images.add(new Pair(img, parameters), weight);
+        }
+        else 
+        {
+            _images.add(new Pair(image, []), weight);
+        }
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    public function removeImage(image : Dynamic) : Void
+    {
+        _images.remove(image);
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    /**
 		 * Used internally, this method creates an image object for displaying the particle 
 		 * by creating aninstance of one of the display objects and wrapping it in a MovieClipSprite.
 		 */
-		override public function createImage():Object
-		{
-			var img:Pair = _images.getRandomValue();
-			return new MovieClipSprite( construct( img.image, img.parameters ) ,"none", 1, true );
-		}
-	}
+    override public function createImage() : Dynamic
+    {
+        var img : Pair = _images.getRandomValue();
+        return new MovieClipSprite(construct(img.image, img.parameters), "none", 1, true);
+    }
 }
+
 class Pair
 {
-	internal var image:Class;
-	internal var parameters:Array;
-	
-	public function Pair( image:Class, parameters:Array )
-	{
-		this.image = image;
-		this.parameters = parameters;
-	}
+    @:allow(org.flintparticles.integration.away3d.v3.initializers)
+    private var image : Class<Dynamic>;
+    @:allow(org.flintparticles.integration.away3d.v3.initializers)
+    private var parameters : Array<Dynamic>;
+    
+    public function new(image : Class<Dynamic>, parameters : Array<Dynamic>)
+    {
+        this.image = image;
+        this.parameters = parameters;
+    }
 }

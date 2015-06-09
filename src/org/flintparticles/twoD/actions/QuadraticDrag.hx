@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The QuadraticDrag action applies drag to the particle to slow it down when 
 	 * it's moving. The drag force is proportional to the square of the speed of 
 	 * the particle. For other types of drag see the LinerDrag and Friction actions.
@@ -44,11 +45,13 @@ package org.flintparticles.twoD.actions
 	 * @see LinearDrag
 	 */
 
-	public class QuadraticDrag extends ActionBase
-	{
-		private var _drag:Number;
-		
-		/**
+class QuadraticDrag extends ActionBase
+{
+    public var drag(get, set) : Float;
+
+    private var _drag : Float;
+    
+    /**
 		 * The constructor creates a QuadraticDrag action for use by an emitter. 
 		 * To add a QuadraticDrag to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -58,24 +61,26 @@ package org.flintparticles.twoD.actions
 		 * @param drag The amount of drag. A higher number produces a stronger 
 		 * drag force.
 		 */
-		public function QuadraticDrag( drag:Number = 0 )
-		{
-			this.drag = drag;
-		}
-		
-		/**
+    public function new(drag : Float = 0)
+    {
+        super();
+        this.drag = drag;
+    }
+    
+    /**
 		 * The amount of drag. A higher number produces a stronger drag force.
 		 */
-		public function get drag():Number
-		{
-			return _drag;
-		}
-		public function set drag( value:Number ):void
-		{
-			_drag = value;
-		}
-		
-		/**
+    private function get_Drag() : Float
+    {
+        return _drag;
+    }
+    private function set_Drag(value : Float) : Float
+    {
+        _drag = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the drag on the particle and applies it for the period of 
 		 * time indicated.
 		 * 
@@ -88,25 +93,25 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var len2:Number = p.velX * p.velX + p.velY * p.velY;
-			if( len2 == 0 )
-			{
-				return;
-			}
-			var scale:Number = 1 - _drag * time * Math.sqrt( len2 ) / p.mass;
-			if( scale < 0 )
-			{
-				p.velX = 0;
-				p.velY = 0;
-			}
-			else
-			{
-				p.velX *= scale;
-				p.velY *= scale;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var len2 : Float = p.velX * p.velX + p.velY * p.velY;
+        if (len2 == 0) 
+        {
+            return;
+        }
+        var scale : Float = 1 - _drag * time * Math.sqrt(len2) / p.mass;
+        if (scale < 0) 
+        {
+            p.velX = 0;
+            p.velY = 0;
+        }
+        else 
+        {
+            p.velX *= scale;
+            p.velY *= scale;
+        }
+    }
 }
+

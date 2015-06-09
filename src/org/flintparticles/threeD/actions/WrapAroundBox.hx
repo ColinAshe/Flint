@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The WrapAroundBox action confines all the particles to a rectangle region. If a
 	 * particle leaves the rectangle on one side it reenters on the other.
 	 * 
@@ -43,19 +44,26 @@ package org.flintparticles.threeD.actions
 	 * all movement has occured.
 	 */
 
-	public class WrapAroundBox extends ActionBase
-	{
-		private var _minX : Number;
-		private var _maxX : Number;
-		private var _minY : Number;
-		private var _maxY : Number;
-		private var _minZ : Number;
-		private var _maxZ : Number;
-		private var _width : Number;
-		private var _height : Number;
-		private var _depth : Number;
+class WrapAroundBox extends ActionBase
+{
+    public var minX(get, set) : Float;
+    public var maxX(get, set) : Float;
+    public var minY(get, set) : Float;
+    public var maxY(get, set) : Float;
+    public var minZ(get, set) : Float;
+    public var maxZ(get, set) : Float;
 
-		/**
+    private var _minX : Float;
+    private var _maxX : Float;
+    private var _minY : Float;
+    private var _maxY : Float;
+    private var _minZ : Float;
+    private var _maxZ : Float;
+    private var _width : Float;
+    private var _height : Float;
+    private var _depth : Float;
+    
+    /**
 		 * The constructor creates a WrapAroundBox action for use by an emitter. 
 		 * To add a WrapAroundBox to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -69,96 +77,103 @@ package org.flintparticles.threeD.actions
 		 * @param minZ The minZ coordinate of the box.
 		 * @param maxZ The maxZ coordinate of the box.
 		 */
-		public function WrapAroundBox( minX:Number = 0, maxX:Number = 0, minY:Number = 0, maxY:Number = 0, minZ:Number = 0, maxZ:Number = 0 )
-		{
-			priority = -20;
-			this.minX = minX;
-			this.maxX = maxX;
-			this.minY = minY;
-			this.maxY = maxY;
-			this.minZ = minZ;
-			this.maxZ = maxZ;
-		}
-		
-		/**
+    public function new(minX : Float = 0, maxX : Float = 0, minY : Float = 0, maxY : Float = 0, minZ : Float = 0, maxZ : Float = 0)
+    {
+        super();
+        priority = -20;
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+        this.minZ = minZ;
+        this.maxZ = maxZ;
+    }
+    
+    /**
 		 * The minX coordinate of the box.
 		 */
-		public function get minX():Number
-		{
-			return _minX;
-		}
-		public function set minX( value:Number ):void
-		{
-			_minX = value;
-			_width = _maxX - _minX;
-		}
-
-		/**
+    private function get_MinX() : Float
+    {
+        return _minX;
+    }
+    private function set_MinX(value : Float) : Float
+    {
+        _minX = value;
+        _width = _maxX - _minX;
+        return value;
+    }
+    
+    /**
 		 * The maxX coordinate of the box.
 		 */
-		public function get maxX():Number
-		{
-			return _maxX;
-		}
-		public function set maxX( value:Number ):void
-		{
-			_maxX = value;
-			_width = _maxX - _minX;
-		}
-
-		/**
+    private function get_MaxX() : Float
+    {
+        return _maxX;
+    }
+    private function set_MaxX(value : Float) : Float
+    {
+        _maxX = value;
+        _width = _maxX - _minX;
+        return value;
+    }
+    
+    /**
 		 * The minY coordinate of the box.
 		 */
-		public function get minY():Number
-		{
-			return _minY;
-		}
-		public function set minY( value:Number ):void
-		{
-			_minY = value;
-			_height = _maxY - _minY;
-		}
-
-		/**
+    private function get_MinY() : Float
+    {
+        return _minY;
+    }
+    private function set_MinY(value : Float) : Float
+    {
+        _minY = value;
+        _height = _maxY - _minY;
+        return value;
+    }
+    
+    /**
 		 * The maxY coordinate of the box.
 		 */
-		public function get maxY():Number
-		{
-			return _maxY;
-		}
-		public function set maxY( value:Number ):void
-		{
-			_maxY = value;
-			_height = _maxY - _minY;
-		}
-
-		/**
+    private function get_MaxY() : Float
+    {
+        return _maxY;
+    }
+    private function set_MaxY(value : Float) : Float
+    {
+        _maxY = value;
+        _height = _maxY - _minY;
+        return value;
+    }
+    
+    /**
 		 * The minZ coordinate of the box.
 		 */
-		public function get minZ():Number
-		{
-			return _minZ;
-		}
-		public function set minZ( value:Number ):void
-		{
-			_minZ = value;
-			_depth = _maxZ - _minZ;
-		}
-
-		/**
+    private function get_MinZ() : Float
+    {
+        return _minZ;
+    }
+    private function set_MinZ(value : Float) : Float
+    {
+        _minZ = value;
+        _depth = _maxZ - _minZ;
+        return value;
+    }
+    
+    /**
 		 * The maxZ coordinate of the box.
 		 */
-		public function get maxZ():Number
-		{
-			return _maxZ;
-		}
-		public function set maxZ( value:Number ):void
-		{
-			_maxZ = value;
-			_depth = _maxZ - _minZ;
-		}
-
-		/**
+    private function get_MaxZ() : Float
+    {
+        return _maxZ;
+    }
+    private function set_MaxZ(value : Float) : Float
+    {
+        _maxZ = value;
+        _depth = _maxZ - _minZ;
+        return value;
+    }
+    
+    /**
 		 * Tests whether the particle has left the box and, if so, moves it
 		 * to enter on the other side.
 		 * 
@@ -171,33 +186,33 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			if ( p.velocity.x > 0 && p.position.x >= _maxX )
-			{
-				p.position.x -= _width;
-			}
-			else if ( p.velocity.x < 0 && p.position.x <= _minX )
-			{
-				p.position.x += _width;
-			}
-			if ( p.velocity.y > 0 && p.position.y >= _maxY )
-			{
-				p.position.y -= _height;
-			}
-			else if ( p.velocity.y < 0 && p.position.y <= _minY )
-			{
-				p.position.y += _height;
-			}
-			if ( p.velocity.z > 0 && p.position.z >= _maxZ )
-			{
-				p.position.z -= _depth;
-			}
-			else if ( p.velocity.z < 0 && p.position.z <= _minZ )
-			{
-				p.position.z += _depth;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        if (p.velocity.x > 0 && p.position.x >= _maxX) 
+        {
+            p.position.x -= _width;
+        }
+        else if (p.velocity.x < 0 && p.position.x <= _minX) 
+        {
+            p.position.x += _width;
+        }
+        if (p.velocity.y > 0 && p.position.y >= _maxY) 
+        {
+            p.position.y -= _height;
+        }
+        else if (p.velocity.y < 0 && p.position.y <= _minY) 
+        {
+            p.position.y += _height;
+        }
+        if (p.velocity.z > 0 && p.position.z >= _maxZ) 
+        {
+            p.position.z -= _depth;
+        }
+        else if (p.velocity.z < 0 && p.position.z <= _minZ) 
+        {
+            p.position.z += _depth;
+        }
+    }
 }
+

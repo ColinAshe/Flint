@@ -28,11 +28,12 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.flare3d.initializers
-{
-	import org.flintparticles.common.initializers.ImageClasses;
+package org.flintparticles.integration.flare3d.initializers;
 
-	/**
+
+import org.flintparticles.common.initializers.ImageClasses;
+
+/**
 	 * The F3DObjectClasses Initializer sets the class of the 3D Object to use 
 	 * to draw the particle in a 3D scene. It selects one of multiple object 
 	 * classes that are passed to it. It is used with the Flare3D renderer when
@@ -60,9 +61,9 @@ package org.flintparticles.integration.flare3d.initializers
 	 * @see org.flintparticles.integration.away3d.v4.initializers.F3DCloneObjects
 	 * @see org.flintparticles.common.Initializers.SetImageProperties
 	 */
-	public class F3DObjectClasses extends ImageClasses
-	{
-		/**
+class F3DObjectClasses extends ImageClasses
+{
+    /**
 		 * The constructor creates an F3DObjectClasses initializer for use by 
 		 * an emitter. To add an F3DObjectClasses to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -78,9 +79,8 @@ package org.flintparticles.integration.flare3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function F3DObjectClasses( objects:Array, weights:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( objects, weights, usePool, fillPool );
-		}
-	}
+    public function new(objects : Array<Dynamic>, weights : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(objects, weights, usePool, fillPool);
+    }
 }

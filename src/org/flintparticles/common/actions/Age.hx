@@ -27,13 +27,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.easing.Linear;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.easing.Linear;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Age action operates in conjunction with the Lifetime 
 	 * initializer. The Lifetime initializer sets the lifetime for
 	 * the particle. The Age action then ages the particle over time,
@@ -56,11 +57,13 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.initializers.Lifetime
 	 * @see org.flintparticles.common.energy
 	 */
-	public class Age extends ActionBase
-	{
-		private var _easing:Function;
-		
-		/**
+class Age extends ActionBase
+{
+    public var easing(get, set) : Function;
+
+    private var _easing : Function;
+    
+    /**
 		 * The constructor creates an Age action for use by an emitter. 
 		 * To add an Age to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -71,32 +74,34 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function Age( easing:Function = null )
-		{
-			if ( easing == null )
-			{
-				_easing = Linear.easeNone;
-			}
-			else
-			{
-				_easing = easing;
-			}
-		}
-		
-		/**
+    public function new(easing : Function = null)
+    {
+        super();
+        if (easing == null) 
+        {
+            _easing = Linear.easeNone;
+        }
+        else 
+        {
+            _easing = easing;
+        }
+    }
+    
+    /**
 		 * The easing function used to modify the energy over the 
 		 * lifetime of the particle.
 		 */
-		public function get easing():Function
-		{
-			return _easing;
-		}
-		public function set easing( value:Function ):void
-		{
-			_easing = value;
-		}
-		
-		/**
+    private function get_Easing() : Function
+    {
+        return _easing;
+    }
+    private function set_Easing(value : Function) : Function
+    {
+        _easing = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the energy of the particle based on its age and the easing function.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -108,18 +113,18 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			particle.age += time;
-			if( particle.age >= particle.lifetime )
-			{
-				particle.energy = 0;
-				particle.isDead = true;
-			}
-			else
-			{
-				particle.energy = _easing( particle.age, 1, -1, particle.lifetime );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        particle.age += time;
+        if (particle.age >= particle.lifetime) 
+        {
+            particle.energy = 0;
+            particle.isDead = true;
+        }
+        else 
+        {
+            particle.energy = _easing(particle.age, 1, -1, particle.lifetime);
+        }
+    }
 }
+

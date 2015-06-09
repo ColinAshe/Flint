@@ -28,26 +28,31 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.Action;
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.zones.Zone3D;	
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.Action;
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.zones.Zone3D;
+
+/**
 	 * The ZonedAction Action applies an action to the particle only if it is in the specified zone. 
 	 */
 
-	public class ZonedAction extends ActionBase
-	{
-		private var _action:Action;
-		private var _zone:Zone3D;
-		private var _invert:Boolean;
-		
-		/**
+class ZonedAction extends ActionBase
+{
+    public var action(get, set) : Action;
+    public var zone(get, set) : Zone3D;
+    public var invertZone(get, set) : Bool;
+
+    private var _action : Action;
+    private var _zone : Zone3D;
+    private var _invert : Bool;
+    
+    /**
 		 * The constructor creates a ZonedAction action for use by 
 		 * an emitter. To add a ZonedAction to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -59,100 +64,105 @@ package org.flintparticles.threeD.actions
 		 * @param invertZone If false (the default) the action is applied only to particles inside 
 		 * the zone. If true the action is applied only to particles outside the zone.
 		 */
-		public function ZonedAction( action:Action = null, zone:Zone3D = null, invertZone:Boolean = false )
-		{
-			this.action = action;
-			this.zone = zone;
-			this.invertZone = invertZone;
-		}
-		
-		/**
+    public function new(action : Action = null, zone : Zone3D = null, invertZone : Bool = false)
+    {
+        super();
+        this.action = action;
+        this.zone = zone;
+        this.invertZone = invertZone;
+    }
+    
+    /**
 		 * The action to apply when inside the zone.
 		 */
-		public function get action():Action
-		{
-			return _action;
-		}
-		public function set action( value:Action ):void
-		{
-			_action = value;
-		}
-		
-		/**
+    private function get_Action() : Action
+    {
+        return _action;
+    }
+    private function set_Action(value : Action) : Action
+    {
+        _action = value;
+        return value;
+    }
+    
+    /**
 		 * The zone in which to apply the acceleration.
 		 */
-		public function get zone():Zone3D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone3D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone3D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone3D) : Zone3D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * If false (the default), the action is applied to particles inside the zone.
 		 * If true, the action is applied to particles outside the zone.
 		 */
-		public function get invertZone():Boolean
-		{
-			return _invert;
-		}
-		public function set invertZone( value:Boolean ):void
-		{
-			_invert = value;
-		}
-		
-		/**
+    private function get_InvertZone() : Bool
+    {
+        return _invert;
+    }
+    private function set_InvertZone(value : Bool) : Bool
+    {
+        _invert = value;
+        return value;
+    }
+    
+    /**
 		 * Provides access to the priority of the action being used.
 		 * 
 		 * @inheritDoc
 		 */
-		override public function get priority():int
-		{
-			return _action.priority;
-		}
-		override public function set priority( value:int ):void
-		{
-			_action.priority = value;
-		}
-		
-		/**
+    override private function get_Priority() : Int
+    {
+        return _action.priority;
+    }
+    override private function set_Priority(value : Int) : Int
+    {
+        _action.priority = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function addedToEmitter( emitter:Emitter ):void
-		{
-			_action.addedToEmitter( emitter );
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        _action.addedToEmitter(emitter);
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function removedFromEmitter( emitter:Emitter ):void
-		{
-			_action.removedFromEmitter( emitter );
-		}
-
-		/**
+    override public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        _action.removedFromEmitter(emitter);
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			if( _zone.contains( p.position ) )
-			{
-				if( !_invert )
-				{
-					_action.update( emitter, p, time );
-				}
-			}
-			else
-			{
-				if( _invert )
-				{
-					_action.update( emitter, p, time );
-				}
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        if (_zone.contains(p.position)) 
+        {
+            if (!_invert) 
+            {
+                _action.update(emitter, p, time);
+            }
+        }
+        else 
+        {
+            if (_invert) 
+            {
+                _action.update(emitter, p, time);
+            }
+        }
+    }
 }
+

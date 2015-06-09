@@ -28,19 +28,20 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.emitters
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.particles.ParticleCreator3D;
+package org.flintparticles.threed.emitters;
 
-	import flash.geom.Matrix3D;
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.particles.ParticleCreator3D;
+
+import flash.geom.Matrix3D;
+import flash.geom.Vector3D;
+
+/**
 	 * The Emitter3D class defines an emitter that exists in 3D space. It is the
 	 * main emitter for using Flint in a 3D coordinate system.
 	 * 
@@ -53,99 +54,106 @@ package org.flintparticles.threeD.emitters
 	 * <p>This emitter adds 3D specific features to the base emitter class.</p>
 	 */
 
-	public class Emitter3D extends Emitter
-	{
-		/**
+class Emitter3D extends Emitter
+{
+    public static var defaultParticleFactory(get, never) : ParticleFactory;
+    public var position(get, set) : Vector3D;
+    public var rotation(get, set) : Quaternion;
+    public var rotationTransform(get, never) : Matrix3D;
+
+    /**
 		 * @private
 		 * 
 		 * default factory to manage the creation, reuse and destruction of particles
 		 */
-		protected static var _creator:ParticleCreator3D = new ParticleCreator3D();
-		
-		/**
+    private static var _creator : ParticleCreator3D = new ParticleCreator3D();
+    
+    /**
 		 * The default particle factory used to manage the creation, reuse and destruction of particles.
 		 */
-		public static function get defaultParticleFactory():ParticleFactory
-		{
-			return _creator;
-		}
-		
-		/**
+    private static function get_DefaultParticleFactory() : ParticleFactory
+    {
+        return _creator;
+    }
+    
+    /**
 		 * @private
 		 */
-		protected var _position:Vector3D;
-		/**
+    private var _position : Vector3D;
+    /**
 		 * @private
 		 */
-		protected var _rotation:Quaternion;
-		/**
+    private var _rotation : Quaternion;
+    /**
 		 * @private
 		 */
-		protected var _rotationTransform:Matrix3D;
-		private var _rotTransformRotation:Quaternion;
-		
-		/**
+    private var _rotationTransform : Matrix3D;
+    private var _rotTransformRotation : Quaternion;
+    
+    /**
 		 * Identifies whether the particles should be arranged
 		 * into a spacially sorted array - this speeds up proximity
 		 * testing for those actions that need it.
 		 */
-		public var spaceSort:Boolean = false;
-		
-		/**
+    public var spaceSort : Bool = false;
+    
+    /**
 		 * The constructor creates an emitter 3D.
 		 */
-		public function Emitter3D()
-		{
-			super();
-			_particleFactory = _creator;
-			_position = new Vector3D( 0, 0, 0, 1 );
-			_rotation = Quaternion.IDENTITY.clone();
-			_rotationTransform = new Matrix3D();
-			_rotTransformRotation = Quaternion.IDENTITY.clone();
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        _particleFactory = _creator;
+        _position = new Vector3D(0, 0, 0, 1);
+        _rotation = Quaternion.IDENTITY.clone();
+        _rotationTransform = new Matrix3D();
+        _rotTransformRotation = Quaternion.IDENTITY.clone();
+    }
+    
+    /**
 		 * Indicates the position of the Emitter instance relative to 
 		 * the local coordinate system of the Renderer.
 		 */
-		public function get position():Vector3D
-		{
-			return _position;
-		}
-		public function set position( value:Vector3D ):void
-		{
-			_position = value;
-			_position.w = 1;
-		}
-		/**
+    private function get_Position() : Vector3D
+    {
+        return _position;
+    }
+    private function set_Position(value : Vector3D) : Vector3D
+    {
+        _position = value;
+        _position.w = 1;
+        return value;
+    }
+    /**
 		 * Indicates the rotation of the Emitter instance relative to 
 		 * the local coordinate system of the Renderer.
 		 */
-		public function get rotation():Quaternion
-		{
-			return _rotation;
-		}
-		public function set rotation( value:Quaternion ):void
-		{
-			_rotation = value;
-		}
-		
-		/**
+    private function get_Rotation() : Quaternion
+    {
+        return _rotation;
+    }
+    private function set_Rotation(value : Quaternion) : Quaternion
+    {
+        _rotation = value;
+        return value;
+    }
+    
+    /**
 		 * Indicates the rotation of the Emitter instance relative to 
 		 * the local coordinate system of the Renderer, as a matrix
 		 * transformation.
 		 */
-		public function get rotationTransform():Matrix3D
-		{
-			if( !_rotTransformRotation.equals( _rotation ) )
-			{
-				_rotationTransform = _rotation.toMatrixTransformation();
-				_rotTransformRotation = _rotation.clone();
-			}
-			return _rotationTransform;
-		}
-		
-		/*
+    private function get_RotationTransform() : Matrix3D
+    {
+        if (!_rotTransformRotation.equals(_rotation)) 
+        {
+            _rotationTransform = _rotation.toMatrixTransformation();
+            _rotTransformRotation = _rotation.clone();
+        }
+        return _rotationTransform;
+    }
+    
+    /*
 		 * Used internally to initialize a particle based on the state of the
 		 * emitter. This function sets the particle's position and rotation to 
 		 * match the position and rotation of the emitter. After setting this
@@ -153,40 +161,38 @@ package org.flintparticles.threeD.emitters
 		 * 
 		 * @param particle The particle to initialize.
 		 */
-		override protected function initParticle( particle:Particle ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			p.position.x = _position.x;
-			p.position.y = _position.y;
-			p.position.z = _position.z;
-			p.rotation.w = _rotation.w;
-			p.rotation.x = _rotation.x;
-			p.rotation.y = _rotation.y;
-			p.rotation.z = _rotation.z;
-		}
-		
-		/**
+    override private function initParticle(particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        p.position.x = _position.x;
+        p.position.y = _position.y;
+        p.position.z = _position.z;
+        p.rotation.w = _rotation.w;
+        p.rotation.x = _rotation.x;
+        p.rotation.y = _rotation.y;
+        p.rotation.z = _rotation.z;
+    }
+    
+    /**
 		 * If the spaceSort property is true, this method creates the spaceSortedX
 		 * array.
 		 * 
 		 * @param time The duration, in seconds, of the current frame.
 		 */
-		override protected function sortParticles():void
-		{
-			if( spaceSort )
-			{
-				_particles.sort( sortOnX );
-				var len:int = _particles.length;
-				for( var i:int = 0; i < len; ++i )
-				{
-					Particle3D( _particles[ i ] ).sortID = i;
-				}
-			}
-		}
-		
-		private function sortOnX( p1:Particle3D, p2:Particle3D ):int
-		{
-			return p1.position.x - p2.position.x;
-		}
-	}
+    override private function sortParticles() : Void
+    {
+        if (spaceSort) 
+        {
+            _particles.sort(sortOnX);
+            var len : Int = _particles.length;
+            for (i in 0...len){
+                cast((_particles[i]), Particle3D).sortID = i;
+            }
+        }
+    }
+    
+    private function sortOnX(p1 : Particle3D, p2 : Particle3D) : Int
+    {
+        return p1.position.x - p2.position.x;
+    }
 }

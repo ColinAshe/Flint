@@ -27,74 +27,83 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.displayObjects
+package org.flintparticles.common.displayobjects;
+
+
+import flash.display.Shape;
+
+/**
+ * The Ring class is a DisplayObject with a circle shape that contains a hole. 
+ * The registration point of this diaplay object is in the center of the Ring.
+ */
+
+class Ring extends Shape
 {
-    import flash.display.Shape;
+    public var outerRadius(get, set) : Float;
+    public var innerRadius(get, set) : Float;
+    public var color(get, set) : Int;
 
+    private var _outerRadius : Float;
+    private var _innerRadius : Float;
+    private var _color : Int;
+    
     /**
-     * The Ring class is a DisplayObject with a circle shape that contains a hole. 
-     * The registration point of this diaplay object is in the center of the Ring.
+     * The constructor creates a Ring with the specified inner and outer radius.
+     * @param inner Inner radius of the ring
+     * @param outer Outer radius of the ring
+     * @param color Color of the ring
+     * @param bm    Blend mode of the ring
      */
-
-    public class Ring extends Shape
+    public function new(inner : Float = 1, outer : Float = 2, color : Int = 0xFFFFFF, bm : String = "normal")
     {
-        private var _outerRadius:Number;
-        private var _innerRadius:Number;
-        private var _color:uint;
-
-        /**
-         * The constructor creates a Ring with the specified inner and outer radius.
-         * @param inner Inner radius of the ring
-         * @param outer Outer radius of the ring
-         * @param color Color of the ring
-         * @param bm    Blend mode of the ring
-         */
-        public function Ring( inner:Number = 1, outer:Number = 2, color:uint = 0xFFFFFF, bm:String = "normal" )
-        {
-            _outerRadius = outer;
-            _innerRadius = inner;
-            _color = color;
-            draw();
-            blendMode = bm;
-        }
-
-        private function draw():void
-        {
-            graphics.clear();
-            graphics.beginFill( _color );
-            graphics.drawCircle( 0, 0, _outerRadius );
-            graphics.drawCircle( 0, 0, _innerRadius );
-            graphics.endFill();
-        }
-
-        public function get outerRadius():Number
-        {
-            return _outerRadius;
-        }
-        public function set outerRadius( value:Number ):void
-        {
-            _outerRadius = value;
-            draw();
-        }
-
-        public function get innerRadius():Number
-        {
-            return _innerRadius;
-        }
-        public function set innerRadius( value:Number ):void
-        {
-            _innerRadius = value;
-            draw();
-        }
-
-        public function get color():uint
-        {
-            return _color;
-        }
-        public function set color( value:uint ):void
-        {
-            _color = value;
-            draw();
-        }
+        super();
+        _outerRadius = outer;
+        _innerRadius = inner;
+        _color = color;
+        draw();
+        blendMode = bm;
+    }
+    
+    private function draw() : Void
+    {
+        graphics.clear();
+        graphics.beginFill(_color);
+        graphics.drawCircle(0, 0, _outerRadius);
+        graphics.drawCircle(0, 0, _innerRadius);
+        graphics.endFill();
+    }
+    
+    private function get_OuterRadius() : Float
+    {
+        return _outerRadius;
+    }
+    private function set_OuterRadius(value : Float) : Float
+    {
+        _outerRadius = value;
+        draw();
+        return value;
+    }
+    
+    private function get_InnerRadius() : Float
+    {
+        return _innerRadius;
+    }
+    private function set_InnerRadius(value : Float) : Float
+    {
+        _innerRadius = value;
+        draw();
+        return value;
+    }
+    
+    private function get_Color() : Int
+    {
+        return _color;
+    }
+    private function set_Color(value : Int) : Int
+    {
+        _color = value;
+        draw();
+        return value;
     }
 }
+

@@ -28,24 +28,27 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.flare3d.initializers
-{
-	import flare.core.Pivot3D;
+package org.flintparticles.integration.flare3d.initializers;
 
-	import org.flintparticles.common.initializers.ImageInitializerBase;
 
-	/**
+import flare.core.Pivot3D;
+
+import org.flintparticles.common.initializers.ImageInitializerBase;
+
+/**
 	 * The F3DCloneObject Initializer sets the object to use to draw
 	 * the particle. It calls the clone method of the object to create 
 	 * an instance for each particle.
 	 * 
 	 * <p>This class includes an object pool for reusing objects when particles die.</p>
 	 */
-	public class F3DCloneObject extends ImageInitializerBase
-	{
-		private var _object:Pivot3D;
-		
-		/**
+class F3DCloneObject extends ImageInitializerBase
+{
+    public var object(get, set) : Pivot3D;
+
+    private var _object : Pivot3D;
+    
+    /**
 		 * The constructor creates an F3DCloneObject initializer for use by 
 		 * an emitter. To add an F3DCloneObject to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -57,39 +60,40 @@ package org.flintparticles.integration.flare3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function F3DCloneObject( object:Pivot3D = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( usePool );
-			_object = object;
-			if( fillPool > 0 )
-			{
-				this.fillPool( fillPool );
-			}
-		}
-		
-		/**
+    public function new(object : Pivot3D = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(usePool);
+        _object = object;
+        if (fillPool > 0) 
+        {
+            this.fillPool(fillPool);
+        }
+    }
+    
+    /**
 		 * The Object3D to clone for each particle created by the emitter.
 		 */
-		public function get object():Pivot3D
-		{
-			return _object;
-		}
-		public function set object( value:Pivot3D ):void
-		{
-			_object = value;
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		/**
+    private function get_Object() : Pivot3D
+    {
+        return _object;
+    }
+    private function set_Object(value : Pivot3D) : Pivot3D
+    {
+        _object = value;
+        if (_usePool) 
+        {
+            clearPool();
+        }
+        return value;
+    }
+    
+    /**
 		 * Used internally, this method creates an image object for displaying the particle 
 		 * by cloning the original Object3D.
 		 */
-		override public function createImage():Object
-		{
-			return _object.clone();
-		}
-	}
+    override public function createImage() : Dynamic
+    {
+        return _object.clone();
+    }
 }
+

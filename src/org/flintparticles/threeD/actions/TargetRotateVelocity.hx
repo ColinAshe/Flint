@@ -28,27 +28,32 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The TargetRotateVelocity action adjusts the angular velocity of the particle towards the target angular velocity.
 	 */
-	public class TargetRotateVelocity extends ActionBase
-	{
-		private var _rotateSpeed:Number = 0;
-		private var _axis:Vector3D;
-		private var _angVel:Vector3D;
-		private var _rate:Number;
-		
-		/**
+class TargetRotateVelocity extends ActionBase
+{
+    public var rate(get, set) : Float;
+    public var axis(get, set) : Vector3D;
+    public var rotateSpeed(get, set) : Float;
+
+    private var _rotateSpeed : Float = 0;
+    private var _axis : Vector3D;
+    private var _angVel : Vector3D;
+    private var _rate : Float;
+    
+    /**
 		 * The constructor creates a TargetRotateVelocity action for use by 
 		 * an emitter. To add a TargetRotateVelocity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -60,70 +65,74 @@ package org.flintparticles.threeD.actions
 		 * @param rate Adjusts how quickly the particle reaches the target angular velocity.
 		 * Larger numbers cause it to approach the target angular velocity more quickly.
 		 */
-		public function TargetRotateVelocity( axis:Vector3D = null, rotateSpeed:Number = 0, rate:Number = 0.1 )
-		{
-			this.rotateSpeed = rotateSpeed;
-			if( axis )
-			{
-				this.axis = axis;
-			}
-			this.rate = rate;
-		}
-		
-		/**
+    public function new(axis : Vector3D = null, rotateSpeed : Float = 0, rate : Float = 0.1)
+    {
+        super();
+        this.rotateSpeed = rotateSpeed;
+        if (axis != null) 
+        {
+            this.axis = axis;
+        }
+        this.rate = rate;
+    }
+    
+    /**
 		 * Adjusts how quickly the particle reaches the target angular velocity.
 		 * Larger numbers cause it to approach the target angular velocity more quickly.
 		 */
-		public function get rate():Number
-		{
-			return _rate;
-		}
-		public function set rate( value:Number ):void
-		{
-			_rate = value;
-		}
-		
-		/**
+    private function get_Rate() : Float
+    {
+        return _rate;
+    }
+    private function set_Rate(value : Float) : Float
+    {
+        _rate = value;
+        return value;
+    }
+    
+    /**
 		 * The axis for the target angular velocity.
 		 */
-		public function get axis():Vector3D
-		{
-			return _axis;
-		}
-		public function set axis( value:Vector3D ):void
-		{
-			_axis = Vector3DUtils.cloneUnit( value );
-			_angVel = _axis.clone();
-			_angVel.scaleBy( _rotateSpeed );
-		}
-		
-		/**
+    private function get_Axis() : Vector3D
+    {
+        return _axis;
+    }
+    private function set_Axis(value : Vector3D) : Vector3D
+    {
+        _axis = Vector3DUtils.cloneUnit(value);
+        _angVel = _axis.clone();
+        _angVel.scaleBy(_rotateSpeed);
+        return value;
+    }
+    
+    /**
 		 * The size of the target angular velocity.
 		 */
-		public function get rotateSpeed():Number
-		{
-			return _rotateSpeed;
-		}
-		public function set rotateSpeed( value:Number ):void
-		{
-			_rotateSpeed = value;
-			if( _axis )
-			{
-				_angVel = _axis.clone();
-				_angVel.scaleBy( _rotateSpeed );
-			}
-		}
-
-		/**
+    private function get_RotateSpeed() : Float
+    {
+        return _rotateSpeed;
+    }
+    private function set_RotateSpeed(value : Float) : Float
+    {
+        _rotateSpeed = value;
+        if (_axis != null) 
+        {
+            _angVel = _axis.clone();
+            _angVel.scaleBy(_rotateSpeed);
+        }
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var v:Vector3D = Particle3D( particle ).angVelocity;
-			var c:Number = _rate * time;
-			v.x += ( _angVel.x - v.x ) * c;
-			v.y += ( _angVel.y - v.y ) * c;
-			v.z += ( _angVel.z - v.z ) * c;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var v : Vector3D = cast((particle), Particle3D).angVelocity;
+        var c : Float = _rate * time;
+        v.x += (_angVel.x - v.x) * c;
+        v.y += (_angVel.y - v.y) * c;
+        v.z += (_angVel.z - v.z) * c;
+    }
 }
+

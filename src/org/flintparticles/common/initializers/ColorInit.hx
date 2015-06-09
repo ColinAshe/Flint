@@ -28,22 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.interpolateColors;	
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.InterpolateColors;
+
+/**
 	 * The ColorInit Initializer sets the color of the particle.
 	 */
 
-	public class ColorInit extends InitializerBase
-	{
-		private var _min:uint;
-		private var _max:uint;
-		
-		/**
+class ColorInit extends InitializerBase
+{
+    public var minColor(get, set) : Int;
+    public var maxColor(get, set) : Int;
+    public var color(get, set) : Int;
+
+    private var _min : Int;
+    private var _max : Int;
+    
+    /**
 		 * The constructor creates a ColorInit initializer for use by 
 		 * an emitter. To add a ColorInit to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -58,65 +64,69 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function ColorInit( color1:uint= 0xFFFFFF, color2:uint = 0xFFFFFF )
-		{
-			_min = color1;
-			_max = color2;
-		}
-		
-		/**
+    public function new(color1 : Int = 0xFFFFFF, color2 : Int = 0xFFFFFF)
+    {
+        super();
+        _min = color1;
+        _max = color2;
+    }
+    
+    /**
 		 * The minimum color value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get minColor():uint
-		{
-			return _min;
-		}
-		public function set minColor( value:uint ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinColor() : Int
+    {
+        return _min;
+    }
+    private function set_MinColor(value : Int) : Int
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum color value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get maxColor():uint
-		{
-			return _max;
-		}
-		public function set maxColor( value:uint ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxColor() : Int
+    {
+        return _max;
+    }
+    private function set_MaxColor(value : Int) : Int
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minColor and maxColor.
 		 * When writing this sets both maxColor and minColor to the 
 		 * same color.
 		 */
-		public function get color():uint
-		{
-			return _min == _max ? _min : interpolateColors( _max, _min, 0.5 );
-		}
-		public function set color( value:uint ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_Color() : Int
+    {
+        return _min == (_max != 0) ? _min : interpolateColors(_max, _min, 0.5);
+    }
+    private function set_Color(value : Int) : Int
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( _max == _min )
-			{
-				particle.color = _min;
-			}
-			else
-			{
-				particle.color = interpolateColors( _min, _max, Math.random() );
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (_max == _min) 
+        {
+            particle.color = _min;
+        }
+        else 
+        {
+            particle.color = interpolateColors(_min, _max, Math.random());
+        }
+    }
 }
+

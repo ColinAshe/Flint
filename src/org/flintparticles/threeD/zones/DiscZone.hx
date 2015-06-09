@@ -28,33 +28,40 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.zones 
-{
-	import flash.geom.Vector3D;
-	import org.flintparticles.threeD.geom.Vector3DUtils;	
+package org.flintparticles.threed.zones;
 
-	/**
+import org.flintparticles.threed.zones.Zone3D;
+
+import flash.geom.Vector3D;
+import org.flintparticles.threed.geom.Vector3DUtils;
+
+/**
 	 * The DiscZone zone defines a zone that contains all the points on a disc.
 	 * The disc can be positioned anywhere in 3D space. The disc may, optionally,
 	 * have a hole in the middle.
 	 */
 
-	public class DiscZone implements Zone3D 
-	{
-		private var _center:Vector3D;
-		private var _normal:Vector3D;
-		private var _innerRadius:Number;
-		private var _innerRadiusSq:Number;
-		private var _outerRadius:Number;
-		private var _outerRadiusSq:Number;
-		private var _distToOrigin:Number;
-		private var _planeAxis1:Vector3D;
-		private var _planeAxis2:Vector3D;
-		private var _dirty:Boolean;
+class DiscZone implements Zone3D
+{
+    public var center(get, set) : Vector3D;
+    public var normal(get, set) : Vector3D;
+    public var innerRadius(get, set) : Float;
+    public var outerRadius(get, set) : Float;
 
-		private static const TWOPI:Number = Math.PI * 2;
-		
-		/**
+    private var _center : Vector3D;
+    private var _normal : Vector3D;
+    private var _innerRadius : Float;
+    private var _innerRadiusSq : Float;
+    private var _outerRadius : Float;
+    private var _outerRadiusSq : Float;
+    private var _distToOrigin : Float;
+    private var _planeAxis1 : Vector3D;
+    private var _planeAxis2 : Vector3D;
+    private var _dirty : Bool;
+    
+    private static var TWOPI : Float = Math.PI * 2;
+    
+    /**
 		 * The constructor creates a DiscZone 3D zone.
 		 * 
 		 * @param centre The point at the center of the disc.
@@ -63,78 +70,82 @@ package org.flintparticles.threeD.zones
 		 * @param innerRadius The inner radius of the disc. This defines the hole 
 		 * in the center of the disc. If set to zero, there is no hole. 
 		 */
-		public function DiscZone( center:Vector3D = null, normal:Vector3D = null, outerRadius:Number = 0, innerRadius:Number = 0 )
-		{
-			this.center = center ? center : new Vector3D();
-			this.normal = normal ? normal : Vector3D.Z_AXIS;
-			this.innerRadius = innerRadius;
-			this.outerRadius = outerRadius;
-		}
-		
-		private function init():void
-		{
-			_distToOrigin = _normal.dotProduct( center );
-			var axes:Array = Vector3DUtils.getPerpendiculars( normal );
-			_planeAxis1 = axes[0];
-			_planeAxis2 = axes[1];
-			_dirty = false;
-		}
-		
-		/**
+    public function new(center : Vector3D = null, normal : Vector3D = null, outerRadius : Float = 0, innerRadius : Float = 0)
+    {
+        this.center = (center != null) ? center : new Vector3D();
+        this.normal = (normal != null) ? normal : Vector3D.Z_AXIS;
+        this.innerRadius = innerRadius;
+        this.outerRadius = outerRadius;
+    }
+    
+    private function init() : Void
+    {
+        _distToOrigin = _normal.dotProduct(center);
+        var axes : Array<Dynamic> = Vector3DUtils.getPerpendiculars(normal);
+        _planeAxis1 = axes[0];
+        _planeAxis2 = axes[1];
+        _dirty = false;
+    }
+    
+    /**
 		 * The point at the center of the disc.
 		 */
-		public function get center() : Vector3D
-		{
-			return _center.clone();
-		}
-		public function set center( value : Vector3D ) : void
-		{
-			_center = Vector3DUtils.clonePoint( value );
-			_dirty = true;
-		}
-
-		/**
+    private function get_Center() : Vector3D
+    {
+        return _center.clone();
+    }
+    private function set_Center(value : Vector3D) : Vector3D
+    {
+        _center = Vector3DUtils.clonePoint(value);
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The vector normal to the disc. When setting the vector, the vector is
 		 * normalized. So, when reading the vector this will be a normalized version
 		 * of the vector that is set.
 		 */
-		public function get normal() : Vector3D
-		{
-			return _normal.clone();
-		}
-		public function set normal( value : Vector3D ) : void
-		{
-			_normal = Vector3DUtils.cloneUnit( value );
-			_dirty = true;
-		}
-
-		/**
+    private function get_Normal() : Vector3D
+    {
+        return _normal.clone();
+    }
+    private function set_Normal(value : Vector3D) : Vector3D
+    {
+        _normal = Vector3DUtils.cloneUnit(value);
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The inner radius of the disc.
 		 */
-		public function get innerRadius() : Number
-		{
-			return _innerRadius;
-		}
-		public function set innerRadius( value : Number ) : void
-		{
-			_innerRadius = value;
-			_innerRadiusSq = _innerRadius * _innerRadius;
-		}
-
-		/**
+    private function get_InnerRadius() : Float
+    {
+        return _innerRadius;
+    }
+    private function set_InnerRadius(value : Float) : Float
+    {
+        _innerRadius = value;
+        _innerRadiusSq = _innerRadius * _innerRadius;
+        return value;
+    }
+    
+    /**
 		 * The outer radius of the disc.
 		 */
-		public function get outerRadius() : Number
-		{
-			return _outerRadius;
-		}
-		public function set outerRadius( value : Number ) : void
-		{
-			_outerRadius = value;
-			_outerRadiusSq = _outerRadius * _outerRadius;
-		}
-
-		/**
+    private function get_OuterRadius() : Float
+    {
+        return _outerRadius;
+    }
+    private function set_OuterRadius(value : Float) : Float
+    {
+        _outerRadius = value;
+        _outerRadiusSq = _outerRadius * _outerRadius;
+        return value;
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -142,62 +153,62 @@ package org.flintparticles.threeD.zones
 		 * @param p The location to test.
 		 * @return true if the location is inside the zone, false if it is outside.
 		 */
-		public function contains( p:Vector3D ):Boolean
-		{
-			if( _dirty )
-			{
-				init();
-			}
-			// is not in plane if dist to origin along normal is different
-			var dist:Number = _normal.dotProduct( p );
-			if( Math.abs( dist - _distToOrigin ) > 0.1 ) // test for close, not exact
-			{
-				return false;
-			}
-			// test distance to center
-			var distToCenter:Number = Vector3D.distance( center, p );
-			if( distToCenter <= _outerRadiusSq && distToCenter >= _innerRadiusSq )
-			{
-				return true;
-			}
-			return false;
-		}
-		
-		/**
+    public function contains(p : Vector3D) : Bool
+    {
+        if (_dirty) 
+        {
+            init();
+        }  // is not in plane if dist to origin along normal is different  
+        
+        var dist : Float = _normal.dotProduct(p);
+        if (Math.abs(dist - _distToOrigin) > 0.1)   // test for close, not exact  
+        {
+            return false;
+        }  // test distance to center  
+        
+        var distToCenter : Float = Vector3D.distance(center, p);
+        if (distToCenter <= _outerRadiusSq && distToCenter >= _innerRadiusSq) 
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getLocation():Vector3D
-		{
-			if( _dirty )
-			{
-				init();
-			}
-			var rand:Number = Math.random();
-			var radius:Number = _innerRadius + (1 - rand * rand ) * ( _outerRadius - _innerRadius );
-			var angle:Number = Math.random() * TWOPI;
-			var p:Vector3D = _planeAxis1.clone();
-			p.scaleBy( radius * Math.cos( angle ) );
-			var p2:Vector3D = _planeAxis2.clone();
-			p2.scaleBy( radius * Math.sin( angle ) );
-			p.incrementBy( p2 );
-			return _center.add( p );
-		}
-		
-		/**
+    public function getLocation() : Vector3D
+    {
+        if (_dirty) 
+        {
+            init();
+        }
+        var rand : Float = Math.random();
+        var radius : Float = _innerRadius + (1 - rand * rand) * (_outerRadius - _innerRadius);
+        var angle : Float = Math.random() * TWOPI;
+        var p : Vector3D = _planeAxis1.clone();
+        p.scaleBy(radius * Math.cos(angle));
+        var p2 : Vector3D = _planeAxis2.clone();
+        p2.scaleBy(radius * Math.sin(angle));
+        p.incrementBy(p2);
+        return _center.add(p);
+    }
+    
+    /**
 		 * The getArea method returns the size of the zone.
 		 * This method is used by the MultiZone class. Usually, 
 		 * it need not be called directly by the user.
 		 * 
 		 * @return The surface area of the disc.
 		 */
-		public function getVolume():Number
-		{
-			// treat as one pixel tall disc
-			return ( _outerRadius * _outerRadius - _innerRadius * _innerRadius ) * Math.PI;
-		}
-	}
+    public function getVolume() : Float
+    {
+        // treat as one pixel tall disc
+        return (_outerRadius * _outerRadius - _innerRadius * _innerRadius) * Math.PI;
+    }
 }
+

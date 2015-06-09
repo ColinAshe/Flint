@@ -28,37 +28,42 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.away3d.v3.utils
-{
-	import away3d.core.math.Quaternion;
+package org.flintparticles.integration.away3d.v3.utils;
 
-	import org.flintparticles.threeD.geom.Quaternion;
 
-	/**
+import away3d.core.math.Quaternion;
+
+import org.flintparticles.threed.geom.Quaternion;
+
+/**
 	 * This class contains static methods to convert between Away3D geometry 
 	 * classes and Flint geometry classes.
 	 */
-	public class Convert 
-	{
-		/**
+class Convert
+{
+    /**
 		 * Convert a Flint Quaternion object to an Away3D Quaternion object.
 		 */
-		public static function QuaternionToA3D( q:org.flintparticles.threeD.geom.Quaternion ):away3d.core.math.Quaternion
-		{
-			var r:away3d.core.math.Quaternion = new away3d.core.math.Quaternion();
-			r.w = q.w;
-			r.x = q.x;
-			r.y = q.y;
-			r.z = q.z;
-			return r;
-		}
-
-		/**
+    public static function QuaternionToA3D(q : org.flintparticles.threed.geom.Quaternion) : away3d.core.math.Quaternion
+    {
+        var r : away3d.core.math.Quaternion = new away3d.core.math.Quaternion();
+        r.w = q.w;
+        r.x = q.x;
+        r.y = q.y;
+        r.z = q.z;
+        return r;
+    }
+    
+    /**
 		 * Convert an Away3D Quaternion object to a Flint Quaternion object.
 		 */
-		public static function QuaternionFromA3D( q:away3d.core.math.Quaternion ):org.flintparticles.threeD.geom.Quaternion
-		{
-			return new org.flintparticles.threeD.geom.Quaternion( q.w, q.x, q.y, q.z );
-		}
-	}
+    public static function QuaternionFromA3D(q : away3d.core.math.Quaternion) : org.flintparticles.threed.geom.Quaternion
+    {
+        return new org.flintparticles.threed.geom.Quaternion(q.w, q.x, q.y, q.z);
+    }
+
+    public function new()
+    {
+    }
 }
+

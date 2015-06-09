@@ -28,23 +28,29 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.activities
-{
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
+package org.flintparticles.threed.activities;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.geom.Vector3DUtils;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The MoveEmitter activity moves the emitter at a constant velocity.
 	 */
-	public class MoveEmitter extends ActivityBase
-	{
-		private var _vel:Vector3D;
-		
-		/**
+class MoveEmitter extends ActivityBase
+{
+    public var velocity(get, set) : Vector3D;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var z(get, set) : Float;
+
+    private var _vel : Vector3D;
+    
+    /**
 		 * The constructor creates a MoveEmitter activity for use by 
 		 * an emitter. To add a MoveEmitter to an emitter, use the
 		 * emitter's addActvity method.
@@ -56,68 +62,72 @@ package org.flintparticles.threeD.activities
 		 * @param y The y coordinate of the velocity to move the emitter, 
 		 * in pixels per second.
 		 */
-		public function MoveEmitter( velocity:Vector3D = null )
-		{
-			this.velocity = velocity ? velocity : new Vector3D();
-		}
-		
-		/**
+    public function new(velocity : Vector3D = null)
+    {
+        super();
+        this.velocity = (velocity != null) ? velocity : new Vector3D();
+    }
+    
+    /**
 		 * The velocity to move the emitter, in pixels per second.
 		 */
-		public function get velocity():Vector3D
-		{
-			return _vel;
-		}
-		public function set velocity( value:Vector3D ):void
-		{
-			_vel = Vector3DUtils.cloneVector( value );
-		}
-		
-		/**
+    private function get_Velocity() : Vector3D
+    {
+        return _vel;
+    }
+    private function set_Velocity(value : Vector3D) : Vector3D
+    {
+        _vel = Vector3DUtils.cloneVector(value);
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the velocity to move the emitter, in pixels per second.
 		 */
-		public function get x():Number
-		{
-			return _vel.x;
-		}
-		public function set x( value:Number ):void
-		{
-			_vel.x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _vel.x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _vel.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of  the velocity to move the emitter, in pixels per second.
 		 */
-		public function get y():Number
-		{
-			return _vel.y;
-		}
-		public function set y( value:Number ):void
-		{
-			_vel.y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _vel.y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _vel.y = value;
+        return value;
+    }
+    
+    /**
 		 * The z coordinate of the velocity to move the emitter, in pixels per second.
 		 */
-		public function get z():Number
-		{
-			return _vel.z;
-		}
-		public function set z( value:Number ):void
-		{
-			_vel.z = value;
-		}
-		
-		/**
+    private function get_Z() : Float
+    {
+        return _vel.z;
+    }
+    private function set_Z(value : Float) : Float
+    {
+        _vel.z = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var p:Vector3D = Emitter3D( emitter ).position;
-			p.x += _vel.x * time;
-			p.y += _vel.y * time;
-			p.z += _vel.z * time;
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var p : Vector3D = cast((emitter), Emitter3D).position;
+        p.x += _vel.x * time;
+        p.y += _vel.y * time;
+        p.z += _vel.z * time;
+    }
 }

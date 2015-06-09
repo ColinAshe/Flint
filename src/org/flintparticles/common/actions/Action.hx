@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions
-{
-	import org.flintparticles.common.behaviours.Behaviour;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.behaviours.Behaviour;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Action interface must be implemented by all particle actions.
 	 * 
 	 * <p>An Action is a class that is used to continuously modify an aspect 
@@ -54,9 +55,10 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.emitters.Emitter#addAction()
 	 * @see org.flintparticles.common.emitters.Emitter#removeAction()
 	 */
-	public interface Action extends Behaviour
-	{
-		/**
+interface Action extends Behaviour
+{
+
+    /**
 		 * The update method is used by the emitter to apply the action
 		 * to every particle. It is the key feature of the actions and is
 		 * used to update the state of every particle every frame. This method 
@@ -71,6 +73,5 @@ package org.flintparticles.common.actions
 		 * @param particle The particle to be updated.
 		 * @param time The duration of the frame - used for time based updates.
 		 */
-		function update( emitter:Emitter, particle:Particle, time:Number ):void;
-	}
+    function update(emitter : Emitter, particle : Particle, time : Float) : Void;
 }

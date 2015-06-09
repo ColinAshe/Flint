@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.renderers
-{
-	import org.flintparticles.twoD.particles.Particle2D;
-	
-	import flash.geom.Rectangle;	
+package org.flintparticles.twod.renderers;
 
-	/**
+
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.geom.Rectangle;
+
+/**
 	 * The PixelRenderer draws particles as single pixels on a Bitmap display object. The
 	 * region of the particle system covered by this bitmap object must be defined
 	 * in the canvas property of the PixelRenderer. Particles outside this region
@@ -52,25 +53,24 @@ package org.flintparticles.twoD.renderers
 	 * display objects in its display list. To enable mouse events for the renderer
 	 * or its children set the mouseEnabled or mouseChildren properties to true.</p>
 	 */
-	public class PixelRenderer extends BitmapRenderer
-	{
-		/**
+class PixelRenderer extends BitmapRenderer
+{
+    /**
 		 * The constructor creates a PixelRenderer. After creation it should be
 		 * added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage and should be applied to an Emitter using the Emitter's
 		 * renderer property.
 		 */
-		public function PixelRenderer( canvas:Rectangle )
-		{
-			super( canvas );
-		}
-		
-		/**
+    public function new(canvas : Rectangle)
+    {
+        super(canvas);
+    }
+    
+    /**
 		 * Used internally to draw the particles.
 		 */
-		override protected function drawParticle( particle:Particle2D ):void
-		{
-			_bitmapData.setPixel32( Math.round( particle.x - _canvas.x ), Math.round( particle.y - _canvas.y ), particle.color );
-		}
-	}
+    override private function drawParticle(particle : Particle2D) : Void
+    {
+        _bitmapData.setPixel32(Math.round(particle.x - _canvas.x), Math.round(particle.y - _canvas.y), particle.color);
+    }
 }

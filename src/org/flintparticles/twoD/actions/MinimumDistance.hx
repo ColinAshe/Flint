@@ -28,28 +28,32 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.emitters.Emitter2D;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.emitters.Emitter2D;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The MinimumDistance action applies an acceleration to the particle to 
 	 * maintain a minimum distance between it and its neighbours.
 	 * 
 	 * <p>This action has a priority of 10, so that it executes 
 	 * before other actions.</p>
 	 */
-	public class MinimumDistance extends ActionBase
-	{
-		private var _min:Number;
-		private var _acc:Number;
-		private var _minSq:Number;
-		
-		/**
+class MinimumDistance extends ActionBase
+{
+    public var minimum(get, set) : Float;
+    public var acceleration(get, set) : Float;
+
+    private var _min : Float;
+    private var _acc : Float;
+    private var _minSq : Float;
+    
+    /**
 		 * The constructor creates a MinimumDistance action for use by an emitter. 
 		 * To add a MinimumDistance to all particles created by an emitter, use 
 		 * the emitter's addAction method.
@@ -61,40 +65,43 @@ package org.flintparticles.twoD.actions
 		 * @param acceleration The acceleration force applied to avoid the 
 		 * other particles.
 		 */
-		public function MinimumDistance( minimum:Number = 0, acceleration:Number = 0 )
-		{
-			priority = 10;
-			this.minimum = minimum;
-			this.acceleration = acceleration;
-		}
-		
-		/**
+    public function new(minimum : Float = 0, acceleration : Float = 0)
+    {
+        super();
+        priority = 10;
+        this.minimum = minimum;
+        this.acceleration = acceleration;
+    }
+    
+    /**
 		 * The minimum distance, in pixels, that this action maintains between 
 		 * particles.
 		 */
-		public function get minimum():Number
-		{
-			return _min;
-		}
-		public function set minimum( value:Number ):void
-		{
-			_min = value;
-			_minSq = value * value;
-		}
-		
-		/**
+    private function get_Minimum() : Float
+    {
+        return _min;
+    }
+    private function set_Minimum(value : Float) : Float
+    {
+        _min = value;
+        _minSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * The acceleration force applied to avoid the other particles.
 		 */
-		public function get acceleration():Number
-		{
-			return _acc;
-		}
-		public function set acceleration( value:Number ):void
-		{
-			_acc = value;
-		}
-
-		/**
+    private function get_Acceleration() : Float
+    {
+        return _acc;
+    }
+    private function set_Acceleration(value : Float) : Float
+    {
+        _acc = value;
+        return value;
+    }
+    
+    /**
 		 * Instructs the emitter to produce a sorted particle array for optimizing
 		 * the calculations in the update method of this action.
 		 * 
@@ -102,12 +109,12 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter2D( emitter ).spaceSort = true;
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter2D).spaceSort = true;
+    }
+    
+    /**
 		 * Checks for particles closer than the minimum distance to the current 
 		 * particle and if any are found applies the acceleration to move the 
 		 * particles apart.
@@ -121,55 +128,57 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var e:Emitter2D = Emitter2D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle2D;
-			var i:int;
-			var len:int = particles.length;
-			var distanceInv:Number;
-			var distanceSq:Number;
-			var dx:Number;
-			var dy:Number;
-			var moveX:Number = 0;
-			var moveY:Number = 0;
-			var factor:Number;
-			for( i = p.sortID - 1; i >= 0; --i )
-			{
-				other = particles[i];
-				if( ( dx = p.x - other.x ) > _min ) break;
-				dy = p.y - other.y;
-				if( dy > _min || dy < -_min ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= _minSq && distanceSq > 0 )
-				{
-					distanceInv = 1 / Math.sqrt( distanceSq );
-					moveX += dx * distanceInv;
-					moveY += dy * distanceInv;
-				} 
-			}
-			for( i = p.sortID + 1; i < len; ++i )
-			{
-				other = particles[i];
-				if( ( dx = p.x - other.x ) < -_min ) break;
-				dy = p.y - other.y;
-				if( dy > _min || dy < -_min ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= _minSq && distanceSq > 0 )
-				{
-					distanceInv = 1 / Math.sqrt( distanceSq );
-					moveX += dx * distanceInv;
-					moveY += dy * distanceInv;
-				} 
-			}
-			if( moveX != 0 || moveY != 0 )
-			{
-				factor = time * _acc / Math.sqrt( moveX * moveX + moveY * moveY );
-				p.velX += factor * moveX;
-				p.velY += factor * moveY;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle2D;
+        var i : Int;
+        var len : Int = particles.length;
+        var distanceInv : Float;
+        var distanceSq : Float;
+        var dx : Float;
+        var dy : Float;
+        var moveX : Float = 0;
+        var moveY : Float = 0;
+        var factor : Float;
+        i = p.sortID - 1;
+        while (i >= 0){
+            other = particles[i];
+            if ((dx = p.x - other.x) > _min)                 break;
+            dy = p.y - other.y;
+            if (dy > _min || dy < -_min)                 {--i;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= _minSq && distanceSq > 0) 
+            {
+                distanceInv = 1 / Math.sqrt(distanceSq);
+                moveX += dx * distanceInv;
+                moveY += dy * distanceInv;
+            }
+            --i;
+        }
+        for (i in p.sortID + 1...len){
+            other = particles[i];
+            if ((dx = p.x - other.x) < -_min)                 break;
+            dy = p.y - other.y;
+            if (dy > _min || dy < -_min)                 {++i;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= _minSq && distanceSq > 0) 
+            {
+                distanceInv = 1 / Math.sqrt(distanceSq);
+                moveX += dx * distanceInv;
+                moveY += dy * distanceInv;
+            }
+        }
+        if (moveX != 0 || moveY != 0) 
+        {
+            factor = time * _acc / Math.sqrt(moveX * moveX + moveY * moveY);
+            p.velX += factor * moveX;
+            p.velY += factor * moveY;
+        }
+    }
 }
+

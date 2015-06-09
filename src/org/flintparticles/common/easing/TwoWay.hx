@@ -27,82 +27,87 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.easing
-{
-	/**
+package org.flintparticles.common.easing;
+
+
+/**
 	 * A set of easing equations that start and end at the end value and reach the start value 
 	 * at the half-time point. They are designed for modifying the particle energy such that it 
 	 * starts and ends at zero and peaks at half way through the particle's lifetime.
 	 * 
 	 * @see org.flintparticles.common.actions.Age
 	 */
-	public class TwoWay
-	{
-		/**
+class TwoWay
+{
+    /**
 		 * Gives a linear increase and decrease in energy either side of the centre point.
 		 */
-		public static function linear( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			if( ( t = 2 * t / d ) <= 1 )
-			{
-				return ( 1 - t ) * c + b;
-			}
-			return ( t - 1 ) * c + b;
-		}
-		
-		/**
+    public static function linear(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        if ((t = 2 * t / d) <= 1) 
+        {
+            return (1 - t) * c + b;
+        }
+        return (t - 1) * c + b;
+    }
+    
+    /**
 		 * Energy increases and then decreases as if following the top half of a circle.
 		 */
-		public static function circular( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			t = 1 - (2 * t / d);
-			return ( 1 - Math.sqrt( 1 - t * t ) ) * c + b;
-		}
-		
-		/**
+    public static function circular(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        t = 1 - (2 * t / d);
+        return (1 - Math.sqrt(1 - t * t)) * c + b;
+    }
+    
+    /**
 		 * Energy follows the first half of a sine wave.
 		 */
-		public static function sine( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			return ( 1 - Math.sin( Math.PI * t / d ) ) * c + b;
-		}
-		
-		/**
+    public static function sine(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return (1 - Math.sin(Math.PI * t / d)) * c + b;
+    }
+    
+    /**
 		 * Eases towards the middle using a quadratic curve.
 		 */
-		public static function quadratic( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			t = 1 - (2 * t / d);
-			return t * t * c + b;
-		}
-		
-		/**
+    public static function quadratic(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        t = 1 - (2 * t / d);
+        return t * t * c + b;
+    }
+    
+    /**
 		 * Eases towards the middle using a cubic curve.
 		 */
-		public static function cubic( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			t = 1 - (2 * t / d);
-			if( t < 0 ) t = -t;
-			return t * t * t * c + b;
-		}
-		
-		/**
+    public static function cubic(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        t = 1 - (2 * t / d);
+        if (t < 0)             t = -t;
+        return t * t * t * c + b;
+    }
+    
+    /**
 		 * Eases towards the middle using a quartic curve.
 		 */
-		public static function quartic( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			t = 1 - (2 * t / d);
-			return t * t * t * t * c + b;
-		}
-		
-		/**
+    public static function quartic(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        t = 1 - (2 * t / d);
+        return t * t * t * t * c + b;
+    }
+    
+    /**
 		 * Eases towards the middle using a quintic curve.
 		 */
-		public static function quintic( t : Number, b : Number, c : Number, d : Number ):Number
-		{
-			t = 1 - (2 * t / d);
-			if( t < 0 ) t = -t;
-			return t * t * t * t * t * c + b;
-		}
-	}
+    public static function quintic(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        t = 1 - (2 * t / d);
+        if (t < 0)             t = -t;
+        return t * t * t * t * t * c + b;
+    }
+
+    public function new()
+    {
+    }
 }
+

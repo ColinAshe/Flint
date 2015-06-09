@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.flare3d.initializers
-{
-	import flare.core.Pivot3D;
-	import flare.materials.Material3D;
+package org.flintparticles.integration.flare3d.initializers;
 
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
 
-	/**
+import flare.core.Pivot3D;
+import flare.materials.Material3D;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The F3DApplyMaterial initializer sets a material to apply to the Flare3D
 	 * object that is used when rendering the particle. To use this initializer,
 	 * the particle's image object must be a Flare3D Pivot3D object.
@@ -45,11 +46,13 @@ package org.flintparticles.integration.flare3d.initializers
 	 * <p>This initializer has a priority of -10 to ensure that it is applied after 
 	 * the ImageInit classes which define the image object.</p>
 	 */
-	public class F3DApplyMaterial extends InitializerBase
-	{
-		private var _material:Material3D;
-		
-		/**
+class F3DApplyMaterial extends InitializerBase
+{
+    public var material(get, set) : Material3D;
+
+    private var _material : Material3D;
+    
+    /**
 		 * The constructor creates an F3DApplyMaterial initializer for use by 
 		 * an emitter. To add an F3DApplyMaterial to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -58,33 +61,35 @@ package org.flintparticles.integration.flare3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function F3DApplyMaterial( material:Material3D )
-		{
-			priority = -10;
-			_material = material;
-		}
-		
-		/**
+    public function new(material : Material3D)
+    {
+        super();
+        priority = -10;
+        _material = material;
+    }
+    
+    /**
 		 * The material to use for the particle.
 		 */
-		public function get material():Material3D
-		{
-			return _material;
-		}
-		public function set material( value:Material3D ):void
-		{
-			_material = value;
-		}
-		
-		/**
+    private function get_Material() : Material3D
+    {
+        return _material;
+    }
+    private function set_Material(value : Material3D) : Material3D
+    {
+        _material = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( particle.image && particle.image is Pivot3D )
-			{
-				Pivot3D( particle.image ).setMaterial( _material );
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (particle.image && Std.is(particle.image, Pivot3D)) 
+        {
+            cast((particle.image), Pivot3D).setMaterial(_material);
+        }
+    }
 }
+

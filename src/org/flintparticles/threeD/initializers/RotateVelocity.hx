@@ -28,29 +28,35 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.initializers;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The RotateVelocity Initializer sets the angular velocity of the particle.
 	 * It is usually combined with the Rotate action to rotate the particle
 	 * using this angular velocity.
 	 */
 
-	public class RotateVelocity extends InitializerBase
-	{
-		private var _max:Number;
-		private var _min:Number;
-		private var _axis : Vector3D;
+class RotateVelocity extends InitializerBase
+{
+    public var axis(get, set) : Vector3D;
+    public var minAngVelocity(get, set) : Float;
+    public var maxAngVelocity(get, set) : Float;
+    public var angVelocity(get, set) : Float;
 
-		/**
+    private var _max : Float;
+    private var _min : Float;
+    private var _axis : Vector3D;
+    
+    /**
 		 * The constructor creates a RotateVelocity initializer for use by 
 		 * an emitter. To add a RotateVelocity to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -67,88 +73,93 @@ package org.flintparticles.threeD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function RotateVelocity( axis:Vector3D = null, minAngVelocity:Number = 0, maxAngVelocity:Number = NaN )
-		{
-			this.axis = axis;
-			this.minAngVelocity = minAngVelocity;
-			this.maxAngVelocity = maxAngVelocity;
-		}
-		
-		/**
+    public function new(axis : Vector3D = null, minAngVelocity : Float = 0, maxAngVelocity : Float = NaN)
+    {
+        super();
+        this.axis = axis;
+        this.minAngVelocity = minAngVelocity;
+        this.maxAngVelocity = maxAngVelocity;
+    }
+    
+    /**
 		 * The axis for the rotation.
 		 */
-		public function get axis():Vector3D
-		{
-			return _axis;
-		}
-		public function set axis( value:Vector3D ):void
-		{
-			_axis = Vector3DUtils.cloneUnit( value );
-		}
-		
-		/**
+    private function get_Axis() : Vector3D
+    {
+        return _axis;
+    }
+    private function set_Axis(value : Vector3D) : Vector3D
+    {
+        _axis = Vector3DUtils.cloneUnit(value);
+        return value;
+    }
+    
+    /**
 		 * The minimum angular velocity value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get minAngVelocity():Number
-		{
-			return _min;
-		}
-		public function set minAngVelocity( value:Number ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinAngVelocity() : Float
+    {
+        return _min;
+    }
+    private function set_MinAngVelocity(value : Float) : Float
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum angular velocity value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get maxAngVelocity():Number
-		{
-			return _max;
-		}
-		public function set maxAngVelocity( value:Number ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxAngVelocity() : Float
+    {
+        return _max;
+    }
+    private function set_MaxAngVelocity(value : Float) : Float
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minAngVelocity and maxAngVelocity.
 		 * When writing this sets both maxAngVelocity and minAngVelocity to the 
 		 * same angular velocity value.
 		 */
-		public function get angVelocity():Number
-		{
-			if( isNaN( _max ) || _min == _max )
-			{
-				return _min;
-			}
-			return ( _max + _min ) / 2;
-		}
-		public function set angVelocity( value:Number ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_AngVelocity() : Float
+    {
+        if (Math.isNaN(_max) || _min == _max) 
+        {
+            return _min;
+        }
+        return (_max + _min) / 2;
+    }
+    private function set_AngVelocity(value : Float) : Float
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var angle:Number;
-			if( isNaN( _max ) || _min == _max )
-			{
-				angle = _min;
-			}
-			else
-			{
-				angle = _min + Math.random() * ( _max - _min );
-			}
-			var v:Vector3D = p.angVelocity;
-			v.x = axis.x * angle;
-			v.y = axis.y * angle;
-			v.z = axis.z * angle;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var angle : Float;
+        if (Math.isNaN(_max) || _min == _max) 
+        {
+            angle = _min;
+        }
+        else 
+        {
+            angle = _min + Math.random() * (_max - _min);
+        }
+        var v : Vector3D = p.angVelocity;
+        v.x = axis.x * angle;
+        v.y = axis.y * angle;
+        v.z = axis.z * angle;
+    }
 }
+

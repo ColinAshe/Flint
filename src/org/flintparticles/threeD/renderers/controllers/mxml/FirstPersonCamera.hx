@@ -28,13 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.renderers.controllers.mxml
-{
-	import flash.display.DisplayObject;
-	
-	import org.flintparticles.threeD.renderers.Camera;	
+package org.flintparticles.threed.renderers.controllers.mxml;
 
-	/**
+import org.flintparticles.threed.renderers.controllers.mxml.KeyboardControllerMxml;
+
+import flash.display.DisplayObject;
+
+import org.flintparticles.threed.renderers.Camera;
+
+/**
 	 * Sets keyboard input to make a renderer's camera track, pan and tilt in response to 
 	 * keyboard input.
 	 * 
@@ -54,12 +56,15 @@ package org.flintparticles.threeD.renderers.controllers.mxml
 	 * <li>Page down key - lower the camera.</li>
 	 * </ul>
 	 */
-	public class FirstPersonCamera extends KeyboardControllerMxml
-	{
-		private var _rotationRate:Number;
-		private var _trackRate:Number;
-		
-		/**
+class FirstPersonCamera extends KeyboardControllerMxml
+{
+    public var rotationRate(get, set) : Float;
+    public var trackRate(get, set) : Float;
+
+    private var _rotationRate : Float;
+    private var _trackRate : Float;
+    
+    /**
 		 * The constructor creates an FirstPersonCamera controller.
 		 * 
 		 * @param stage The display object on which to listen for keyboard input. This should usually
@@ -73,90 +78,93 @@ package org.flintparticles.threeD.renderers.controllers.mxml
 		 * own tick event to update its state. The internal tick process is tied
 		 * to the framerate and updates the camera every frame.
 		 */
-		public function FirstPersonCamera( stage:DisplayObject = null, camera:Camera = null, rotationRate:Number = 1, trackRate:Number = 200, useInternalTick:Boolean = true )
-		{
-			if( camera )
-			{
-				this.camera = camera;
-			}
-			if( stage )
-			{
-				this.stage = stage;
-			}
-			this.rotationRate = rotationRate;
-			this.trackRate = trackRate;
-			this.useInternalTick = useInternalTick;
-		}
-		
-		/**
+    public function new(stage : DisplayObject = null, camera : Camera = null, rotationRate : Float = 1, trackRate : Float = 200, useInternalTick : Bool = true)
+    {
+        super();
+        if (camera != null) 
+        {
+            this.camera = camera;
+        }
+        if (stage != null) 
+        {
+            this.stage = stage;
+        }
+        this.rotationRate = rotationRate;
+        this.trackRate = trackRate;
+        this.useInternalTick = useInternalTick;
+    }
+    
+    /**
 		 * The rate at which to rotate the camera when the appropriate keys are 
 		 * pressed, in radians per second.
 		 */
-		public function get rotationRate():Number
-		{
-			return _rotationRate;
-		}
-		public function set rotationRate( value:Number ):void
-		{
-			_rotationRate = value;
-		}
-		
-		/**
+    private function get_RotationRate() : Float
+    {
+        return _rotationRate;
+    }
+    private function set_RotationRate(value : Float) : Float
+    {
+        _rotationRate = value;
+        return value;
+    }
+    
+    /**
 		 * The rate at which to track the camera when the appropriate keys are 
 		 * pressed, in units per second.
 		 */
-		public function get trackRate():Number
-		{
-			return _trackRate;
-		}
-		public function set trackRate( value:Number ):void
-		{
-			_trackRate = value;
-		}
-		
-		
-		override protected function updateCamera( time:Number ):void
-		{
-			if( wDown )
-			{
-				camera.dolly( _trackRate * time );
-			}
-			if( sDown )
-			{
-				camera.dolly( -_trackRate * time );
-			}
-			if( aDown )
-			{
-				camera.track( -_trackRate * time );
-			}
-			if( dDown )
-			{
-				camera.track( _trackRate * time );
-			}
-			if( pgUpDown )
-			{
-				camera.lift( _trackRate * time );
-			}
-			if( pgDownDown )
-			{
-				camera.lift( -_trackRate * time );
-			}
-			if( leftDown )
-			{
-				camera.pan( -_rotationRate * time );
-			}
-			if( rightDown )
-			{
-				camera.pan( _rotationRate * time );
-			}
-			if( upDown )
-			{
-				camera.tilt( -_rotationRate * time );
-			}
-			if( downDown )
-			{
-				camera.tilt( _rotationRate * time );
-			}
-		}
-	}
+    private function get_TrackRate() : Float
+    {
+        return _trackRate;
+    }
+    private function set_TrackRate(value : Float) : Float
+    {
+        _trackRate = value;
+        return value;
+    }
+    
+    
+    override private function updateCamera(time : Float) : Void
+    {
+        if (wDown) 
+        {
+            camera.dolly(_trackRate * time);
+        }
+        if (sDown) 
+        {
+            camera.dolly(-_trackRate * time);
+        }
+        if (aDown) 
+        {
+            camera.track(-_trackRate * time);
+        }
+        if (dDown) 
+        {
+            camera.track(_trackRate * time);
+        }
+        if (pgUpDown) 
+        {
+            camera.lift(_trackRate * time);
+        }
+        if (pgDownDown) 
+        {
+            camera.lift(-_trackRate * time);
+        }
+        if (leftDown) 
+        {
+            camera.pan(-_rotationRate * time);
+        }
+        if (rightDown) 
+        {
+            camera.pan(_rotationRate * time);
+        }
+        if (upDown) 
+        {
+            camera.tilt(-_rotationRate * time);
+        }
+        if (downDown) 
+        {
+            camera.tilt(_rotationRate * time);
+        }
+    }
 }
+

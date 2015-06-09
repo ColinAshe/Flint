@@ -28,35 +28,36 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.events
-{
-	import flash.events.Event;	
+package org.flintparticles.common.events;
 
-	/**
+
+import flash.events.Event;
+
+/**
 	 * The class for emitter related events dispatched by classes in the Flint project.
 	 */
-	public class EmitterEvent extends Event
-	{
-		/**
+class EmitterEvent extends Event
+{
+    /**
 		 * The event dispatched by an emitter when it currently has no particles
 		 * to display.
 		 */
-		public static var EMITTER_EMPTY:String = "emitterEmpty";
-		
-		/**
+    public static var EMITTER_EMPTY : String = "emitterEmpty";
+    
+    /**
 		 * The event dispatched by an emitter when it has updated all its particles
 		 * and is ready for them to be rendered. Renderers usually listen for
 		 * this event to know when to redraw the particles.
 		 */
-		public static var EMITTER_UPDATED:String = "emitterUpdated";
-
-		/**
+    public static var EMITTER_UPDATED : String = "emitterUpdated";
+    
+    /**
 		 * The event dispatched by an emitter when it's counter has completed it's full 
 		 * lifecycle and will not emit any further particles.
 		 */
-		public static var COUNTER_COMPLETE:String = "counterComplete";
-		
-		/**
+    public static var COUNTER_COMPLETE : String = "counterComplete";
+    
+    /**
 		 * The constructor creates a EmitterEvent object.
 		 * 
 		 * @param type The type of the event, accessible as Event.type.
@@ -65,9 +66,8 @@ package org.flintparticles.common.events
 		 * @param cancelable Determines whether the Event object can be 
 		 * canceled. The default values is false.
 		 */
-		public function EmitterEvent( type : String, bubbles : Boolean = false, cancelable : Boolean = false )
-		{
-			super(type, bubbles, cancelable);
-		}
-	}
+    public function new(type : String, bubbles : Bool = false, cancelable : Bool = false)
+    {
+        super(type, bubbles, cancelable);
+    }
 }

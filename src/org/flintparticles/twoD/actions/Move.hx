@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The Move action updates the position of the particle based on its velocity.
 	 * It uses a Euler integrator to calculate the new position. If you want an
 	 * emitter's particles to move then you must add a Move action, or a similar 
@@ -43,21 +44,22 @@ package org.flintparticles.twoD.actions
 	 * 
 	 * <p>This action has a priority of -10, so that it executes after other actions.</p>
 	 */
-	public class Move extends ActionBase
-	{
-		/**
+class Move extends ActionBase
+{
+    /**
 		 * The constructor creates a Move action for use by an emitter. 
 		 * To add a Move to all particles created by an emitter, use the
 		 * emitter's addAction method.
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function Move()
-		{
-			priority = -10;
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        priority = -10;
+    }
+    
+    /**
 		 * Updates the particle's position based on its velocity and the period of 
 		 * time indicated.
 		 * 
@@ -70,13 +72,13 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.previousX = p.x;
-			p.previousY = p.y;
-			p.x += p.velX * time;
-			p.y += p.velY * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.previousX = p.x;
+        p.previousY = p.y;
+        p.x += p.velX * time;
+        p.y += p.velY * time;
+    }
 }
+

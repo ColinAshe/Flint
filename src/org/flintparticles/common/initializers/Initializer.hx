@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers
-{
-	import org.flintparticles.common.behaviours.Behaviour;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;		
+package org.flintparticles.common.initializers;
 
-	/**
+
+import org.flintparticles.common.behaviours.Behaviour;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Initializer interface must be implemented by all particle initializers.
 	 * 
 	 * <p>An Initializer is a class that is used to set properties of a particle 
@@ -54,9 +55,10 @@ package org.flintparticles.common.initializers
 	 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 	 * @see org.flintparticles.common.emitters.Emitter#removeInitializer()
 	 */
-	public interface Initializer extends Behaviour
-	{
-		/**
+interface Initializer extends Behaviour
+{
+
+    /**
 		 * The initialize method is used by the emitter to apply the initialization
 		 * to every particle. It is the key feature of the initializers and is
 		 * used to initialize the state of every particle. This method 
@@ -66,6 +68,5 @@ package org.flintparticles.common.initializers
 		 * @param emitter The Emitter that created the particle.
 		 * @param particle The particle to be initialized.
 		 */
-		function initialize( emitter:Emitter, particle:Particle ):void;
-	}
+    function initialize(emitter : Emitter, particle : Particle) : Void;
 }

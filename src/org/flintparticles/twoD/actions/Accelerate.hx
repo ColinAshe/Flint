@@ -28,24 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The Accelerate Action adjusts the velocity of each particle by a 
 	 * constant acceleration. This can be used, for example, to simulate
 	 * gravity.
 	 */
-	public class Accelerate extends ActionBase
-	{
-		private var _x:Number;
-		private var _y:Number;
-		
-		/**
+class Accelerate extends ActionBase
+{
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+
+    private var _x : Float;
+    private var _y : Float;
+    
+    /**
 		 * The constructor creates an Acceleration action for use by an emitter. 
 		 * To add an Accelerator to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -57,39 +61,42 @@ package org.flintparticles.twoD.actions
 		 * @param accelerationY The y coordinate of the acceleration to apply, in 
 		 * pixels per second per second.
 		 */
-		public function Accelerate( accelerationX:Number = 0, accelerationY:Number = 0 )
-		{
-			this.x = accelerationX;
-			this.y = accelerationY;
-		}
-		
-		/**
+    public function new(accelerationX : Float = 0, accelerationY : Float = 0)
+    {
+        super();
+        this.x = accelerationX;
+        this.y = accelerationY;
+    }
+    
+    /**
 		 * The x coordinate of the acceleration, in
 		 * pixels per second per second.
 		 */
-		public function get x():Number
-		{
-			return _x;
-		}
-		public function set x( value:Number ):void
-		{
-			_x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the acceleration, in
 		 * pixels per second per second.
 		 */
-		public function get y():Number
-		{
-			return _y;
-		}
-		public function set y( value:Number ):void
-		{
-			_y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _y = value;
+        return value;
+    }
+    
+    /**
 		 * Applies the acceleration to a particle for the specified time period.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -101,11 +108,11 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.velX += _x * time;
-			p.velY += _y * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.velX += _x * time;
+        p.velY += _y * time;
+    }
 }
+

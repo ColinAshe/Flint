@@ -28,63 +28,64 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.events
-{
-	import org.flintparticles.common.particles.Particle;
-	
-	import flash.events.Event;	
+package org.flintparticles.common.events;
 
-	/**
+
+import org.flintparticles.common.particles.Particle;
+
+import flash.events.Event;
+
+/**
 	 * The class for particle related events dispatched by classes in the Flint project.
 	 */
-	public class ParticleEvent extends Event
-	{
-		/**
+class ParticleEvent extends Event
+{
+    /**
 		 * The event dispatched by an emitter when a particle is created.
 		 */
-		public static var PARTICLE_CREATED:String = "particleCreated";
-		
-		/**
+    public static var PARTICLE_CREATED : String = "particleCreated";
+    
+    /**
 		 * The event dispatched by an emitter when a particle dies.
 		 */
-		public static var PARTICLE_DEAD:String = "particleDead";
-		
-		/**
+    public static var PARTICLE_DEAD : String = "particleDead";
+    
+    /**
 		 * The event dispatched by an emitter when a pre-existing particle is added to it.
 		 */
-		public static var PARTICLE_ADDED:String = "particleAdded";
-		
-		/**
+    public static var PARTICLE_ADDED : String = "particleAdded";
+    
+    /**
 		 * The event dispatched by an emitter when a particle is removed from it (but doesn't die).
 		 */
-		public static var PARTICLE_REMOVED:String = "particleRemoved";
-
-		/**
+    public static var PARTICLE_REMOVED : String = "particleRemoved";
+    
+    /**
 		 * The event dispatched by an emitter when a particle collides with another particle.
 		 */
-		public static var PARTICLES_COLLISION:String = "particlesCollision";
-		
-		/**
+    public static var PARTICLES_COLLISION : String = "particlesCollision";
+    
+    /**
 		 * The event dispatched by an emitter when a particle collides with a zone.
 		 */
-		public static var ZONE_COLLISION:String = "zoneCollision";
-		
-		/**
+    public static var ZONE_COLLISION : String = "zoneCollision";
+    
+    /**
 		 * The event dispatched by an emitter when a particle collides with another particle.
 		 */
-		public static var BOUNDING_BOX_COLLISION:String = "boundingBoxCollision";
-		
-		/**
+    public static var BOUNDING_BOX_COLLISION : String = "boundingBoxCollision";
+    
+    /**
 		 * The particle to which the event relates.
 		 */
-		public var particle:Particle;
-		
-		/**
+    public var particle : Particle;
+    
+    /**
 		 * The other object involved in the event. This may be null.
 		 */
-		public var otherObject:*;
-		
-		/**
+    public var otherObject : Dynamic;
+    
+    /**
 		 * The constructor creates a ParticleEvent object.
 		 * 
 		 * @param type The type of the event, accessible as Event.type.
@@ -94,22 +95,21 @@ package org.flintparticles.common.events
 		 * @param cancelable Determines whether the Event object can be 
 		 * canceled. The default values is false.
 		 */
-		public function ParticleEvent( type : String, particle:Particle = null, bubbles : Boolean = false, cancelable : Boolean = false )
-		{
-			super(type, bubbles, cancelable);
-			this.particle = particle;
-		}
-
-		/**
+    public function new(type : String, particle : Particle = null, bubbles : Bool = false, cancelable : Bool = false)
+    {
+        super(type, bubbles, cancelable);
+        this.particle = particle;
+    }
+    
+    /**
 		 * Creates a copy of this event.
 		 * 
 		 * @return The copy of this event.
 		 */
-		override public function clone():Event
-		{
-			var e:ParticleEvent = new ParticleEvent( type, particle, bubbles, cancelable );
-			e.otherObject = otherObject;
-			return e;
-		}
-	}
+    override public function clone() : Event
+    {
+        var e : ParticleEvent = new ParticleEvent(type, particle, bubbles, cancelable);
+        e.otherObject = otherObject;
+        return e;
+    }
 }

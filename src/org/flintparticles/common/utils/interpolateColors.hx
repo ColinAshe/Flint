@@ -28,9 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.utils 
+package org.flintparticles.common.utils;
+
+
+/**
+ * Class for interpolateColors
+ */
+@:final class ClassForInterpolateColors
 {
-	/**
+    /**
 	 * This function is used to find a color between two other colors.
 	 * 
 	 * @param color1 The first color.
@@ -39,13 +45,18 @@ package org.flintparticles.common.utils
 	 * is made from the second color.
 	 * @return The color created.
 	 */
-	public function interpolateColors( color1:uint, color2:uint, ratio:Number ):uint
-	{
-		var inv:Number = 1 - ratio;
-		var red:uint = Math.round( ( ( color1 >>> 16 ) & 255 ) * ratio + ( ( color2 >>> 16 ) & 255 ) * inv );
-		var green:uint = Math.round( ( ( color1 >>> 8 ) & 255 ) * ratio + ( ( color2 >>> 8 ) & 255 ) * inv );
-		var blue:uint = Math.round( ( ( color1 ) & 255 ) * ratio + ( ( color2 ) & 255 ) * inv );
-		var alpha:uint = Math.round( ( ( color1 >>> 24 ) & 255 ) * ratio + ( ( color2 >>> 24 ) & 255 ) * inv );
-		return ( alpha << 24 ) | ( red << 16 ) | ( green << 8 ) | blue;
-	}
+    public function interpolateColors(color1 : Int, color2 : Int, ratio : Float) : Int
+    {
+        var inv : Float = 1 - ratio;
+        var red : Int = Math.round(((color1 >>> 16) & 255) * ratio + ((color2 >>> 16) & 255) * inv);
+        var green : Int = Math.round(((color1 >>> 8) & 255) * ratio + ((color2 >>> 8) & 255) * inv);
+        var blue : Int = Math.round(((color1) & 255) * ratio + ((color2) & 255) * inv);
+        var alpha : Int = Math.round(((color1 >>> 24) & 255) * ratio + ((color2 >>> 24) & 255) * inv);
+        return (alpha << 24) | (red << 16) | (green << 8) | blue;
+    }
+
+    public function new()
+    {
+    }
 }
+

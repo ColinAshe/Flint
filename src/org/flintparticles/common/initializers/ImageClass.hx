@@ -28,11 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers
-{
-	import org.flintparticles.common.utils.construct;
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.ImageInitializerBase;
+
+import org.flintparticles.common.utils.Construct;
+
+/**
 	 * The ImageClass Initializer sets the DisplayObject to use to draw
 	 * the particle. It is used with the DisplayObjectRenderer. When using the
 	 * BitmapRenderer it is more efficient to use the SharedImage Initializer.
@@ -42,12 +44,15 @@ package org.flintparticles.common.initializers
 	 * <p>To enable use of the object pool, it was necessary to alter the constructor so the 
 	 * parameters for the image class are passed as an array rather than as plain values.</p>
 	 */
-	public class ImageClass extends ImageInitializerBase
-	{
-		private var _imageClass:Class;
-		private var _parameters:Array;
-		
-		/**
+class ImageClass extends ImageInitializerBase
+{
+    public var imageClass(get, set) : Class<Dynamic>;
+    public var parameters(get, set) : Array<Dynamic>;
+
+    private var _imageClass : Class<Dynamic>;
+    private var _parameters : Array<Dynamic>;
+    
+    /**
 		 * The constructor creates an ImageClass initializer for use by 
 		 * an emitter. To add an ImageClass to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -62,59 +67,60 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function ImageClass( imageClass:Class = null, parameters : Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( usePool );
-			_imageClass = imageClass;
-			_parameters = parameters ? parameters : [];
-			if( fillPool > 0 )
-			{
-				this.fillPool( fillPool );
-			}
-			
-		}
-		
-		/**
+    public function new(imageClass : Class<Dynamic> = null, parameters : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(usePool);
+        _imageClass = imageClass;
+        _parameters = (parameters != null) ? parameters : [];
+        if (fillPool > 0) 
+        {
+            this.fillPool(fillPool);
+        }
+    }
+    
+    /**
 		 * The class to use when creating
 		 * the particles' DisplayObjects.
 		 */
-		public function get imageClass():Class
-		{
-			return _imageClass;
-		}
-		public function set imageClass( value:Class ):void
-		{
-			_imageClass = value;
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		/**
+    private function get_ImageClass() : Class<Dynamic>
+    {
+        return _imageClass;
+    }
+    private function set_ImageClass(value : Class<Dynamic>) : Class<Dynamic>
+    {
+        _imageClass = value;
+        if (_usePool) 
+        {
+            clearPool();
+        }
+        return value;
+    }
+    
+    /**
 		 * The parameters to pass to the constructor
 		 * for the image class.
 		 */
-		public function get parameters():Array
-		{
-			return _parameters;
-		}
-		public function set parameters( value:Array ):void
-		{
-			_parameters = value;
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		/**
+    private function get_Parameters() : Array<Dynamic>
+    {
+        return _parameters;
+    }
+    private function set_Parameters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        _parameters = value;
+        if (_usePool) 
+        {
+            clearPool();
+        }
+        return value;
+    }
+    
+    /**
 		 * Used internally, this method creates an image object for displaying the particle 
 		 * by calling the image class constructor with the supplied parameters.
 		 */
-		override public function createImage() : Object
-		{
-			return construct( _imageClass, _parameters );
-		}
-	}
+    override public function createImage() : Dynamic
+    {
+        return construct(_imageClass, _parameters);
+    }
 }
+

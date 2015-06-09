@@ -28,16 +28,18 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.common.initializers;
 
-	[DefaultProperty("image")]
-	
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+import flash.display.DisplayObject;
+
+@:meta(DefaultProperty(name="image"))
+
+
+/**
 	 * The SharedImage Initializer sets the DisplayObject to use to draw
 	 * the particle. It is used with the BitmapRenderer. When using the
 	 * DisplayObjectRenderer the ImageClass Initializer must be used.
@@ -48,11 +50,13 @@ package org.flintparticles.common.initializers
 	 * only indirectly used to display the particle.
 	 */
 
-	public class SharedImage extends InitializerBase
-	{
-		private var _image:DisplayObject;
-		
-		/**
+class SharedImage extends InitializerBase
+{
+    public var image(get, set) : DisplayObject;
+
+    private var _image : DisplayObject;
+    
+    /**
 		 * The constructor creates a SharedImage initializer for use by 
 		 * an emitter. To add a SharedImage to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -61,29 +65,31 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function SharedImage( image:DisplayObject = null )
-		{
-			_image = image;
-		}
-		
-		/**
+    public function new(image : DisplayObject = null)
+    {
+        super();
+        _image = image;
+    }
+    
+    /**
 		 * The DisplayObject to use for each particle created by the emitter.
 		 */
-		public function get image():DisplayObject
-		{
-			return _image;
-		}
-		public function set image( value:DisplayObject ):void
-		{
-			_image = value;
-		}
-		
-		/**
+    private function get_Image() : DisplayObject
+    {
+        return _image;
+    }
+    private function set_Image(value : DisplayObject) : DisplayObject
+    {
+        _image = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			particle.image = _image;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        particle.image = _image;
+    }
 }
+

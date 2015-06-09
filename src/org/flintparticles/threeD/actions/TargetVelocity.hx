@@ -28,25 +28,32 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The TargetVelocity action adjusts the velocity of the particle towards the target velocity.
 	 */
-	public class TargetVelocity extends ActionBase
-	{
-		private var _vel:Vector3D;
-		private var _rate:Number;
-		
-		/**
+class TargetVelocity extends ActionBase
+{
+    public var targetVelocity(get, set) : Vector3D;
+    public var rate(get, set) : Float;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var z(get, set) : Float;
+
+    private var _vel : Vector3D;
+    private var _rate : Float;
+    
+    /**
 		 * The constructor creates a TargetVelocity action for use by 
 		 * an emitter. To add a TargetVelocity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -58,83 +65,89 @@ package org.flintparticles.threeD.actions
 		 * @param rate Adjusts how quickly the particle reaches the target velocity.
 		 * Larger numbers cause it to approach the target velocity more quickly.
 		 */
-		public function TargetVelocity( targetVelocity:Vector3D = null, rate:Number = 0.1 )
-		{
-			this.targetVelocity = targetVelocity ? targetVelocity : new Vector3D();
-			this.rate = rate;
-		}
-		
-		/**
+    public function new(targetVelocity : Vector3D = null, rate : Float = 0.1)
+    {
+        super();
+        this.targetVelocity = (targetVelocity != null) ? targetVelocity : new Vector3D();
+        this.rate = rate;
+    }
+    
+    /**
 		 * The x coordinate of the target velocity, in pixels per second.s
 		 */
-		public function get targetVelocity():Vector3D
-		{
-			return _vel;
-		}
-		public function set targetVelocity( value:Vector3D ):void
-		{
-			_vel = Vector3DUtils.cloneVector( value );
-		}
-		
-		/**
+    private function get_TargetVelocity() : Vector3D
+    {
+        return _vel;
+    }
+    private function set_TargetVelocity(value : Vector3D) : Vector3D
+    {
+        _vel = Vector3DUtils.cloneVector(value);
+        return value;
+    }
+    
+    /**
 		 * Adjusts how quickly the particle reaches the target angular velocity.
 		 * Larger numbers cause it to approach the target angular velocity more quickly.
 		 */
-		public function get rate():Number
-		{
-			return _rate;
-		}
-		public function set rate( value:Number ):void
-		{
-			_rate = value;
-		}
-		
-		/**
+    private function get_Rate() : Float
+    {
+        return _rate;
+    }
+    private function set_Rate(value : Float) : Float
+    {
+        _rate = value;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the target velocity.
 		 */
-		public function get x():Number
-		{
-			return _vel.x;
-		}
-		public function set x( value:Number ):void
-		{
-			_vel.x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _vel.x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _vel.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of  the target velocity.
 		 */
-		public function get y():Number
-		{
-			return _vel.y;
-		}
-		public function set y( value:Number ):void
-		{
-			_vel.y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _vel.y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _vel.y = value;
+        return value;
+    }
+    
+    /**
 		 * The z coordinate of the target velocity.
 		 */
-		public function get z():Number
-		{
-			return _vel.z;
-		}
-		public function set z( value:Number ):void
-		{
-			_vel.z = value;
-		}
-
-		/**
+    private function get_Z() : Float
+    {
+        return _vel.z;
+    }
+    private function set_Z(value : Float) : Float
+    {
+        _vel.z = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var v:Vector3D = Particle3D( particle ).velocity;
-			var c:Number = _rate * time;
-			v.x += ( _vel.x - v.x ) * c;
-			v.y += ( _vel.y - v.y ) * c;
-			v.z += ( _vel.z - v.z ) * c;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var v : Vector3D = cast((particle), Particle3D).velocity;
+        var c : Float = _rate * time;
+        v.x += (_vel.x - v.x) * c;
+        v.y += (_vel.y - v.y) * c;
+        v.z += (_vel.z - v.z) * c;
+    }
 }
+

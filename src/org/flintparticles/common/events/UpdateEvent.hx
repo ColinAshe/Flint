@@ -28,27 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.events
-{
-	import flash.events.Event;	
+package org.flintparticles.common.events;
 
-	/**
+
+import flash.events.Event;
+
+/**
 	 * The UpdateEvent is dispatched from the FrameUpdater utility every frame, to all emitters that are
 	 * being updated by Flint, to trigger the update cycle on each emitter.
 	 */
-	public class UpdateEvent extends Event
-	{
-		/**
+class UpdateEvent extends Event
+{
+    /**
 		 * The event dispatched on the enter frame
 		 */
-		public static var UPDATE:String = "update";
-		
-		/**
+    public static var UPDATE : String = "update";
+    
+    /**
 		 * The particle to which the event relates.
 		 */
-		public var time:Number;
-		
-		/**
+    public var time : Float;
+    
+    /**
 		 * The constructor creates a ParticleEvent object.
 		 * 
 		 * @param type The type of the event, accessible as Event.type.
@@ -58,20 +59,19 @@ package org.flintparticles.common.events
 		 * @param cancelable Determines whether the Event object can be 
 		 * canceled. The default values is false.
 		 */
-		public function UpdateEvent( type : String, time:Number = NaN, bubbles : Boolean = false, cancelable : Boolean = false )
-		{
-			super(type, bubbles, cancelable);
-			this.time = time;
-		}
-		
-		/**
+    public function new(type : String, time : Float = NaN, bubbles : Bool = false, cancelable : Bool = false)
+    {
+        super(type, bubbles, cancelable);
+        this.time = time;
+    }
+    
+    /**
 		 * Creates a copy of this event.
 		 * 
 		 * @return The copy of this event.
 		 */
-		override public function clone():Event
-		{
-			return new UpdateEvent( type, time, bubbles, cancelable );
-		}
-	}
+    override public function clone() : Event
+    {
+        return new UpdateEvent(type, time, bubbles, cancelable);
+    }
 }

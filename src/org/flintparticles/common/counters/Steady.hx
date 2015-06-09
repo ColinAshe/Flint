@@ -28,23 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Steady counter causes the emitter to emit particles continuously
 	 * at a steady rate. It can be used to simulate any continuous particle
 	 * stream.
 	 */
-	public class Steady implements Counter
-	{
-		private var _timeToNext:Number;
-		private var _rate:Number;
-		private var _rateInv:Number;
-		private var _running:Boolean;
-		
-		/**
+class Steady implements Counter
+{
+    public var rate(get, set) : Float;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _timeToNext : Float;
+    private var _rate : Float;
+    private var _rateInv : Float;
+    private var _running : Bool;
+    
+    /**
 		 * The constructor creates a Steady counter for use by an emitter. To
 		 * add a Steady counter to an emitter use the emitter's counter property.
 		 * 
@@ -52,60 +57,61 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function Steady( rate:Number = 0 )
-		{
-			_running = false;
-			this.rate = rate;
-		}
-		
-		/**
+    public function new(rate : Float = 0)
+    {
+        _running = false;
+        this.rate = rate;
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter emitting particles after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * The number of particles to emit per second.
 		 */
-		public function get rate():Number
-		{
-			return _rate;
-		}
-		public function set rate( value:Number ):void
-		{
-			if( !value || value < 0 )
-			{
-				value = 0;
-			}
-			if( _rate != value )
-			{
-				if( _rate && value )
-				{
-					var timePassed:Number = _rateInv - _timeToNext;
-					_rate = value;
-					_rateInv = value ? 1 / value : Number.MAX_VALUE;
-					_timeToNext = Math.max( _rateInv - timePassed, 0 );
-				}
-				else
-				{
-					_rate = value;
-					_rateInv = value ? 1 / value : Number.MAX_VALUE;
-					_timeToNext = _rateInv;
-				}
-			}
-		}
-		
-		/**
+    private function get_Rate() : Float
+    {
+        return _rate;
+    }
+    private function set_Rate(value : Float) : Float
+    {
+        if (value == 0 || value < 0) 
+        {
+            value = 0;
+        }
+        if (_rate != value) 
+        {
+            if (_rate != 0 && value != 0) 
+            {
+                var timePassed : Float = _rateInv - _timeToNext;
+                _rate = value;
+                _rateInv = (value != 0) ? 1 / value : Float.MAX_VALUE;
+                _timeToNext = Math.max(_rateInv - timePassed, 0);
+            }
+            else 
+            {
+                _rate = value;
+                _rateInv = (value != 0) ? 1 / value : Float.MAX_VALUE;
+                _timeToNext = _rateInv;
+            }
+        }
+        return value;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -117,14 +123,14 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_running = true;
-			_timeToNext = _rateInv;
-			return 0;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        _timeToNext = _rateInv;
+        return 0;
+    }
+    
+    /**
 		 * Uses the time, rateMin and rateMax to calculate how many
 		 * particles the emitter should emit now.
 		 * 
@@ -137,37 +143,36 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			if( !_running )
-			{
-				return 0;
-			}
-			var count:uint = 0;
-			_timeToNext -= time;
-			while( _timeToNext <= 0 )
-			{
-				++count;
-				_timeToNext += _rateInv;
-			}
-			return count;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running) 
+        {
+            return 0;
+        }
+        var count : Int = 0;
+        _timeToNext -= time;
+        while (_timeToNext <= 0)
+        {
+            ++count;
+            _timeToNext += _rateInv;
+        }
+        return count;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles. For this counter
 		 * this will always be false.
 		 */
-		public function get complete():Boolean
-		{
-			return false;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return false;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
 }

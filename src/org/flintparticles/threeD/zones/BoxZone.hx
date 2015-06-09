@@ -28,31 +28,40 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.zones 
-{
-	import org.flintparticles.threeD.geom.Matrix3DUtils;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
+package org.flintparticles.threed.zones;
 
-	import flash.geom.Matrix3D;
-	import flash.geom.Vector3D;
+import org.flintparticles.threed.zones.Zone3D;
 
-	/**
+import org.flintparticles.threed.geom.Matrix3DUtils;
+import org.flintparticles.threed.geom.Vector3DUtils;
+
+import flash.geom.Matrix3D;
+import flash.geom.Vector3D;
+
+/**
 	 * The BoxZone zone defines a cuboid or box shaped zone.
 	 */
 
-	public class BoxZone implements Zone3D 
-	{
-		private var _width:Number;
-		private var _height:Number;
-		private var _depth:Number;
-		private var _center:Vector3D;
-		private var _upAxis:Vector3D;
-		private var _depthAxis:Vector3D;
-		private var _transformTo:Matrix3D;
-		private var _transformFrom:Matrix3D;
-		private var _dirty:Boolean;
-		
-		/**
+class BoxZone implements Zone3D
+{
+    public var width(get, set) : Float;
+    public var height(get, set) : Float;
+    public var depth(get, set) : Float;
+    public var center(get, set) : Vector3D;
+    public var upAxis(get, set) : Vector3D;
+    public var depthAxis(get, set) : Vector3D;
+
+    private var _width : Float;
+    private var _height : Float;
+    private var _depth : Float;
+    private var _center : Vector3D;
+    private var _upAxis : Vector3D;
+    private var _depthAxis : Vector3D;
+    private var _transformTo : Matrix3D;
+    private var _transformFrom : Matrix3D;
+    private var _dirty : Bool;
+    
+    /**
 		 * The constructor creates a BoxZone 3D zone.
 		 * 
 		 * @param width The width of the box.
@@ -64,107 +73,113 @@ package org.flintparticles.threeD.zones
 		 * @param depthAxis The axis along which the depth is measured. The box is rotated
 		 * so that the depth is in this direction.
 		 */
-		public function BoxZone( width:Number = 0, height:Number = 0, depth:Number = 0, center:Vector3D = null, upAxis:Vector3D = null, depthAxis:Vector3D = null )
-		{
-			this.width = width;
-			this.height = height;
-			this.depth = depth;
-			this.center = center ? center : new Vector3D();
-			this.upAxis = upAxis ? upAxis : Vector3D.Y_AXIS;
-			this.depthAxis = depthAxis ? depthAxis : Vector3D.Z_AXIS;
-		}
-		
-		private function init():void
-		{
-			_transformFrom = Matrix3DUtils.newBasisTransform( _upAxis.crossProduct( _depthAxis ), _upAxis, _depthAxis );
-			_transformFrom.appendTranslation( _center.x, _center.y, _center.z );
-			_transformFrom.prependTranslation( -_width/2, -_height/2, -_depth/2 );
-			_transformTo = _transformFrom.clone();
-			_transformTo.invert();
-			_dirty = false;
-		}
-		
-		/**
+    public function new(width : Float = 0, height : Float = 0, depth : Float = 0, center : Vector3D = null, upAxis : Vector3D = null, depthAxis : Vector3D = null)
+    {
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.center = (center != null) ? center : new Vector3D();
+        this.upAxis = (upAxis != null) ? upAxis : Vector3D.Y_AXIS;
+        this.depthAxis = (depthAxis != null) ? depthAxis : Vector3D.Z_AXIS;
+    }
+    
+    private function init() : Void
+    {
+        _transformFrom = Matrix3DUtils.newBasisTransform(_upAxis.crossProduct(_depthAxis), _upAxis, _depthAxis);
+        _transformFrom.appendTranslation(_center.x, _center.y, _center.z);
+        _transformFrom.prependTranslation(-_width / 2, -_height / 2, -_depth / 2);
+        _transformTo = _transformFrom.clone();
+        _transformTo.invert();
+        _dirty = false;
+    }
+    
+    /**
 		 * The width of the box.
 		 */
-		public function get width() : Number
-		{
-			return _width;
-		}
-		public function set width( value : Number ) : void
-		{
-			_width = value;
-			_dirty = true;
-		}
-		
-		/**
+    private function get_Width() : Float
+    {
+        return _width;
+    }
+    private function set_Width(value : Float) : Float
+    {
+        _width = value;
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The height of the box.
 		 */
-		public function get height() : Number
-		{
-			return _height;
-		}
-		public function set height( value : Number ) : void
-		{
-			_height = value;
-			_dirty = true;
-		}
-		
-		/**
+    private function get_Height() : Float
+    {
+        return _height;
+    }
+    private function set_Height(value : Float) : Float
+    {
+        _height = value;
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The depth of the box.
 		 */
-		public function get depth() : Number
-		{
-			return _depth;
-		}
-		public function set depth( value : Number ) : void
-		{
-			_depth = value;
-			_dirty = true;
-		}
-
-		/**
+    private function get_Depth() : Float
+    {
+        return _depth;
+    }
+    private function set_Depth(value : Float) : Float
+    {
+        _depth = value;
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The point at the center of the box.
 		 */
-		public function get center() : Vector3D
-		{
-			return _center.clone();
-		}
-		public function set center( value : Vector3D ) : void
-		{
-			_center = Vector3DUtils.clonePoint( value );
-			_dirty = true;
-		}
-
-		/**
+    private function get_Center() : Vector3D
+    {
+        return _center.clone();
+    }
+    private function set_Center(value : Vector3D) : Vector3D
+    {
+        _center = Vector3DUtils.clonePoint(value);
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The axis along which the height is measured. The box is rotated
 		 * so that the height is in this direction.
 		 */
-		public function get upAxis() : Vector3D
-		{
-			return _upAxis.clone();
-		}
-		public function set upAxis( value : Vector3D ) : void
-		{
-			_upAxis = Vector3DUtils.cloneUnit( value );
-			_dirty = true;
-		}
-
-		/**
+    private function get_UpAxis() : Vector3D
+    {
+        return _upAxis.clone();
+    }
+    private function set_UpAxis(value : Vector3D) : Vector3D
+    {
+        _upAxis = Vector3DUtils.cloneUnit(value);
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The axis along which the depth is measured. The box is rotated
 		 * so that the depth is in this direction.
 		 */
-		public function get depthAxis() : Vector3D
-		{
-			return _depthAxis.clone();
-		}
-		public function set depthAxis( value : Vector3D ) : void
-		{
-			_depthAxis = Vector3DUtils.cloneUnit( value );
-			_dirty = true;
-		}
-
-		/**
+    private function get_DepthAxis() : Vector3D
+    {
+        return _depthAxis.clone();
+    }
+    private function set_DepthAxis(value : Vector3D) : Vector3D
+    {
+        _depthAxis = Vector3DUtils.cloneUnit(value);
+        _dirty = true;
+        return value;
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the box.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -173,44 +188,44 @@ package org.flintparticles.threeD.zones
 		 * @param y The y coordinate of the location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		public function contains( p:Vector3D ):Boolean
-		{
-			if( _dirty )
-			{
-				init();
-			}
-			var q:Vector3D = _transformTo.transformVector( p );
-			return q.x >= 0 && q.x <= _width && q.y >= 0 && q.y <= _height && q.z >= 0 && q.z <= _depth;
-		}
-		
-		/**
+    public function contains(p : Vector3D) : Bool
+    {
+        if (_dirty) 
+        {
+            init();
+        }
+        var q : Vector3D = _transformTo.transformVector(p);
+        return q.x >= 0 && q.x <= _width && q.y >= 0 && q.y <= _height && q.z >= 0 && q.z <= _depth;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the box.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getLocation():Vector3D
-		{
-			if( _dirty )
-			{
-				init();
-			}
-			var p:Vector3D = new Vector3D( Math.random() * _width, Math.random() * _height, Math.random() * _depth, 1 );
-			p = _transformFrom.transformVector( p );
-			return p;
-		}
-		
-		/**
+    public function getLocation() : Vector3D
+    {
+        if (_dirty) 
+        {
+            init();
+        }
+        var p : Vector3D = new Vector3D(Math.random() * _width, Math.random() * _height, Math.random() * _depth, 1);
+        p = _transformFrom.transformVector(p);
+        return p;
+    }
+    
+    /**
 		 * The getArea method returns the volume of the box.
 		 * This method is used by the MultiZone class. Usually, 
 		 * it need not be called directly by the user.
 		 * 
 		 * @return the volume of the box.
 		 */
-		public function getVolume():Number
-		{
-			return _width * _height * _depth;
-		}
-	}
+    public function getVolume() : Float
+    {
+        return _width * _height * _depth;
+    }
 }
+

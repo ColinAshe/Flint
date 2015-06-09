@@ -28,17 +28,19 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.zones.Zone3D;	
+package org.flintparticles.threed.initializers;
 
-	[DefaultProperty("zone")]
-	
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.zones.Zone3D;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The PositionAbsolute Initializer sets the initial location of the particle.
 	 * 
 	 * <p>The class uses zones to place the particle. A zone defines a region
@@ -50,11 +52,13 @@ package org.flintparticles.threeD.initializers
 	 * in the org.flintparticles.threeD.zones package.</p>
 	 */
 
-	public class PositionAbsolute extends InitializerBase
-	{
-		private var _zone : Zone3D;
+class PositionAbsolute extends InitializerBase
+{
+    public var zone(get, set) : Zone3D;
 
-		/**
+    private var _zone : Zone3D;
+    
+    /**
 		 * The constructor creates a PositionAbsolute initializer for use by 
 		 * an emitter. To add a PositionAbsolute to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -63,30 +67,32 @@ package org.flintparticles.threeD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function PositionAbsolute( zone : Zone3D = null )
-		{
-			this.zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone3D = null)
+    {
+        super();
+        this.zone = zone;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone3D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone3D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone3D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone3D) : Zone3D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			p.position = _zone.getLocation();
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        p.position = _zone.getLocation();
+    }
 }
+

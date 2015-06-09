@@ -28,29 +28,33 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The TweenPosition action adjusts the particle's position between two
 	 * locations as it ages. This action
 	 * should be used in conjunction with the Age action.
 	 */
 
-	public class TweenPosition extends ActionBase
-	{
-		private var _start:Vector3D;
-		private var _end:Vector3D;
-		private var _diff:Vector3D;
-		
-		/**
+class TweenPosition extends ActionBase
+{
+    public var start(get, set) : Vector3D;
+    public var end(get, set) : Vector3D;
+
+    private var _start : Vector3D;
+    private var _end : Vector3D;
+    private var _diff : Vector3D;
+    
+    /**
 		 * The constructor creates a TweenPosition action for use by 
 		 * an emitter. To add a TweenPosition to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -66,54 +70,57 @@ package org.flintparticles.threeD.actions
 		 * @param endY The y value of the particle at the end of its
 		 * life.
 		 */
-		public function TweenPosition( start:Vector3D = null, end:Vector3D = null )
-		{
-			this.start = start ? start : new Vector3D();
-			this.end = end ? end : new Vector3D();
-		}
-		
-		/**
+    public function new(start : Vector3D = null, end : Vector3D = null)
+    {
+        super();
+        this.start = (start != null) ? start : new Vector3D();
+        this.end = (end != null) ? end : new Vector3D();
+    }
+    
+    /**
 		 * The x position for the particle at the start of its life.
 		 */
-		public function get start():Vector3D
-		{
-			return _start;
-		}
-		public function set start( value:Vector3D ):void
-		{
-			_start = Vector3DUtils.clonePoint( value );
-			if( _end )
-			{
-				_diff = _start.subtract( _end );
-			}
-		}
-		
-		/**
+    private function get_Start() : Vector3D
+    {
+        return _start;
+    }
+    private function set_Start(value : Vector3D) : Vector3D
+    {
+        _start = Vector3DUtils.clonePoint(value);
+        if (_end != null) 
+        {
+            _diff = _start.subtract(_end);
+        }
+        return value;
+    }
+    
+    /**
 		 * The X value for the particle at the end of its life.
 		 */
-		public function get end():Vector3D
-		{
-			return _end;
-		}
-		public function set end( value:Vector3D ):void
-		{
-			_end = Vector3DUtils.clonePoint( value );
-			if( _start )
-			{
-				_diff = _start.subtract( _end );
-			}
-		}
-		
-		/**
+    private function get_End() : Vector3D
+    {
+        return _end;
+    }
+    private function set_End(value : Vector3D) : Vector3D
+    {
+        _end = Vector3DUtils.clonePoint(value);
+        if (_start != null) 
+        {
+            _diff = _start.subtract(_end);
+        }
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Vector3D = Particle3D( particle ).position;
-			var r:Number = particle.energy;
-			p.x = _diff.x * r + _end.x;
-			p.y = _diff.y * r + _end.y;
-			p.z = _diff.z * r + _end.z;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Vector3D = cast((particle), Particle3D).position;
+        var r : Float = particle.energy;
+        p.x = _diff.x * r + _end.x;
+        p.y = _diff.y * r + _end.y;
+        p.z = _diff.z * r + _end.z;
+    }
 }
+

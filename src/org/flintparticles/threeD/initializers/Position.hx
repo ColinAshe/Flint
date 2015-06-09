@@ -28,21 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.zones.Zone3D;
+package org.flintparticles.threed.initializers;
 
-	import flash.geom.Vector3D;
 
-	[DefaultProperty("zone")]
-	
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.zones.Zone3D;
+
+import flash.geom.Vector3D;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The Position Initializer sets the initial location of the particle.
 	 * 
 	 * <p>The class uses zones to place the particle. A zone defines a region
@@ -53,11 +55,13 @@ package org.flintparticles.threeD.initializers
 	 * in the org.flintparticles.threeD.zones package.</p>
 	 */
 
-	public class Position extends InitializerBase
-	{
-		private var _zone : Zone3D;
+class Position extends InitializerBase
+{
+    public var zone(get, set) : Zone3D;
 
-		/**
+    private var _zone : Zone3D;
+    
+    /**
 		 * The constructor creates a Position initializer for use by 
 		 * an emitter. To add a Position to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -66,36 +70,38 @@ package org.flintparticles.threeD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function Position( zone : Zone3D = null )
-		{
-			this.zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone3D = null)
+    {
+        super();
+        this.zone = zone;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone3D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone3D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone3D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone3D) : Zone3D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var e:Emitter3D = Emitter3D( emitter );
-			var position:Vector3D = zone.getLocation();
-			if( !e.rotation.equals( Quaternion.IDENTITY ) )
-			{
-				position = e.rotationTransform.transformVector( position );
-			}
-			p.position.incrementBy( position );
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var e : Emitter3D = cast((emitter), Emitter3D);
+        var position : Vector3D = zone.getLocation();
+        if (!e.rotation.equals(Quaternion.IDENTITY)) 
+        {
+            position = e.rotationTransform.transformVector(position);
+        }
+        p.position.incrementBy(position);
+    }
 }
+

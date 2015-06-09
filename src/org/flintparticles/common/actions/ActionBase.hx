@@ -28,12 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The ActionBase class is the abstract base class for all particle actions
 	 * in the Flint library. It implements the Action interface with a default
 	 * priority of zero and empty methods for the rest of the interface.
@@ -50,34 +51,38 @@ package org.flintparticles.common.actions
 	 * 
 	 * @see org.flintparticles.common.emitters.Emitter#addAction()
 	 */
-	public class ActionBase implements Action
-	{
-		protected var _priority:int = 0;
-		
-		/**
+class ActionBase implements Action
+{
+    public var priority(get, set) : Int;
+
+    private var _priority : Int = 0;
+    
+    /**
 		 * The constructor creates an ActionBase object. But you shouldn't use it 
 		 * directly because the ActionBase class is abstract.
 		 */
-		public function ActionBase()
-		{
-		}
-		
-		/**
+    public function new()
+    {
+        
+    }
+    
+    /**
 		 * Returns a default priority of 0 for this action. Derived classes 
 		 * override this method if they want a different default priority.
 		 * 
 		 * @see org.flintparticles.common.actions.Action#getDefaultPriority()
 		 */
-		public function get priority():int
-		{
-			return _priority;
-		}
-		public function set priority( value:int ):void
-		{
-			_priority = value;
-		}
-		
-		/**
+    private function get_Priority() : Int
+    {
+        return _priority;
+    }
+    private function set_Priority(value : Int) : Int
+    {
+        _priority = value;
+        return value;
+    }
+    
+    /**
 		 * This method does nothing. Some derived classes override this method
 		 * to perform actions when the action is added to an emitter.
 		 * 
@@ -85,11 +90,12 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		public function addedToEmitter( emitter:Emitter ):void
-		{
-		}
-		
-		/**
+    public function addedToEmitter(emitter : Emitter) : Void
+    {
+        
+    }
+    
+    /**
 		 * This method does nothing. Some derived classes override this method
 		 * to perform actions when the action is removed from the emitter.
 		 * 
@@ -97,11 +103,12 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#removedFromEmitter()
 		 */
-		public function removedFromEmitter( emitter:Emitter ):void
-		{
-		}
-		
-		/**
+    public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        
+    }
+    
+    /**
 		 * This method does nothing. All derived classes override this method
 		 * to update each particle every frame.
 		 * 
@@ -111,8 +118,8 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-		}
-	}
+    public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        
+    }
 }

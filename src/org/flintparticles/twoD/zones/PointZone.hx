@@ -28,77 +28,86 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.zones 
-{
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.zones;
 
-	import flash.geom.Point;
+import org.flintparticles.twod.zones.Zone2D;
 
-	/**
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.geom.Point;
+
+/**
 	 * The PointZone zone defines a zone that contains a single point.
 	 */
 
-	public class PointZone implements Zone2D
-	{
-		private var _point:Point;
-		
-		/**
+class PointZone implements Zone2D
+{
+    public var point(get, set) : Point;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+
+    private var _point : Point;
+    
+    /**
 		 * The constructor defines a PointZone zone.
 		 * 
 		 * @param point The point that is the zone.
 		 */
-		public function PointZone( point:Point = null )
-		{
-			if( point == null )
-			{
-				_point = new Point( 0, 0 );
-			}
-			else
-			{
-			_point = point;
-		}
-		}
-		
-		/**
+    public function new(point : Point = null)
+    {
+        if (point == null) 
+        {
+            _point = new Point(0, 0);
+        }
+        else 
+        {
+            _point = point;
+        }
+    }
+    
+    /**
 		 * The point that is the zone.
 		 */
-		public function get point() : Point
-		{
-			return _point;
-		}
-
-		public function set point( value : Point ) : void
-		{
-			_point = value;
-		}
-
-		/**
+    private function get_Point() : Point
+    {
+        return _point;
+    }
+    
+    private function set_Point(value : Point) : Point
+    {
+        _point = value;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the point that is the zone.
 		 */
-		public function get x() : Number
-		{
-			return _point.x;
-		}
-
-		public function set x( value : Number ) : void
-		{
-			_point.x = value;
-		}
-
-		/**
+    private function get_X() : Float
+    {
+        return _point.x;
+    }
+    
+    private function set_X(value : Float) : Float
+    {
+        _point.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the point that is the zone.
 		 */
-		public function get y() : Number
-		{
-			return _point.y;
-		}
-
-		public function set y( value : Number ) : void
-		{
-			_point.y = value;
-		}
-
-		/**
+    private function get_Y() : Float
+    {
+        return _point.y;
+    }
+    
+    private function set_Y(value : Float) : Float
+    {
+        _point.y = value;
+        return value;
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -107,37 +116,37 @@ package org.flintparticles.twoD.zones
 		 * @param y The y coordinate of the location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		public function contains( x:Number, y:Number ):Boolean
-		{
-			return _point.x == x && _point.y == y;
-		}
-		
-		/**
+    public function contains(x : Float, y : Float) : Bool
+    {
+        return _point.x == x && _point.y == y;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getLocation():Point
-		{
-			return _point.clone();
-		}
-		
-		/**
+    public function getLocation() : Point
+    {
+        return _point.clone();
+    }
+    
+    /**
 		 * The getArea method returns the size of the zone.
 		 * This method is used by the MultiZone class. Usually, 
 		 * it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		public function getArea():Number
-		{
-			// treat as one pixel square
-			return 1;
-		}
-
-		/**
+    public function getArea() : Float
+    {
+        // treat as one pixel square
+        return 1;
+    }
+    
+    /**
 		 * Manages collisions between a particle and the zone. Particles will colide with the point defined 
 		 * for this zone. The collisionRadius of the particle is used when calculating the collision.
 		 * 
@@ -146,87 +155,87 @@ package org.flintparticles.twoD.zones
 		 * 
 		 * @return Whether a collision occured.
 		 */
-		public function collideParticle(particle:Particle2D, bounce:Number = 1):Boolean
-		{
-			var relativePreviousX:Number = particle.previousX - _point.x;
-			var relativePreviousY:Number = particle.previousY - _point.y;
-			var dot:Number = relativePreviousX * particle.velX + relativePreviousY * particle.velY;
-			if( dot >= 0 )
-			{
-				return false;
-			}
-			var relativeX:Number = particle.x - _point.x;
-			var relativeY:Number = particle.y - _point.y;
-			var radius:Number = particle.collisionRadius;
-			dot = relativeX * particle.velX + relativeY * particle.velY;
-			if( dot <= 0 )
-			{
-				if( relativeX > radius || relativeX < -radius )
-				{
-					return false;
-				}
-				if( relativeY > radius || relativeY < -radius )
-				{
-					return false;
-				}
-				if( relativeX * relativeX + relativeY * relativeY > radius * radius )
-				{
-					return false;
-				}
-			}
-			
-			var frameVelX:Number = relativeX - relativePreviousX;
-			var frameVelY:Number = relativeY - relativePreviousY;
-			var a:Number = frameVelX * frameVelX + frameVelY * frameVelY;
-			var b:Number = 2 * ( relativePreviousX * frameVelX + relativePreviousY * frameVelY );
-			var c:Number = relativePreviousX * relativePreviousX + relativePreviousY * relativePreviousY - radius * radius;
-			var sq:Number = b * b - 4 * a * c;
-			if( sq < 0 )
-			{
-				return false;
-			}
-			var srt:Number = Math.sqrt( sq );
-			var t1:Number = ( -b + srt ) / ( 2 * a );
-			var t2:Number = ( -b - srt ) / ( 2 * a );
-			var t:Array = new Array();
-			
-			if( t1 > 0 && t1 <= 1 )
-			{
-				t.push( t1 );
-			}
-			if( t2 > 0 && t2 <= 1 )
-			{
-				t.push( t2 );
-			}
-			var time:Number;
-			if( t.length == 0 )
-			{
-				return false;
-			}
-			if( t.length == 1 )
-			{
-				time = t[0];
-			}
-			else
-			{
-				time = Math.min( t1, t2 );
-			}
-			var cx:Number = relativePreviousX + time * frameVelX + _point.x;
-			var cy:Number = relativePreviousY + time * frameVelY + _point.y;
-			var nx:Number = cx - _point.x;
-			var ny:Number = cy - _point.y;
-			var d:Number = Math.sqrt( nx * nx + ny * ny );
-			nx /= d;
-			ny /= d;
-			var n:Number = frameVelX * nx + frameVelY * ny;
-			frameVelX -= 2 * nx * n;
-			frameVelY -= 2 * ny * n;
-			particle.x = cx + ( 1 - time ) * frameVelX;
-			particle.y = cy + ( 1 - time ) * frameVelY;
-			var normalVel:Number = particle.velX * nx + particle.velY * ny;
-			particle.velX -= (1 + bounce) * nx * normalVel;
-			particle.velY -= (1 + bounce) * ny * normalVel;
-			return true;
-		}
-	}
+    public function collideParticle(particle : Particle2D, bounce : Float = 1) : Bool
+    {
+        var relativePreviousX : Float = particle.previousX - _point.x;
+        var relativePreviousY : Float = particle.previousY - _point.y;
+        var dot : Float = relativePreviousX * particle.velX + relativePreviousY * particle.velY;
+        if (dot >= 0) 
+        {
+            return false;
+        }
+        var relativeX : Float = particle.x - _point.x;
+        var relativeY : Float = particle.y - _point.y;
+        var radius : Float = particle.collisionRadius;
+        dot = relativeX * particle.velX + relativeY * particle.velY;
+        if (dot <= 0) 
+        {
+            if (relativeX > radius || relativeX < -radius) 
+            {
+                return false;
+            }
+            if (relativeY > radius || relativeY < -radius) 
+            {
+                return false;
+            }
+            if (relativeX * relativeX + relativeY * relativeY > radius * radius) 
+            {
+                return false;
+            }
+        }
+        
+        var frameVelX : Float = relativeX - relativePreviousX;
+        var frameVelY : Float = relativeY - relativePreviousY;
+        var a : Float = frameVelX * frameVelX + frameVelY * frameVelY;
+        var b : Float = 2 * (relativePreviousX * frameVelX + relativePreviousY * frameVelY);
+        var c : Float = relativePreviousX * relativePreviousX + relativePreviousY * relativePreviousY - radius * radius;
+        var sq : Float = b * b - 4 * a * c;
+        if (sq < 0) 
+        {
+            return false;
+        }
+        var srt : Float = Math.sqrt(sq);
+        var t1 : Float = (-b + srt) / (2 * a);
+        var t2 : Float = (-b - srt) / (2 * a);
+        var t : Array<Dynamic> = new Array<Dynamic>();
+        
+        if (t1 > 0 && t1 <= 1) 
+        {
+            t.push(t1);
+        }
+        if (t2 > 0 && t2 <= 1) 
+        {
+            t.push(t2);
+        }
+        var time : Float;
+        if (t.length == 0) 
+        {
+            return false;
+        }
+        if (t.length == 1) 
+        {
+            time = t[0];
+        }
+        else 
+        {
+            time = Math.min(t1, t2);
+        }
+        var cx : Float = relativePreviousX + time * frameVelX + _point.x;
+        var cy : Float = relativePreviousY + time * frameVelY + _point.y;
+        var nx : Float = cx - _point.x;
+        var ny : Float = cy - _point.y;
+        var d : Float = Math.sqrt(nx * nx + ny * ny);
+        nx /= d;
+        ny /= d;
+        var n : Float = frameVelX * nx + frameVelY * ny;
+        frameVelX -= 2 * nx * n;
+        frameVelY -= 2 * ny * n;
+        particle.x = cx + (1 - time) * frameVelX;
+        particle.y = cy + (1 - time) * frameVelY;
+        var normalVel : Float = particle.velX * nx + particle.velY * ny;
+        particle.velX -= (1 + bounce) * nx * normalVel;
+        particle.velY -= (1 + bounce) * ny * normalVel;
+        return true;
+    }
 }
+

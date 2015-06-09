@@ -28,20 +28,26 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The AlphaInit Initializer sets the alpha transparency of the particle.
 	 */
-	public class AlphaInit extends InitializerBase
-	{
-		private var _min:Number;
-		private var _max:Number;
-		
-		/**
+class AlphaInit extends InitializerBase
+{
+    public var minAlpha(get, set) : Float;
+    public var maxAlpha(get, set) : Float;
+    public var alpha(get, set) : Float;
+
+    private var _min : Float;
+    private var _max : Float;
+    
+    /**
 		 * The constructor creates an AlphaInit initializer for use by 
 		 * an emitter. To add an AlphaInit to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -61,75 +67,79 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function AlphaInit( minAlpha:Number= 1, maxAlpha:Number = NaN )
-		{
-			priority = -10;
-			_min = minAlpha;
-			if( isNaN( maxAlpha ) )
-			{
-				_max = _min;
-			}
-			else
-			{
-				_max = maxAlpha;
-			}
-		}
-		
-		/**
+    public function new(minAlpha : Float = 1, maxAlpha : Float = NaN)
+    {
+        super();
+        priority = -10;
+        _min = minAlpha;
+        if (Math.isNaN(maxAlpha)) 
+        {
+            _max = _min;
+        }
+        else 
+        {
+            _max = maxAlpha;
+        }
+    }
+    
+    /**
 		 * The minimum alpha value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get minAlpha():Number
-		{
-			return _min;
-		}
-		public function set minAlpha( value:Number ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinAlpha() : Float
+    {
+        return _min;
+    }
+    private function set_MinAlpha(value : Float) : Float
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum alpha value for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get maxAlpha():Number
-		{
-			return _max;
-		}
-		public function set maxAlpha( value:Number ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxAlpha() : Float
+    {
+        return _max;
+    }
+    private function set_MaxAlpha(value : Float) : Float
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minAlpha and maxAlpha.
 		 * When writing this sets both maxAlpha and minAlpha to the 
 		 * same alpha value.
 		 */
-		public function get alpha():Number
-		{
-			return _min == _max ? _min : ( _max + _min ) / 2;
-		}
-		public function set alpha( value:Number ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_Alpha() : Float
+    {
+        return _min == (_max != 0) ? _min : (_max + _min) / 2;
+    }
+    private function set_Alpha(value : Float) : Float
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var alpha:Number;
-			if( _max == _min )
-			{
-				alpha = _min;
-			}
-			else
-			{
-				alpha = _min + Math.random() * ( _max - _min );
-			}
-			particle.color = ( particle.color & 0xFFFFFF ) | ( Math.round( alpha * 255 ) << 24 );
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var alpha : Float;
+        if (_max == _min) 
+        {
+            alpha = _min;
+        }
+        else 
+        {
+            alpha = _min + Math.random() * (_max - _min);
+        }
+        particle.color = (particle.color & 0xFFFFFF) | (Math.round(alpha * 255) << 24);
+    }
 }
+

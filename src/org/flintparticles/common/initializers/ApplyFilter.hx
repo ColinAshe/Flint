@@ -28,23 +28,27 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	
-	import flash.display.DisplayObject;
-	import flash.filters.BitmapFilter;	
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+import flash.display.DisplayObject;
+import flash.filters.BitmapFilter;
+
+/**
 	 * The ApplyFilter Initializer applies a filter to the particle's image.
 	 */
 
-	public class ApplyFilter extends InitializerBase
-	{
-		private var _filter:BitmapFilter;
-		
-		/**
+class ApplyFilter extends InitializerBase
+{
+    public var filter(get, set) : BitmapFilter;
+
+    private var _filter : BitmapFilter;
+    
+    /**
 		 * The constructor creates an ApplyFilter initializer for use by 
 		 * an emitter. To add an ApplyFilter to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -56,44 +60,46 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function ApplyFilter( filter:BitmapFilter = null )
-		{
-			priority = -10;
-			_filter = filter;
-		}
-
-		
-		/**
+    public function new(filter : BitmapFilter = null)
+    {
+        super();
+        priority = -10;
+        _filter = filter;
+    }
+    
+    
+    /**
 		 * The filter to apply to each particle's image when it is created.
 		 */
-		public function get filter():BitmapFilter
-		{
-			return _filter;
-		}
-		public function set filter( value:BitmapFilter ):void
-		{
-			_filter = value;
-		}
-		
-		/**
+    private function get_Filter() : BitmapFilter
+    {
+        return _filter;
+    }
+    private function set_Filter(value : BitmapFilter) : BitmapFilter
+    {
+        _filter = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( particle.image && particle.image is DisplayObject )
-			{
-				var img:DisplayObject = particle.image;
-				if( img.filters )
-				{
-					var filters:Array = img.filters;
-					filters.push( _filter );
-					img.filters = filters;
-				}
-				else
-				{
-					img.filters = [ _filter ];
-				}
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (particle.image && Std.is(particle.image, DisplayObject)) 
+        {
+            var img : DisplayObject = particle.image;
+            if (img.filters) 
+            {
+                var filters : Array<Dynamic> = img.filters;
+                filters.push(_filter);
+                img.filters = filters;
+            }
+            else 
+            {
+                img.filters = [_filter];
+            }
+        }
+    }
 }
+

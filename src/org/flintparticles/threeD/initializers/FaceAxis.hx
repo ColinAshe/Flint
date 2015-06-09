@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import flash.geom.Vector3D;
-	import org.flintparticles.threeD.particles.Particle3D;	
+package org.flintparticles.threed.initializers;
 
-	/**
+
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import flash.geom.Vector3D;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The FaceAxis Initializer sets the face axis of the particle. The face axis
 	 * is a unit vector in the coordinate space of the particle that indicates the
 	 * "forward" direction for the particle.
@@ -48,11 +49,13 @@ package org.flintparticles.threeD.initializers
 	 * of the particle.</p>
 	 */
 
-	public class FaceAxis extends InitializerBase
-	{
-		private var _axis : Vector3D;
+class FaceAxis extends InitializerBase
+{
+    public var axis(get, set) : Vector3D;
 
-		/**
+    private var _axis : Vector3D;
+    
+    /**
 		 * The constructor creates a FaceAxis initializer for use by 
 		 * an emitter. To add a FaceAxis to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -61,30 +64,32 @@ package org.flintparticles.threeD.initializers
 		 * 
  		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function FaceAxis( axis : Vector3D = null )
-		{
-			this.axis = axis ? axis : Vector3D.X_AXIS;
-		}
-		
-		/**
+    public function new(axis : Vector3D = null)
+    {
+        super();
+        this.axis = (axis != null) ? axis : Vector3D.X_AXIS;
+    }
+    
+    /**
 		 * The face axis of the particles.
 		 */
-		public function get axis():Vector3D
-		{
-			return _axis;
-		}
-		public function set axis( value:Vector3D ):void
-		{
-			_axis = Vector3DUtils.cloneUnit( value );
-		}
-		
-		/**
+    private function get_Axis() : Vector3D
+    {
+        return _axis;
+    }
+    private function set_Axis(value : Vector3D) : Vector3D
+    {
+        _axis = Vector3DUtils.cloneUnit(value);
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			p.faceAxis = _axis.clone();
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        p.faceAxis = _axis.clone();
+    }
 }
+

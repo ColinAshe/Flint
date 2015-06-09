@@ -28,27 +28,33 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.zones 
-{
-	import org.flintparticles.threeD.geom.Vector3DUtils;
+package org.flintparticles.threed.zones;
 
-	import flash.geom.Vector3D;
+import org.flintparticles.threed.zones.Zone3D;
 
-	/**
+import org.flintparticles.threed.geom.Vector3DUtils;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The SphereZone zone defines a zone that contains all the points in a sphere.
 	 * The sphere can be positioned anywhere in 3D space and may, optionally,
 	 * be hollow in the middle.
 	 */
 
-	public class SphereZone implements Zone3D 
-	{
-		private var _center:Vector3D;
-		private var _innerRadius:Number;
-		private var _innerRadiusSq:Number;
-		private var _outerRadius:Number;
-		private var _outerRadiusSq:Number;
-		
-		/**
+class SphereZone implements Zone3D
+{
+    public var center(get, set) : Vector3D;
+    public var innerRadius(get, set) : Float;
+    public var outerRadius(get, set) : Float;
+
+    private var _center : Vector3D;
+    private var _innerRadius : Float;
+    private var _innerRadiusSq : Float;
+    private var _outerRadius : Float;
+    private var _outerRadiusSq : Float;
+    
+    /**
 		 * The constructor creates a SphereZone 3D zone.
 		 * 
 		 * @param center The point at the center of the sphere.
@@ -56,52 +62,55 @@ package org.flintparticles.threeD.zones
 		 * @param innerRadius The inner radius of the sphere. This defines the hollow 
 		 * center of the sphere. If set to zero, the sphere is solid throughout. 
 		 */
-		public function SphereZone( center:Vector3D = null, outerRadius:Number = 0, innerRadius:Number = 0 )
-		{
-			this.center = center ? center : new Vector3D();
-			this.innerRadius = innerRadius;
-			this.outerRadius = outerRadius;
-		}
-		
-		/**
+    public function new(center : Vector3D = null, outerRadius : Float = 0, innerRadius : Float = 0)
+    {
+        this.center = (center != null) ? center : new Vector3D();
+        this.innerRadius = innerRadius;
+        this.outerRadius = outerRadius;
+    }
+    
+    /**
 		 * The point at the center of the sphere.
 		 */
-		public function get center() : Vector3D
-		{
-			return _center.clone();
-		}
-		public function set center( value : Vector3D ) : void
-		{
-			_center = Vector3DUtils.clonePoint( value );
-		}
-
-		/**
+    private function get_Center() : Vector3D
+    {
+        return _center.clone();
+    }
+    private function set_Center(value : Vector3D) : Vector3D
+    {
+        _center = Vector3DUtils.clonePoint(value);
+        return value;
+    }
+    
+    /**
 		 * The radius of the hollow center of the sphere.
 		 */
-		public function get innerRadius() : Number
-		{
-			return _innerRadius;
-		}
-		public function set innerRadius( value : Number ) : void
-		{
-			_innerRadius = value;
-			_innerRadiusSq = _innerRadius * _innerRadius;
-		}
-
-		/**
+    private function get_InnerRadius() : Float
+    {
+        return _innerRadius;
+    }
+    private function set_InnerRadius(value : Float) : Float
+    {
+        _innerRadius = value;
+        _innerRadiusSq = _innerRadius * _innerRadius;
+        return value;
+    }
+    
+    /**
 		 * The outer radius of the sphere.
 		 */
-		public function get outerRadius() : Number
-		{
-			return _outerRadius;
-		}
-		public function set outerRadius( value : Number ) : void
-		{
-			_outerRadius = value;
-			_outerRadiusSq = _outerRadius * _outerRadius;
-		}
-
-		/**
+    private function get_OuterRadius() : Float
+    {
+        return _outerRadius;
+    }
+    private function set_OuterRadius(value : Float) : Float
+    {
+        _outerRadius = value;
+        _outerRadiusSq = _outerRadius * _outerRadius;
+        return value;
+    }
+    
+    /**
 		 * The contains method determines whether a point is inside the sphere.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -109,44 +118,43 @@ package org.flintparticles.threeD.zones
 		 * @param p The location to test.
 		 * @return true if the location is inside the zone, false if it is outside.
 		 */
-		public function contains( p:Vector3D ):Boolean
-		{
-			var distSq:Number = Vector3DUtils.distanceSquared( p, _center );
-			return distSq <= _outerRadiusSq && distSq >= _innerRadiusSq;
-		}
-		
-		/**
+    public function contains(p : Vector3D) : Bool
+    {
+        var distSq : Float = Vector3DUtils.distanceSquared(p, _center);
+        return distSq <= _outerRadiusSq && distSq >= _innerRadiusSq;
+    }
+    
+    /**
 		 * The getLocation method returns a random point inside the sphere.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return A random point inside the zone.
 		 */
-		public function getLocation():Vector3D
-		{
-			var rand:Vector3D;
-			do
-			{
-				rand = new Vector3D( Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5 );
-			}
-			while ( rand.x == 0 && rand.y == 0 && rand.z == 0 );
-			rand.normalize();
-			var d:Number = Math.random();
-			d = _innerRadius + ( 1 - d * d ) * ( _outerRadius - _innerRadius );
-			rand.scaleBy( d / rand.length );
-			return _center.add( rand );
-		}
-		
-		/**
+    public function getLocation() : Vector3D
+    {
+        var rand : Vector3D;
+        do
+        {
+            rand = new Vector3D(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+        }        while ((rand.x == 0 && rand.y == 0 && rand.z == 0));
+        rand.normalize();
+        var d : Float = Math.random();
+        d = _innerRadius + (1 - d * d) * (_outerRadius - _innerRadius);
+        rand.scaleBy(d / rand.length);
+        return _center.add(rand);
+    }
+    
+    /**
 		 * The getVolume method returns the volume of the sphere.
 		 * This method is used by the MultiZone class. Usually, 
 		 * it need not be called directly by the user.
 		 * 
 		 * @return the volume of the sphere.
 		 */
-		public function getVolume():Number
-		{
-			return ( _outerRadiusSq * _outerRadius - _innerRadiusSq * _innerRadius ) * Math.PI * 4 / 3;
-		}
-	}
+    public function getVolume() : Float
+    {
+        return (_outerRadiusSq * _outerRadius - _innerRadiusSq * _innerRadius) * Math.PI * 4 / 3;
+    }
 }
+

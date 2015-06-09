@@ -28,36 +28,41 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.utils 
-{
-	/**
+package org.flintparticles.common.utils;
+
+
+/**
 	 * The Maths class contains a coupleof useful methods for use in maths functions.
 	 */
-	public class Maths 
-	{
-		private static const RADTODEG:Number = 180 / Math.PI;
-		private static const DEGTORAD:Number = Math.PI / 180;
-		
-		/**
+class Maths
+{
+    private static var RADTODEG : Float = 180 / Math.PI;
+    private static var DEGTORAD : Float = Math.PI / 180;
+    
+    /**
 		 * Converts an angle from radians to degrees
 		 * 
 		 * @param radians The angle in radians
 		 * @return The angle in degrees
 		 */
-		public static function asDegrees( radians:Number ):Number
-		{
-			return radians * RADTODEG;
-		}
-		
-		/**
+    public static function asDegrees(radians : Float) : Float
+    {
+        return radians * RADTODEG;
+    }
+    
+    /**
 		 * Converts an angle from degrees to radians
 		 * 
 		 * @param radians The angle in degrees
 		 * @return The angle in radians
 		 */
-		public static function asRadians( degrees:Number ):Number
-		{
-			return degrees * DEGTORAD;
-		}
-	}
+    public static function asRadians(degrees : Float) : Float
+    {
+        return degrees * DEGTORAD;
+    }
+
+    public function new()
+    {
+    }
 }
+

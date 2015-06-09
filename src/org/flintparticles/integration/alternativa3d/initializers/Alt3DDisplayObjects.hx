@@ -28,22 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.alternativa3d.initializers
-{
-	import alternativa.engine3d.materials.TextureMaterial;
-	import alternativa.engine3d.objects.Sprite3D;
-	import alternativa.engine3d.resources.BitmapTextureResource;
+package org.flintparticles.integration.alternativa3d.initializers;
 
-	import org.flintparticles.common.initializers.ImageInitializerBase;
-	import org.flintparticles.common.utils.WeightedArray;
 
-	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
-	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
-	import flash.utils.Dictionary;
+import alternativa.engine3d.materials.TextureMaterial;
+import alternativa.engine3d.objects.Sprite3D;
+import alternativa.engine3d.resources.BitmapTextureResource;
 
-	/**
+import org.flintparticles.common.initializers.ImageInitializerBase;
+import org.flintparticles.common.utils.WeightedArray;
+
+import flash.display.BitmapData;
+import flash.display.DisplayObject;
+import flash.geom.Matrix;
+import flash.geom.Rectangle;
+import flash.utils.Dictionary;
+
+/**
 	 * The Alt3DDisplayObjects Initializer sets the DisplayObject to use to 
 	 * draw the particle in a 3D scene. It is used with the Alternativa3D renderer when
 	 * particles should be represented by a display object.
@@ -53,12 +54,12 @@ package org.flintparticles.integration.alternativa3d.initializers
 	 * 
 	 * <p>This class includes an object pool for reusing objects when particles die.</p>
 	 */
-	public class Alt3DDisplayObjects extends ImageInitializerBase
-	{
-		private var _displayObjects:WeightedArray;
-		private var _textures : Dictionary;
-		
-		/**
+class Alt3DDisplayObjects extends ImageInitializerBase
+{
+    private var _displayObjects : WeightedArray;
+    private var _textures : Dictionary;
+    
+    /**
 		 * The constructor creates an A3D4DisplayObjects initializer for use by 
 		 * an emitter. To add an A3D4DisplayObjects to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -73,84 +74,82 @@ package org.flintparticles.integration.alternativa3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function Alt3DDisplayObjects( displayObjects:Array, weights:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( usePool );
-			_displayObjects = new WeightedArray();
-			_textures = new Dictionary( true );
-			var len:int = displayObjects.length;
-			var i:int;
-			if( weights != null && weights.length == len )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addDisplayObject( displayObjects[i], weights[i] );
-				}
-			}
-			else
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addDisplayObject( displayObjects[i], 1 );
-				}
-			}
-			if( fillPool > 0 )
-			{
-				this.fillPool( fillPool );
-			}
-		}
-		
-		public function addDisplayObject( displayObject:DisplayObject, weight:Number = 1 ):void
-		{
-			_displayObjects.add( displayObject, weight );
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		public function removeDisplayObject( displayObject:DisplayObject ):void
-		{
-			_displayObjects.remove( displayObject );
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		/**
+    public function new(displayObjects : Array<Dynamic>, weights : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(usePool);
+        _displayObjects = new WeightedArray();
+        _textures = new Dictionary(true);
+        var len : Int = displayObjects.length;
+        var i : Int;
+        if (weights != null && weights.length == len) 
+        {
+            for (i in 0...len){
+                addDisplayObject(displayObjects[i], weights[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                addDisplayObject(displayObjects[i], 1);
+            }
+        }
+        if (fillPool > 0) 
+        {
+            this.fillPool(fillPool);
+        }
+    }
+    
+    public function addDisplayObject(displayObject : DisplayObject, weight : Float = 1) : Void
+    {
+        _displayObjects.add(displayObject, weight);
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    public function removeDisplayObject(displayObject : DisplayObject) : Void
+    {
+        _displayObjects.remove(displayObject);
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    /**
 		 * Used internally, this method creates an image object for displaying the particle 
 		 * by cloning one of the original Object3D objects.
 		 */
-		override public function createImage():Object
-		{
-			var displayObject:DisplayObject = _displayObjects.getRandomValue();
-			if( !_textures[displayObject] )
-			{
-				var bounds:Rectangle = displayObject.getBounds( displayObject );
-				var width:int = textureSize( bounds.width );
-				var height:int = textureSize( bounds.height );
-				var bitmapData:BitmapData = new BitmapData( width, height, true, 0x00FFFFFF );
-				var matrix:Matrix = displayObject.transform.matrix.clone();
-				matrix.translate( -bounds.left, -bounds.top );
-				matrix.scale( width / bounds.width, height / bounds.height );
-				bitmapData.draw( displayObject, matrix, displayObject.transform.colorTransform, null, null, true );
-				var resource : BitmapTextureResource = new BitmapTextureResource( bitmapData );
-				_textures[displayObject] = new TextureMaterial( resource, resource );
-			}
-			return new Sprite3D( displayObject.width, displayObject.height, _textures[displayObject] );
-		}
-		
-		private function textureSize( value:Number ):int
-		{
-			var val:int = Math.ceil( value );
-			var count:int = 0;
-			while( val )
-			{
-				count++;
-				val = val >>> 1;
-			}
-			return 1 << count + 1;
-		}
-	}
+    override public function createImage() : Dynamic
+    {
+        var displayObject : DisplayObject = _displayObjects.getRandomValue();
+        if (!Reflect.field(_textures, Std.string(displayObject))) 
+        {
+            var bounds : Rectangle = displayObject.getBounds(displayObject);
+            var width : Int = textureSize(bounds.width);
+            var height : Int = textureSize(bounds.height);
+            var bitmapData : BitmapData = new BitmapData(width, height, true, 0x00FFFFFF);
+            var matrix : Matrix = displayObject.transform.matrix.clone();
+            matrix.translate(-bounds.left, -bounds.top);
+            matrix.scale(width / bounds.width, height / bounds.height);
+            bitmapData.draw(displayObject, matrix, displayObject.transform.colorTransform, null, null, true);
+            var resource : BitmapTextureResource = new BitmapTextureResource(bitmapData);
+            Reflect.setField(_textures, Std.string(displayObject), new TextureMaterial(resource, resource));
+        }
+        return new Sprite3D(displayObject.width, displayObject.height, Reflect.field(_textures, Std.string(displayObject)));
+    }
+    
+    private function textureSize(value : Float) : Int
+    {
+        var val : Int = Math.ceil(value);
+        var count : Int = 0;
+        while (val)
+        {
+            count++;
+            val = val >>> 1;
+        }
+        return 1 << count + 1;
+    }
 }
+

@@ -28,14 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.initializers;
 
-	[DefaultProperty("initializers")]
-	
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+@:meta(DefaultProperty(name="initializers"))
+
+
+/**
 	 * The InitializerGroup initializer collects a number of initializers into a single 
 	 * larger initializer that applies all the grouped initializers to a particle. It is
 	 * commonly used with the ChooseInitializer initializer to choose from different
@@ -44,115 +46,115 @@ package org.flintparticles.common.initializers
 	 * @see org.flintparticles.common.initializers.ChooseInitializer
 	 */
 
-	public class InitializerGroup extends InitializerBase
-	{
-		private var _initializers:Vector.<Initializer>;
-		private var _emitter:Emitter;
-		
-		/**
+class InitializerGroup extends InitializerBase
+{
+    public var initializers(get, set) : Array<Initializer>;
+
+    private var _initializers : Array<Initializer>;
+    private var _emitter : Emitter;
+    
+    /**
 		 * The constructor creates an InitializerGroup.
 		 * 
 		 * @param initializers Initializers that should be added to the group.
 		 */
-		public function InitializerGroup( ...initializers )
-		{
-			_initializers = new Vector.<Initializer>();
-			for each( var i:Initializer in initializers )
-			{
-				addInitializer( i );
-			}
-		}
-		
-		public function get initializers():Vector.<Initializer>
-		{
-			return _initializers;
-		}
-		public function set initializers( value:Vector.<Initializer> ):void
-		{
-			var initializer:Initializer;
-			if( _emitter )
-			{
-				for each( initializer in _initializers )
-				{
-					initializer.removedFromEmitter( _emitter );
-				}
-			}
-			_initializers = value.slice( );
-			_initializers.sort( prioritySort );
-			if( _emitter )
-			{
-				for each( initializer in _initializers )
-				{
-					initializer.addedToEmitter( _emitter );
-				}
-			}
-		}
-
-		public function addInitializer( initializer:Initializer ):void
-		{
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _initializers[i].priority < initializer.priority )
-				{
-					break;
-				}
-			}
-			_initializers.splice( i, 0, initializer );
-			if( _emitter )
-			{
-				initializer.addedToEmitter( _emitter );
-			}
-		}
-		
-		public function removeInitializer( initializer:Initializer ):void
-		{
-			var index:int = _initializers.indexOf( initializer );
-			if( index != -1 )
-			{
-				_initializers.splice( index, 1 );
-				if( _emitter )
-				{
-					initializer.removedFromEmitter( _emitter );
-				}
-			}
-		}
-		
-		override public function addedToEmitter( emitter:Emitter ):void
-		{
-			_emitter = emitter;
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				_initializers[i].addedToEmitter( emitter );
-			}
-		}
-
-		override public function removedFromEmitter( emitter:Emitter ):void
-		{
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				_initializers[i].removedFromEmitter( emitter );
-			}
-			_emitter = null;
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        _initializers = new Array<Initializer>();
+        for (i in initializers)
+        {
+            addInitializer(i);
+        }
+    }
+    
+    private function get_Initializers() : Array<Initializer>
+    {
+        return _initializers;
+    }
+    private function set_Initializers(value : Array<Initializer>) : Array<Initializer>
+    {
+        var initializer : Initializer;
+        if (_emitter != null) 
+        {
+            for (initializer in _initializers)
+            {
+                initializer.removedFromEmitter(_emitter);
+            }
+        }
+        _initializers = value.substring();
+        _initializers.sort(prioritySort);
+        if (_emitter != null) 
+        {
+            for (initializer in _initializers)
+            {
+                initializer.addedToEmitter(_emitter);
+            }
+        }
+        return value;
+    }
+    
+    public function addInitializer(initializer : Initializer) : Void
+    {
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            if (_initializers[i].priority < initializer.priority) 
+            {
+                break;
+            }
+        }
+        _initializers.splice(i, 0, initializer);
+        if (_emitter != null) 
+        {
+            initializer.addedToEmitter(_emitter);
+        }
+    }
+    
+    public function removeInitializer(initializer : Initializer) : Void
+    {
+        var index : Int = Lambda.indexOf(_initializers, initializer);
+        if (index != -1) 
+        {
+            _initializers.splice(index, 1);
+            if (_emitter != null) 
+            {
+                initializer.removedFromEmitter(_emitter);
+            }
+        }
+    }
+    
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        _emitter = emitter;
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            _initializers[i].addedToEmitter(emitter);
+        }
+    }
+    
+    override public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            _initializers[i].removedFromEmitter(emitter);
+        }
+        _emitter = null;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				_initializers[i].initialize( emitter, particle );
-			}
-		}
-		
-		private function prioritySort( b1:Initializer, b2:Initializer ):Number
-		{
-			return b1.priority - b2.priority;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            _initializers[i].initialize(emitter, particle);
+        }
+    }
+    
+    private function prioritySort(b1 : Initializer, b2 : Initializer) : Float
+    {
+        return b1.priority - b2.priority;
+    }
 }
+

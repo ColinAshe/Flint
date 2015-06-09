@@ -28,26 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The TurnTowardsMouse action causes the particle to constantly adjust its direction
 	 * so that it travels towards the mouse pointer.
 	 */
 
-	public class TurnTowardsMouse extends ActionBase
-	{
-		private var _power:Number;
-		private var _renderer:DisplayObject;
-		
-		/**
+class TurnTowardsMouse extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var renderer(get, set) : DisplayObject;
+
+    private var _power : Float;
+    private var _renderer : DisplayObject;
+    
+    /**
 		 * The constructor creates a TurnTowardsMouse action for use by an emitter. 
 		 * To add a TurnTowardsMouse to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -58,38 +62,41 @@ package org.flintparticles.twoD.actions
 		 * @param renderer The display object whose coordinate system the mouse position is 
 		 * converted to. This is usually the renderer for the particle system created by the emitter.
 		 */
-		public function TurnTowardsMouse( power:Number = 0, renderer:DisplayObject = null )
-		{
-			this.power = power;
-			this.renderer = renderer;
-		}
-		
-		/**
+    public function new(power : Float = 0, renderer : DisplayObject = null)
+    {
+        super();
+        this.power = power;
+        this.renderer = renderer;
+    }
+    
+    /**
 		 * The strength of the turn action. Higher values produce a sharper turn.
 		 */
-		public function get power():Number
-		{
-			return _power;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value;
-		}
-
-		/**
+    private function get_Power() : Float
+    {
+        return _power;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value;
+        return value;
+    }
+    
+    /**
 		 * The display object whose coordinate system the mouse position is converted to. This
 		 * is usually the renderer for the particle system created by the emitter.
 		 */
-		public function get renderer():DisplayObject
-		{
-			return _renderer;
-		}
-		public function set renderer( value:DisplayObject ):void
-		{
-			_renderer = value;
-		}
-		
-		/**
+    private function get_Renderer() : DisplayObject
+    {
+        return _renderer;
+    }
+    private function set_Renderer(value : DisplayObject) : DisplayObject
+    {
+        _renderer = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the direction to the mouse and turns the particle towards 
 		 * this direction.
 		 * 
@@ -102,32 +109,31 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var turnLeft:Boolean = ( ( p.y - _renderer.mouseY ) * p.velX + ( _renderer.mouseX - p.x ) * p.velY > 0 );
-			var newAngle:Number;
-			if ( turnLeft )
-			{
-				newAngle = Math.atan2( p.velY, p.velX ) - _power * time;
-				
-			}
-			else
-			{
-				newAngle = Math.atan2( p.velY, p.velX ) + _power * time;
-			}
-			var len:Number = Math.sqrt( p.velX * p.velX + p.velY * p.velY );
-			p.velX = len * Math.cos( newAngle );
-			p.velY = len * Math.sin( newAngle );
-			var overturned:Boolean = ( ( p.y - _renderer.mouseY ) * p.velX + ( _renderer.mouseX - p.x ) * p.velY > 0 ) != turnLeft;
-			if( overturned )
-			{
-				var dx:Number = _renderer.mouseX - p.x;
-				var dy:Number = _renderer.mouseY - p.y;
-				var factor:Number = len / Math.sqrt( dx * dx + dy * dy );
-				p.velX = dx * factor;
-				p.velY = dy * factor;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var turnLeft : Bool = ((p.y - _renderer.mouseY) * p.velX + (_renderer.mouseX - p.x) * p.velY > 0);
+        var newAngle : Float;
+        if (turnLeft) 
+        {
+            newAngle = Math.atan2(p.velY, p.velX) - _power * time;
+        }
+        else 
+        {
+            newAngle = Math.atan2(p.velY, p.velX) + _power * time;
+        }
+        var len : Float = Math.sqrt(p.velX * p.velX + p.velY * p.velY);
+        p.velX = len * Math.cos(newAngle);
+        p.velY = len * Math.sin(newAngle);
+        var overturned : Bool = ((p.y - _renderer.mouseY) * p.velX + (_renderer.mouseX - p.x) * p.velY > 0) != turnLeft;
+        if (overturned) 
+        {
+            var dx : Float = _renderer.mouseX - p.x;
+            var dy : Float = _renderer.mouseY - p.y;
+            var factor : Float = len / Math.sqrt(dx * dx + dy * dy);
+            p.velX = dx * factor;
+            p.velY = dy * factor;
+        }
+    }
 }
+

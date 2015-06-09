@@ -28,25 +28,31 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The Accelerate Action adjusts the velocity of the particle by a 
 	 * constant acceleration. This can be used, for example, to simulate
 	 * gravity.
 	 */
-	public class Accelerate extends ActionBase
-	{
-		private var _acc:Vector3D;
-		
-		/**
+class Accelerate extends ActionBase
+{
+    public var acceleration(get, set) : Vector3D;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var z(get, set) : Float;
+
+    private var _acc : Vector3D;
+    
+    /**
 		 * The constructor creates an Acceleration action for use by an emitter. 
 		 * To add an Accelerator to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -56,64 +62,69 @@ package org.flintparticles.threeD.actions
 		 * @param acceleration The acceleration to apply, in coordinate units 
 		 * per second per second.
 		 */
-		public function Accelerate( acceleration:Vector3D = null )
-		{
-			this.acceleration = acceleration ? acceleration : new Vector3D();
-		}
-		
-		/**
+    public function new(acceleration : Vector3D = null)
+    {
+        super();
+        this.acceleration = (acceleration != null) ? acceleration : new Vector3D();
+    }
+    
+    /**
 		 * The acceleration, in coordinate units per second per second.
 		 */
-		public function get acceleration():Vector3D
-		{
-			return _acc;
-		}
-		public function set acceleration( value:Vector3D ):void
-		{
-			_acc = value.clone();
-			_acc.w = 0;
-		}
-		
-		/**
+    private function get_Acceleration() : Vector3D
+    {
+        return _acc;
+    }
+    private function set_Acceleration(value : Vector3D) : Vector3D
+    {
+        _acc = value.clone();
+        _acc.w = 0;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the acceleration, in
 		 * coordinate units per second per second.
 		 */
-		public function get x():Number
-		{
-			return _acc.x;
-		}
-		public function set x( value:Number ):void
-		{
-			_acc.x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _acc.x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _acc.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the acceleration, in
 		 * coordinate units per second per second.
 		 */
-		public function get y():Number
-		{
-			return _acc.y;
-		}
-		public function set y( value:Number ):void
-		{
-			_acc.y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _acc.y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _acc.y = value;
+        return value;
+    }
+    
+    /**
 		 * The z coordinate of the acceleration, in
 		 * coordinate units per second per second.
 		 */
-		public function get z():Number
-		{
-			return _acc.z;
-		}
-		public function set z( value:Number ):void
-		{
-			_acc.z = value;
-		}
-		
-		/**
+    private function get_Z() : Float
+    {
+        return _acc.z;
+    }
+    private function set_Z(value : Float) : Float
+    {
+        _acc.z = value;
+        return value;
+    }
+    
+    /**
 		 * Applies the acceleration to a particle for the specified time period.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -125,12 +136,12 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var v:Vector3D = Particle3D( particle ).velocity;
-			v.x += _acc.x * time;
-			v.y += _acc.y * time;
-			v.z += _acc.z * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var v : Vector3D = cast((particle), Particle3D).velocity;
+        v.x += _acc.x * time;
+        v.y += _acc.y * time;
+        v.z += _acc.z * time;
+    }
 }
+

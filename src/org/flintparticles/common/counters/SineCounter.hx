@@ -28,26 +28,33 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Sine counter causes the emitter to emit particles continuously
 	 * at a rate that varies according to a sine wave.
 	 */
-	public class SineCounter implements Counter
-	{
-		private var _emitted:Number;
-		private var _rateMin:Number;
-		private var _rateMax:Number;
-		private var _period:Number;
-		private var _running:Boolean;
-		private var _timePassed:Number;
-		private var _factor:Number;
-		private var _scale:Number;
-		
-		/**
+class SineCounter implements Counter
+{
+    public var rateMin(get, set) : Float;
+    public var rateMax(get, set) : Float;
+    public var period(get, set) : Float;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _emitted : Float;
+    private var _rateMin : Float;
+    private var _rateMax : Float;
+    private var _period : Float;
+    private var _running : Bool;
+    private var _timePassed : Float;
+    private var _factor : Float;
+    private var _scale : Float;
+    
+    /**
 		 * The constructor creates a SineCounter counter for use by an emitter. To
 		 * add a SineCounter counter to an emitter use the emitter's counter property.
 		 * 
@@ -59,75 +66,78 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function SineCounter( period:Number = 1, rateMax:Number = 0, rateMin:Number = 0 )
-		{
-			_running = false;
-			_period = period;
-			_rateMin = rateMin;
-			_rateMax = rateMax;
-			_factor = 2 * Math.PI / period;
-			_scale = 0.5 * ( _rateMax - _rateMin );
-		}
-		
-		/**
+    public function new(period : Float = 1, rateMax : Float = 0, rateMin : Float = 0)
+    {
+        _running = false;
+        _period = period;
+        _rateMin = rateMin;
+        _rateMax = rateMax;
+        _factor = 2 * Math.PI / period;
+        _scale = 0.5 * (_rateMax - _rateMin);
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitting of particles after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-			_emitted = 0;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+        _emitted = 0;
+    }
+    
+    /**
 		 * The number of particles to emit per second at the bottom
 		 * of the sine wave.
 		 */
-		public function get rateMin():Number
-		{
-			return _rateMin;
-		}
-		public function set rateMin( value:Number ):void
-		{
-			_rateMin = value;
-			_scale = 0.5 * ( _rateMax - _rateMin );
-		}
-		
-		/**
+    private function get_RateMin() : Float
+    {
+        return _rateMin;
+    }
+    private function set_RateMin(value : Float) : Float
+    {
+        _rateMin = value;
+        _scale = 0.5 * (_rateMax - _rateMin);
+        return value;
+    }
+    
+    /**
 		 * The number of particles emitted per second at the peak of
 		 * the sine wave.
 		 */
-		public function get rateMax():Number
-		{
-			return _rateMax;
-		}
-		public function set rateMax( value:Number ):void
-		{
-			_rateMax = value;
-			_scale = 0.5 * ( _rateMax - _rateMin );
-		}
-		
-		/**
+    private function get_RateMax() : Float
+    {
+        return _rateMax;
+    }
+    private function set_RateMax(value : Float) : Float
+    {
+        _rateMax = value;
+        _scale = 0.5 * (_rateMax - _rateMin);
+        return value;
+    }
+    
+    /**
 		 * The period of the sine wave used, in seconds.
 		 */
-		public function get period():Number
-		{
-			return _period;
-		}
-		public function set period( value:Number ):void
-		{
-			_period = value;
-			_factor = 2 * Math.PI / _period;
-		}
-		
-		/**
+    private function get_Period() : Float
+    {
+        return _period;
+    }
+    private function set_Period(value : Float) : Float
+    {
+        _period = value;
+        _factor = 2 * Math.PI / _period;
+        return value;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -139,15 +149,15 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_running = true;
-			_timePassed = 0;
-			_emitted = 0;
-			return 0;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        _timePassed = 0;
+        _emitted = 0;
+        return 0;
+    }
+    
+    /**
 		 * Uses the time, period, rateMin and rateMax to calculate how many
 		 * particles the emitter should emit now.
 		 * 
@@ -160,34 +170,33 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			if( !_running )
-			{
-				return 0;
-			}
-			_timePassed += time;
-			var count:uint = Math.floor( _rateMax * _timePassed + _scale * ( 1 - Math.cos( _timePassed * _factor ) ) / _factor );
-			var ret:uint = count - _emitted;
-			_emitted = count;
-			return ret;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running) 
+        {
+            return 0;
+        }
+        _timePassed += time;
+        var count : Int = Math.floor(_rateMax * _timePassed + _scale * (1 - Math.cos(_timePassed * _factor)) / _factor);
+        var ret : Int = count - _emitted;
+        _emitted = count;
+        return ret;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles. For this counter
 		 * this will always be false.
 		 */
-		public function get complete():Boolean
-		{
-			return false;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return false;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
 }

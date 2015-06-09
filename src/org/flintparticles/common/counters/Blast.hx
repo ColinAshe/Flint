@@ -28,21 +28,27 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+import org.flintparticles.common.counters.Counter;
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Blast counter causes the emitter to create a single burst of
 	 * particles when it starts and then emit no further particles.
 	 * It is used, for example, to simulate an explosion.
 	 */
-	public class Blast implements Counter
-	{
-		private var _startCount:uint;
-		private var _done:Boolean = false;
-		
-		/**
+class Blast implements Counter
+{
+    public var startCount(get, set) : Float;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _startCount : Int;
+    private var _done : Bool = false;
+    
+    /**
 		 * The constructor creates a Blast counter for use by an emitter. To
 		 * add a Blast counter to an emitter use the emitter's counter property.
 		 * 
@@ -51,40 +57,43 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function Blast( startCount:uint = 0 )
-		{
-			_startCount = startCount;
-		}
-				
-		/**
+    public function new(startCount : Int = 0)
+    {
+        _startCount = startCount;
+    }
+    
+    /**
 		 * The number of particles to emit when the emitter starts.
 		 */
-		public function get startCount():Number
-		{
-			return _startCount;
-		}
-		public function set startCount( value:Number ):void
-		{
-			_startCount = value;
-		}
-		
-		/**
+    private function get_StartCount() : Float
+    {
+        return _startCount;
+    }
+    private function set_StartCount(value : Float) : Float
+    {
+        _startCount = value;
+        return value;
+    }
+    
+    /**
 		 * Does nothing. Since the blast counter emits a single blast and then
 		 * stops, stopping it changes nothing.
 		 */
-		public function stop():void
-		{
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        
+    }
+    
+    /**
 		 * Does nothing. Since the blast counter emits a single blast and then
 		 * stops, stopping and resuming it changes nothing.
 		 */
-		public function resume():void
-		{
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        
+    }
+    
+    /**
 		 * Initilizes the counter. Returns startCount to indicate that the emitter 
 		 * should emit that many particles when it starts.
 		 * 
@@ -96,14 +105,14 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_done = true;
-			emitter.dispatchCounterComplete();
-			return _startCount;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _done = true;
+        emitter.dispatchCounterComplete();
+        return _startCount;
+    }
+    
+    /**
 		 * Returns 0 to indicate that no particles should be emitted after the 
 		 * initial blast.
 		 * 
@@ -116,25 +125,24 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			return 0;
-		}
-		
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        return 0;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles.
 		 */
-		public function get complete():Boolean
-		{
-			return _done;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return _done;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return false;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return false;
+    }
 }

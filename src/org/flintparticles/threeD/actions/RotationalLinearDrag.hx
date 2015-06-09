@@ -28,26 +28,29 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The RotationalLinearDrag action applies drag to the particle to slow it down 
 	 * when it's rotating. The drag force is proportional to the angular velocity of 
 	 * the particle.
 	 */
 
-	public class RotationalLinearDrag extends ActionBase
-	{
-		private var _drag:Number;
-		
-		/**
+class RotationalLinearDrag extends ActionBase
+{
+    public var drag(get, set) : Float;
+
+    private var _drag : Float;
+    
+    /**
 		 * The constructor creates a RotationalLinearDrag action for use by 
 		 * an emitter. To add a RotationalLinearDrag to all particles created by an 
 		 * emitter, use the emitter's addAction method.
@@ -56,44 +59,46 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @param drag The amount of drag. A higher number produces a stronger drag force.
 		 */
-		public function RotationalLinearDrag( drag:Number = 0 )
-		{
-			this.drag = drag;
-		}
-		
-		/**
+    public function new(drag : Float = 0)
+    {
+        super();
+        this.drag = drag;
+    }
+    
+    /**
 		 * The amount of drag. A higher number produces a stronger drag force.
 		 */
-		public function get drag():Number
-		{
-			return _drag;
-		}
-		public function set drag( value:Number ):void
-		{
-			_drag = value;
-		}
-		
-		/**
+    private function get_Drag() : Float
+    {
+        return _drag;
+    }
+    private function set_Drag(value : Float) : Float
+    {
+        _drag = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var v : Vector3D = Particle3D( particle ).angVelocity;
-			if ( v.x == 0 && v.y == 0 && v.z == 0 )
-			{
-				return;
-			}
-			var scale:Number = 1 - _drag * time / Particle3D( particle ).inertia;
-			if( scale < 0 )
-			{
-				v.x = 0;
-				v.y = 0;
-				v.z = 0;
-			}
-			else
-			{
-				v.scaleBy( scale );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var v : Vector3D = cast((particle), Particle3D).angVelocity;
+        if (v.x == 0 && v.y == 0 && v.z == 0) 
+        {
+            return;
+        }
+        var scale : Float = 1 - _drag * time / cast((particle), Particle3D).inertia;
+        if (scale < 0) 
+        {
+            v.x = 0;
+            v.y = 0;
+            v.z = 0;
+        }
+        else 
+        {
+            v.scaleBy(scale);
+        }
+    }
 }
+

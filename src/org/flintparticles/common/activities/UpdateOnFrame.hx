@@ -28,11 +28,12 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.activities
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.activities;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The UpdateOnFrame activity is used to call a frameUpdate method of an object 
 	 * that implements the FrameUpdatable interface. The frameUpdate method is called
 	 * once every frame.
@@ -50,20 +51,21 @@ package org.flintparticles.common.activities
 	 * 
 	 * @see org.flintparticles.twoD.actions.Explosion
 	 */
-	public class UpdateOnFrame extends ActivityBase
-	{
-		private var action:FrameUpdatable;
-		/**
+class UpdateOnFrame extends ActivityBase
+{
+    private var action : FrameUpdatable;
+    /**
 		 * The constructor creates an UpdateOnFrame activity.
 		 * 
 		 * @param fu The object that shouldbe updated every frame.
 		 */
-		public function UpdateOnFrame( frameUpdatable:FrameUpdatable )
-		{
-			action = frameUpdatable;
-		}
-		
-		/**
+    public function new(frameUpdatable : FrameUpdatable)
+    {
+        super();
+        action = frameUpdatable;
+    }
+    
+    /**
 		 * Calls the frameUpdate method of the FrameUpdatable object associated
 		 * with this activity.
 		 * 
@@ -75,9 +77,8 @@ package org.flintparticles.common.activities
 		 * 
 		 * @see org.flintparticles.common.actions.Activity#update()
 		 */
-		override public function update( emitter:Emitter, time:Number ):void
-		{
-			action.frameUpdate( emitter, time );
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        action.frameUpdate(emitter, time);
+    }
 }

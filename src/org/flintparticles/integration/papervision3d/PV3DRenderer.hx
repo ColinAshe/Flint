@@ -28,20 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.papervision3d 
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.renderers.RendererBase;
-	import org.flintparticles.common.utils.Maths;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.papervision3d.core.math.Number3D;
-	import org.papervision3d.core.math.Quaternion;
-	import org.papervision3d.core.proto.DisplayObjectContainer3D;
-	import org.papervision3d.materials.MovieMaterial;
-	import org.papervision3d.objects.DisplayObject3D;
-	import org.papervision3d.objects.primitives.Plane;
+package org.flintparticles.integration.papervision3d;
 
-	/**
+
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.renderers.RendererBase;
+import org.flintparticles.common.utils.Maths;
+import org.flintparticles.threed.particles.Particle3D;
+import org.papervision3d.core.math.Number3D;
+import org.papervision3d.core.math.Quaternion;
+import org.papervision3d.core.proto.DisplayObjectContainer3D;
+import org.papervision3d.materials.MovieMaterial;
+import org.papervision3d.objects.DisplayObject3D;
+import org.papervision3d.objects.primitives.Plane;
+
+/**
 	 * Renders the particles in a Papervision3D scene.
 	 * 
 	 * <p>To use this renderer, the particles' image properties should be 
@@ -51,11 +52,11 @@ package org.flintparticles.integration.papervision3d
 	 * image objects are drawn according to the state of the particle
 	 * system.</p>
 	 */
-	public class PV3DRenderer extends RendererBase
-	{
-		private var _container:DisplayObjectContainer3D;
-		
-		/**
+class PV3DRenderer extends RendererBase
+{
+    private var _container : DisplayObjectContainer3D;
+    
+    /**
 		 * The constructor creates an Papervision3D renderer for displaying the
 		 * particles in a Papervision3D scene.
 		 * 
@@ -63,13 +64,13 @@ package org.flintparticles.integration.papervision3d
 		 * objects are created inside this object container. This is usually
 		 * a scene object, but it may be any DisplayObjectContainer3D.
 		 */
-		public function PV3DRenderer( container:DisplayObjectContainer3D )
-		{
-			super();
-			_container = container;
-		}
-		
-		/**
+    public function new(container : DisplayObjectContainer3D)
+    {
+        super();
+        _container = container;
+    }
+    
+    /**
 		 * This method copies the particle's state to the associated image object.
 		 * 
 		 * <p>This method is called internally by Flint and shouldn't need to be 
@@ -77,15 +78,15 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particles The particles to be rendered.
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			for each( var p:Particle3D in particles )
-			{
-				renderParticle( p );
-			}
-		}
-		
-		/**
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        for (p in particles)
+        {
+            renderParticle(p);
+        }
+    }
+    
+    /**
 		 * This method is called when a particle is added to an emitter -
 		 * usually because the emitter has just created the particle. The
 		 * method adds the particle's image to the container's display list.
@@ -93,38 +94,38 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particle The particle being added to the emitter.
 		 */
-		override protected function addParticle( particle:Particle ):void
-		{
-			_container.addChild( DisplayObject3D( particle.image ) );
-			renderParticle( particle as Particle3D );
-		}
-		
-		protected function renderParticle( particle:Particle3D ):void
-		{
-			var o:DisplayObject3D = particle.image;
-			o.x = particle.position.x;
-			o.y = particle.position.y;
-			o.z = particle.position.z;
-			o.scaleX = o.scaleY = o.scaleZ = particle.scale;
-			if( o is Plane && o.material is MovieMaterial )
-			{
-				MovieMaterial( o.material ).movie.transform.colorTransform = particle.colorTransform;
-			}
-			else
-			{
-				// this only works for some materials
-				o.material.fillColor = particle.color & 0xFFFFFF;
-				o.material.fillAlpha = particle.alpha;
-				// rotation
-				var rotation:Quaternion = new Quaternion( particle.rotation.x, particle.rotation.y, particle.rotation.z, particle.rotation.w );
-				var r:Number3D = rotation.toEuler();
-				o.rotationX = Maths.asDegrees( r.x );
-				o.rotationY = Maths.asDegrees( r.y );
-				o.rotationZ = Maths.asDegrees( r.z );
-			}
-		}
-		
-		/**
+    override private function addParticle(particle : Particle) : Void
+    {
+        _container.addChild(cast((particle.image), DisplayObject3D));
+        renderParticle(try cast(particle, Particle3D) catch(e:Dynamic) null);
+    }
+    
+    private function renderParticle(particle : Particle3D) : Void
+    {
+        var o : DisplayObject3D = particle.image;
+        o.x = particle.position.x;
+        o.y = particle.position.y;
+        o.z = particle.position.z;
+        o.scaleX = o.scaleY = o.scaleZ = particle.scale;
+        if (Std.is(o, Plane) && Std.is(o.material, MovieMaterial)) 
+        {
+            cast((o.material), MovieMaterial).movie.transform.colorTransform = particle.colorTransform;
+        }
+        else 
+        {
+            // this only works for some materials
+            o.material.fillColor = particle.color & 0xFFFFFF;
+            o.material.fillAlpha = particle.alpha;
+            // rotation
+            var rotation : Quaternion = new Quaternion(particle.rotation.x, particle.rotation.y, particle.rotation.z, particle.rotation.w);
+            var r : Number3D = rotation.toEuler();
+            o.rotationX = Maths.asDegrees(r.x);
+            o.rotationY = Maths.asDegrees(r.y);
+            o.rotationZ = Maths.asDegrees(r.z);
+        }
+    }
+    
+    /**
 		 * This method is called when a particle is removed from an emitter -
 		 * usually because the particle is dying. The method removes the 
 		 * particle's image from the container's display list. It is called 
@@ -132,9 +133,9 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particle The particle being removed from the emitter.
 		 */
-		override protected function removeParticle( particle:Particle ):void
-		{
-			_container.removeChild( DisplayObject3D( particle.image ) );
-		}
-	}
+    override private function removeParticle(particle : Particle) : Void
+    {
+        _container.removeChild(cast((particle.image), DisplayObject3D));
+    }
 }
+

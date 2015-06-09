@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.interpolateColors;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.InterpolateColors;
+
+/**
 	 * The ColorChange action alters the color of the particle as it ages.
 	 * It uses the particle's energy level to decide what colour to display.
 	 * 
@@ -47,12 +48,15 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.actions.Age
 	 */
 
-	public class ColorChange extends ActionBase
-	{
-		private var _startColor:uint;
-		private var _endColor:uint;
-		
-		/**
+class ColorChange extends ActionBase
+{
+    public var startColor(get, set) : Int;
+    public var endColor(get, set) : Int;
+
+    private var _startColor : Int;
+    private var _endColor : Int;
+    
+    /**
 		 * The constructor creates a ColorChange action for use by an emitter. 
 		 * To add a ColorChange to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -64,37 +68,40 @@ package org.flintparticles.common.actions
 		 * @param endColor The 32bit (ARGB) color of the particle when its 
 		 * energy is 0 - usually at the end of its life.
 		 */
-		public function ColorChange( startColor:uint = 0xFFFFFF, endColor:uint = 0xFFFFFF )
-		{
-			_startColor = startColor;
-			_endColor = endColor;
-		}
-		
-		/**
+    public function new(startColor : Int = 0xFFFFFF, endColor : Int = 0xFFFFFF)
+    {
+        super();
+        _startColor = startColor;
+        _endColor = endColor;
+    }
+    
+    /**
 		 * The color of the particle when its energy is 1.
 		 */
-		public function get startColor():uint
-		{
-			return _startColor;
-		}
-		public function set startColor( value:uint ):void
-		{
-			_startColor = value;
-		}
-		
-		/**
+    private function get_StartColor() : Int
+    {
+        return _startColor;
+    }
+    private function set_StartColor(value : Int) : Int
+    {
+        _startColor = value;
+        return value;
+    }
+    
+    /**
 		 * The color of the particle when its energy is zero.
 		 */
-		public function get endColor():uint
-		{
-			return _endColor;
-		}
-		public function set endColor( value:uint ):void
-		{
-			_endColor = value;
-		}
-
-		/**
+    private function get_EndColor() : Int
+    {
+        return _endColor;
+    }
+    private function set_EndColor(value : Int) : Int
+    {
+        _endColor = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the color of the particle based on the colors and the particle's 
 		 * energy level.
 		 * 
@@ -107,9 +114,9 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			particle.color = interpolateColors( _startColor, _endColor, particle.energy );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        particle.color = interpolateColors(_startColor, _endColor, particle.energy);
+    }
 }
+

@@ -28,21 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.activities 
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.activities;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The FrameUpdatable interface is used by the UpdateOnFrame activity.
 	 * 
 	 * @see org.flintparticles.common.activities.UpdateOnFrame
 	 */
-	public interface FrameUpdatable 
-	{
-		/**
+interface FrameUpdatable
+{
+
+    /**
 		 * When used with the UpdateOnFrame activity, the frameUpdate method will be called by the emitter
 		 * every frame before updating the particles.
 		 */
-		function frameUpdate( emitter:Emitter, time:Number ):void;
-	}
+    function frameUpdate(emitter : Emitter, time : Float) : Void;
 }
+

@@ -28,19 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Dictionary Initializer copies properties from an initializing object to a particle's dictionary.
 	 */
-	public class DictionaryInitializer extends InitializerBase 
-	{
-		private var _initValues:*;
-		
-		/**
+class DictionaryInitializer extends InitializerBase
+{
+    public var initValues(get, set) : Dynamic;
+
+    private var _initValues : Dynamic;
+    
+    /**
 		 * The constructor creates a DictionaryInit initializer for use by 
 		 * an emitter. To add a DictionaryInit to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -50,37 +54,39 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function DictionaryInitializer( initValues:* )
-		{
-			_initValues = initValues;
-		}
-		
-		/**
+    public function new(initValues : Dynamic)
+    {
+        super();
+        _initValues = initValues;
+    }
+    
+    /**
 		 * The object containing the properties for copying to the particle's dictionary.
 		 * May be an object or a dictionary.
 		 */
-		public function get initValues():*
-		{
-			return _initValues;
-		}
-		public function set initValues( value:* ):void
-		{
-			_initValues = value;
-		}
-		
-		/**
+    private function get_InitValues() : Dynamic
+    {
+        return _initValues;
+    }
+    private function set_InitValues(value : Dynamic) : Dynamic
+    {
+        _initValues = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if ( !_initValues )
-			{
-				return;
-			}
-			for( var key:* in _initValues )
-			{
-				particle.dictionary[ key ] = _initValues[ key ];
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (_initValues == null) 
+        {
+            return;
+        }
+        for (key in Reflect.fields(_initValues))
+        {
+            particle.dictionary[key] = Reflect.field(_initValues, key);
+        }
+    }
 }
+

@@ -28,12 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Fade action adjusts the particle's alpha as it ages.
 	 * It uses the particle's energy level to decide what colour to display.
 	 * 
@@ -46,12 +47,15 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.actions.Age
 	 */
 
-	public class Fade extends ActionBase
-	{
-		private var _diffAlpha:Number;
-		private var _endAlpha:Number;
-		
-		/**
+class Fade extends ActionBase
+{
+    public var startAlpha(get, set) : Float;
+    public var endAlpha(get, set) : Float;
+
+    private var _diffAlpha : Float;
+    private var _endAlpha : Float;
+    
+    /**
 		 * The constructor creates a Fade action for use by 
 		 * an emitter. To add a Fade to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -68,41 +72,44 @@ package org.flintparticles.common.actions
 		 * is 0 - usually at the end of its lifetime. The value should be 
 		 * between 0 and 1.
 		 */
-		public function Fade( startAlpha:Number = 1, endAlpha:Number = 0 )
-		{
-			priority = -5;
-			_diffAlpha = startAlpha - endAlpha;
-			_endAlpha = endAlpha;
-		}
-		
-		/**
+    public function new(startAlpha : Float = 1, endAlpha : Float = 0)
+    {
+        super();
+        priority = -5;
+        _diffAlpha = startAlpha - endAlpha;
+        _endAlpha = endAlpha;
+    }
+    
+    /**
 		 * The alpha value for the particle when its energy is 1.
 		 * The value should be between 0 and 1.
 		 */
-		public function get startAlpha():Number
-		{
-			return _endAlpha + _diffAlpha;
-		}
-		public function set startAlpha( value:Number ):void
-		{
-			_diffAlpha = value - _endAlpha;
-		}
-		
-		/**
+    private function get_StartAlpha() : Float
+    {
+        return _endAlpha + _diffAlpha;
+    }
+    private function set_StartAlpha(value : Float) : Float
+    {
+        _diffAlpha = value - _endAlpha;
+        return value;
+    }
+    
+    /**
 		 * The alpha value for the particle when its energy is 0.
 		 * The value should be between 0 and 1.
 		 */
-		public function get endAlpha():Number
-		{
-			return _endAlpha;
-		}
-		public function set endAlpha( value:Number ):void
-		{
-			_diffAlpha = _endAlpha + _diffAlpha - value;
-			_endAlpha = value;
-		}
-		
-		/**
+    private function get_EndAlpha() : Float
+    {
+        return _endAlpha;
+    }
+    private function set_EndAlpha(value : Float) : Float
+    {
+        _diffAlpha = _endAlpha + _diffAlpha - value;
+        _endAlpha = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the transparency of the particle based on the values defined
 		 * and the particle's energy level.
 		 * 
@@ -115,10 +122,10 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var alpha:Number = _endAlpha + _diffAlpha * particle.energy;
-			particle.color = ( particle.color & 0xFFFFFF ) | ( Math.round( alpha * 255 ) << 24 );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var alpha : Float = _endAlpha + _diffAlpha * particle.energy;
+        particle.color = (particle.color & 0xFFFFFF) | (Math.round(alpha * 255) << 24);
+    }
 }
+

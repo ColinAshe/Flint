@@ -28,62 +28,69 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.displayObjects 
-{
-	import flash.display.Shape;		
+package org.flintparticles.common.displayobjects;
 
-	/**
+
+import flash.display.Shape;
+
+/**
 	 * The LineShape class is a DisplayObject with a simple line shape. The line is
 	 * horizontal and the registration point of this display object is in the center
 	 * of the line.
 	 */
 
-	public class Line extends Shape
-	{
-		private var _length:Number;
-		private var _color:uint;
-		
-		/**
+class Line extends Shape
+{
+    public var length(get, set) : Float;
+    public var color(get, set) : Int;
+
+    private var _length : Float;
+    private var _color : Int;
+    
+    /**
 		 * The constructor creates a Line with the specified length.
 		 * 
 		 * @param lineLength The length, in pixels, of the line.
 		 * @param color the color of the Line
 		 * @param bm The blendMode for the Line
 		 */
-		public function Line( lineLength : Number = 1, color:uint = 0xFFFFFF, bm:String = "normal" )
-		{
-			_length = lineLength;
-			_color = color;
-			draw();
-			blendMode = bm;
-		}
-		
-		private function draw():void
-		{
-			graphics.clear();
-			graphics.lineStyle( 1, _color );
-			graphics.moveTo( -_length * 0.5, 0 );
-			graphics.lineTo( _length * 0.5, 0 );
-		}
-		
-		public function get length():Number
-		{
-			return _length;
-		}
-		public function set length( value:Number ):void
-		{
-			_length = value;
-			draw();
-		}
-		
-		public function get color():uint
-		{
-			return _color;
-		}
-		public function set color( value:uint ):void
-		{
-			_color = value;
-			draw();
-		}
-	}
+    public function new(lineLength : Float = 1, color : Int = 0xFFFFFF, bm : String = "normal")
+    {
+        super();
+        _length = lineLength;
+        _color = color;
+        draw();
+        blendMode = bm;
+    }
+    
+    private function draw() : Void
+    {
+        graphics.clear();
+        graphics.lineStyle(1, _color);
+        graphics.moveTo(-_length * 0.5, 0);
+        graphics.lineTo(_length * 0.5, 0);
+    }
+    
+    private function get_Length() : Float
+    {
+        return _length;
+    }
+    private function set_Length(value : Float) : Float
+    {
+        _length = value;
+        draw();
+        return value;
+    }
+    
+    private function get_Color() : Int
+    {
+        return _color;
+    }
+    private function set_Color(value : Int) : Int
+    {
+        _color = value;
+        draw();
+        return value;
+    }
 }
+

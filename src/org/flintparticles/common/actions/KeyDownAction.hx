@@ -28,29 +28,34 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	
-	import flash.display.Stage;
-	import flash.events.KeyboardEvent;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+import flash.display.Stage;
+import flash.events.KeyboardEvent;
+
+/**
 	 * The KeyDownAction Action uses another action. It applies the other action
 	 * to the particles only if a specified key is down.
 	 * 
 	 * @see org.flintparticles.common.actions.Action
 	 */
 
-	public class KeyDownAction extends ActionBase
-	{
-		private var _action:Action;
-		private var _keyCode:uint;
-		private var _isDown:Boolean;
-		private var _stage:Stage;
+class KeyDownAction extends ActionBase
+{
+    public var stage(get, set) : Stage;
+    public var action(get, set) : Action;
+    public var keyCode(get, set) : Int;
 
-		/**
+    private var _action : Action;
+    private var _keyCode : Int;
+    private var _isDown : Bool;
+    private var _stage : Stage;
+    
+    /**
 		 * The constructor creates a KeyDownAction action for use by 
 		 * an emitter. To add a KeyDownAction to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -61,115 +66,120 @@ package org.flintparticles.common.actions
 		 * @param keyCode The key code of the key that controls the action.
 		 * @param stage A reference to the stage.
 		 */
-		public function KeyDownAction( action:Action= null, keyCode:uint = 0, stage:Stage = null )
-		{
-			_action = action;
-			_keyCode = keyCode;
-			_isDown = false;
-			_stage = stage;
-			createListeners();
-		}
-		
-		private function createListeners():void
-		{
-			if( _stage )
-			{
-				_stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDownListener, false, 0, true );
-				_stage.addEventListener( KeyboardEvent.KEY_UP, keyUpListener, false, 0, true );
-			}
-		}
-		
-		private function keyDownListener( ev:KeyboardEvent ):void
-		{
-			if( ev.keyCode == _keyCode )
-			{
-				_isDown = true;
-			}
-		}
-		private function keyUpListener( ev:KeyboardEvent ):void
-		{
-			if( ev.keyCode == _keyCode )
-			{
-				_isDown = false;
-			}
-		}
-
-		/**
+    public function new(action : Action = null, keyCode : Int = 0, stage : Stage = null)
+    {
+        super();
+        _action = action;
+        _keyCode = keyCode;
+        _isDown = false;
+        _stage = stage;
+        createListeners();
+    }
+    
+    private function createListeners() : Void
+    {
+        if (_stage != null) 
+        {
+            _stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener, false, 0, true);
+            _stage.addEventListener(KeyboardEvent.KEY_UP, keyUpListener, false, 0, true);
+        }
+    }
+    
+    private function keyDownListener(ev : KeyboardEvent) : Void
+    {
+        if (ev.keyCode == _keyCode) 
+        {
+            _isDown = true;
+        }
+    }
+    private function keyUpListener(ev : KeyboardEvent) : Void
+    {
+        if (ev.keyCode == _keyCode) 
+        {
+            _isDown = false;
+        }
+    }
+    
+    /**
 		 * A reference to the stage
 		 */
-		public function get stage():Stage
-		{
-			return _stage;
-		}
-		public function set stage( value:Stage ):void
-		{
-			_stage = value;
-			createListeners();
-		}
-		
-		/**
+    private function get_Stage() : Stage
+    {
+        return _stage;
+    }
+    private function set_Stage(value : Stage) : Stage
+    {
+        _stage = value;
+        createListeners();
+        return value;
+    }
+    
+    /**
 		 * The action to apply when the key is down.
 		 */
-		public function get action():Action
-		{
-			return _action;
-		}
-		public function set action( value:Action ):void
-		{
-			_action = value;
-		}
-		
-		/**
+    private function get_Action() : Action
+    {
+        return _action;
+    }
+    private function set_Action(value : Action) : Action
+    {
+        _action = value;
+        return value;
+    }
+    
+    /**
 		 * The key code of the key that controls the action.
 		 */
-		public function get keyCode():uint
-		{
-			return _keyCode;
-		}
-		public function set keyCode( value:uint ):void
-		{
-			_keyCode = value;
-		}
-		
-		/**
+    private function get_KeyCode() : Int
+    {
+        return _keyCode;
+    }
+    private function set_KeyCode(value : Int) : Int
+    {
+        _keyCode = value;
+        return value;
+    }
+    
+    /**
 		 * Returns the default priority of the action that is applied.
 		 * 
 		 * @see org.flintparticles.common.actions.Action#getDefaultPriority()
 		 */
-		override public function get priority():int
-		{
-			return _action.priority;
-		}
-		override public function set priority( value:int ):void
-		{
-			_action.priority = value;
-		}
-		
-		/**
+    override private function get_Priority() : Int
+    {
+        return _action.priority;
+    }
+    override private function set_Priority(value : Int) : Int
+    {
+        _action.priority = value;
+        return value;
+    }
+    
+    /**
 		 * Calls the addedToEmitter method of the action that is applied
 		 * 
 		 * @param emitter The Emitter that the Action was added to.
 		 * 
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		override public function addedToEmitter( emitter:Emitter ):void
-		{
-			_action.addedToEmitter( emitter );
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        _action.addedToEmitter(emitter);
+    }
+    
+    /**
 		 * Calls the removedFromEmitter method of the action that is applied
 		 * 
 		 * @param emitter The Emitter that the Action was removed from.
 		 * 
 		 * @see org.flintparticles.common.actions.Action#removedFromEmitter()
 		 */
-		override public function removedFromEmitter( emitter:Emitter ):void
-		{
-			_action.removedFromEmitter( emitter );
-		}
-
-		/**
+    override public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        _action.removedFromEmitter(emitter);
+    }
+    
+    /**
 		 * If the key is down, this method calls the update method of the 
 		 * action that is applied.
 		 * 
@@ -182,12 +192,12 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			if( _isDown )
-			{
-				_action.update( emitter, particle, time );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (_isDown) 
+        {
+            _action.update(emitter, particle, time);
+        }
+    }
 }
+

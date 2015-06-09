@@ -27,135 +27,136 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.particles 
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
+package org.flintparticles.threed.particles;
 
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.Sprite;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.Sprite;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+import flash.geom.Vector3D;
+
+/**
 	 * Utility methods for working with three-d particles.
 	 */
-	public class Particle3DUtils 
-	{
-		public static function createPixelParticlesFromBitmapData( bitmapData:BitmapData, factory:ParticleFactory = null, offset:Vector3D = null ):Vector.<Particle>
-		{
-			if( offset == null )
-			{
-				offset = new Vector3D( 0, 0, 0, 1 );
-			}
-			var particles:Vector.<Particle> = new Vector.<Particle>();
-			var width:int = bitmapData.width;
-			var height:int = bitmapData.height;
-			var y:int;
-			var x:int;
-			var p:Particle3D;
-			var color:uint;
-			if( factory )
-			{
-				for( y = 0; y < height; ++y )
-				{
-					for( x = 0; x < width; ++x )
-					{
-						color = bitmapData.getPixel32( x, y );
-						if( color >>> 24 > 0 )
-						{
-							p = Particle3D( factory.createParticle() );
-							p.position = new Vector3D( x + offset.x, y + offset.y, offset.z, 1 );
-							p.color = color;
-							particles.push( p );
-						}
-					}
-				}
-			}
-			else
-			{
-				for( y = 0; y < height; ++y )
-				{
-					for( x = 0; x < width; ++x )
-					{
-						color = bitmapData.getPixel32( x, y );
-						if( color >>> 24 > 0 )
-						{
-							p = new Particle3D();
-							p.position = new Vector3D( x + offset.x, y + offset.y, offset.z, 1 );
-							p.color = color;
-							particles.push( p );
-						}
-					}
-				}
-			}
-			return particles;
-		}
-		
-		public static function createRectangleParticlesFromBitmapData( bitmapData:BitmapData, size:uint, factory:ParticleFactory = null, offset:Vector3D = null ):Vector.<Particle>
-		{
-			if( offset == null )
-			{
-				offset = new Vector3D( 0, 0, 0, 1 );
-			}
-			var particles:Vector.<Particle> = new Vector.<Particle>();
-			var width:int = bitmapData.width;
-			var height:int = bitmapData.height;
-			var y:int;
-			var x:int;
-			var halfSize:Number = size * 0.5;
-			offset.x += halfSize;
-			offset.y += halfSize;
-			var p:Particle3D;
-			var b:BitmapData;
-			var m:Bitmap;
-			var s:Sprite;
-			var zero:Point = new Point( 0, 0 );
-			if( factory )
-			{
-				for( y = 0; y < height; y += size )
-				{
-					for( x = 0; x < width; x += size )
-					{
-						p = Particle3D( factory.createParticle() );
-						p.position = new Vector3D( x + offset.x, y + offset.y, offset.z, 1 );
-						b = new BitmapData( size, size, true, 0 );
-						b.copyPixels( bitmapData, new Rectangle( x, y, size, size ), zero );
-						m = new Bitmap( b );
-						m.x = -halfSize;
-						m.y = -halfSize;
-						s = new Sprite();
-						s.addChild( m );
-						p.image = s;
-						p.collisionRadius = halfSize;
-						particles.push( p );
-					}
-				}
-			}
-			else
-			{
-				for( y = 0; y < height; ++y )
-				{
-					for( x = 0; x < width; ++x )
-					{
-						p = new Particle3D();
-						p.position = new Vector3D( x + offset.x, y + offset.y, offset.z, 1 );
-						b = new BitmapData( size, size, true, 0 );
-						b.copyPixels( bitmapData, new Rectangle( x, y, size, size ), zero );
-						m = new Bitmap( b );
-						m.x = -halfSize;
-						m.y = -halfSize;
-						s = new Sprite();
-						s.addChild( m );
-						p.image = s;
-						p.collisionRadius = halfSize;
-						particles.push( p );
-					}
-				}
-			}
-			return particles;
-		}
-	}
+class Particle3DUtils
+{
+    public static function createPixelParticlesFromBitmapData(bitmapData : BitmapData, factory : ParticleFactory = null, offset : Vector3D = null) : Array<Particle>
+    {
+        if (offset == null) 
+        {
+            offset = new Vector3D(0, 0, 0, 1);
+        }
+        var particles : Array<Particle> = new Array<Particle>();
+        var width : Int = bitmapData.width;
+        var height : Int = bitmapData.height;
+        var y : Int;
+        var x : Int;
+        var p : Particle3D;
+        var color : Int;
+        if (factory != null) 
+        {
+            for (y in 0...height){
+                for (x in 0...width){
+                    color = bitmapData.getPixel32(x, y);
+                    if (color >>> 24 > 0) 
+                    {
+                        p = cast((factory.createParticle()), Particle3D);
+                        p.position = new Vector3D(x + offset.x, y + offset.y, offset.z, 1);
+                        p.color = color;
+                        particles.push(p);
+                    }
+                }
+            }
+        }
+        else 
+        {
+            for (y in 0...height){
+                for (x in 0...width){
+                    color = bitmapData.getPixel32(x, y);
+                    if (color >>> 24 > 0) 
+                    {
+                        p = new Particle3D();
+                        p.position = new Vector3D(x + offset.x, y + offset.y, offset.z, 1);
+                        p.color = color;
+                        particles.push(p);
+                    }
+                }
+            }
+        }
+        return particles;
+    }
+    
+    public static function createRectangleParticlesFromBitmapData(bitmapData : BitmapData, size : Int, factory : ParticleFactory = null, offset : Vector3D = null) : Array<Particle>
+    {
+        if (offset == null) 
+        {
+            offset = new Vector3D(0, 0, 0, 1);
+        }
+        var particles : Array<Particle> = new Array<Particle>();
+        var width : Int = bitmapData.width;
+        var height : Int = bitmapData.height;
+        var y : Int;
+        var x : Int;
+        var halfSize : Float = size * 0.5;
+        offset.x += halfSize;
+        offset.y += halfSize;
+        var p : Particle3D;
+        var b : BitmapData;
+        var m : Bitmap;
+        var s : Sprite;
+        var zero : Point = new Point(0, 0);
+        if (factory != null) 
+        {
+            y = 0;
+            while (y < height){
+                x = 0;
+                while (x < width){
+                    p = cast((factory.createParticle()), Particle3D);
+                    p.position = new Vector3D(x + offset.x, y + offset.y, offset.z, 1);
+                    b = new BitmapData(size, size, true, 0);
+                    b.copyPixels(bitmapData, new Rectangle(x, y, size, size), zero);
+                    m = new Bitmap(b);
+                    m.x = -halfSize;
+                    m.y = -halfSize;
+                    s = new Sprite();
+                    s.addChild(m);
+                    p.image = s;
+                    p.collisionRadius = halfSize;
+                    particles.push(p);
+                    x += size;
+                }
+                y += size;
+            }
+        }
+        else 
+        {
+            for (y in 0...height){
+                for (x in 0...width){
+                    p = new Particle3D();
+                    p.position = new Vector3D(x + offset.x, y + offset.y, offset.z, 1);
+                    b = new BitmapData(size, size, true, 0);
+                    b.copyPixels(bitmapData, new Rectangle(x, y, size, size), zero);
+                    m = new Bitmap(b);
+                    m.x = -halfSize;
+                    m.y = -halfSize;
+                    s = new Sprite();
+                    s.addChild(m);
+                    p.image = s;
+                    p.collisionRadius = halfSize;
+                    particles.push(p);
+                }
+            }
+        }
+        return particles;
+    }
+
+    public function new()
+    {
+    }
 }
+

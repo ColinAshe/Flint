@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.renderers
-{
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.renderers;
 
-	import flash.geom.Rectangle;
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Rectangle;
+import flash.geom.Vector3D;
+
+/**
 	 * The PixelRenderer is a native Flint 3D renderer that draws particles
 	 * as single pixels on a Bitmap display object.
 	 * 
@@ -54,9 +55,9 @@ package org.flintparticles.threeD.renderers
 	 * display objects in its display list. To enable mouse events for the renderer
 	 * or its children set the mouseEnabled or mouseChildren properties to true.</p>
 	 */
-	public class PixelRenderer extends BitmapRenderer
-	{
-		/**
+class PixelRenderer extends BitmapRenderer
+{
+    /**
 		 * The constructor creates a PixelRenderer. After creation it should be
 		 * added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage.
@@ -72,27 +73,26 @@ package org.flintparticles.threeD.renderers
 		 * 
 		 * @see org.flintparticles.twoD.emitters.Emitter#renderer
 		 */
-		public function PixelRenderer( canvas:Rectangle, zSort:Boolean = false )
-		{
-			super( canvas, zSort );
-		}
-		
-		/**
+    public function new(canvas : Rectangle, zSort : Bool = false)
+    {
+        super(canvas, zSort);
+    }
+    
+    /**
 		 * This is the method that draws each particle. calculates the position
 		 * of the particle in teh camera's viewport and draws the particle
 		 * as a single pixel in that location.
 		 * 
 		 * @param particle The particle to draw on the bitmap.
 		 */
-		override protected function drawParticle( particle:Particle3D ):void
-		{
-			var pos:Vector3D = particle.projectedPosition;
-			if( pos.z < _camera.nearPlaneDistance || pos.z > _camera.farPlaneDistance )
-			{
-				return;
-			}
-			pos.project();
-			_bitmap.bitmapData.setPixel32( Math.round( pos.x + _halfWidth ), Math.round( pos.y + _halfHeight ), particle.color );
-		}
-	}
+    override private function drawParticle(particle : Particle3D) : Void
+    {
+        var pos : Vector3D = particle.projectedPosition;
+        if (pos.z < _camera.nearPlaneDistance || pos.z > _camera.farPlaneDistance) 
+        {
+            return;
+        }
+        pos.project();
+        _bitmap.bitmapData.setPixel32(Math.round(pos.x + _halfWidth), Math.round(pos.y + _halfHeight), particle.color);
+    }
 }

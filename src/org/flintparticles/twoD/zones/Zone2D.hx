@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.zones
-{
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.zones;
 
-	import flash.geom.Point;
 
-	/**
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.geom.Point;
+
+/**
 	 * The Zones interface must be implemented by all zones.
 	 * 
 	 * <p>A zone is a class that defined a region in 2d space. The two required methods 
@@ -43,9 +44,10 @@ package org.flintparticles.twoD.zones
 	 * (in the Position initializer), to define the start velocity for particles (in the
 	 * Velocity initializer), and to define zones within which the particles die.</p>
 	 */
-	public interface Zone2D
-	{
-		/**
+interface Zone2D
+{
+
+    /**
 		 * Determines whether a point is inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
@@ -54,27 +56,27 @@ package org.flintparticles.twoD.zones
 		 * @param y The y coordinate of the location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		function contains( x:Number, y:Number ):Boolean;
-
-		/**
+    function contains(x : Float, y : Float) : Bool;
+    
+    /**
 		 * Returns a random point inside the zone.
 		 * This method is used by the initializers and actions that
 		 * use the zone. Usually, it need not be called directly by the user.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		function getLocation():Point;
-
-		/**
+    function getLocation() : Point;
+    
+    /**
 		 * Returns the size of the zone.
 		 * This method is used by the MultiZone class to manage the balancing between the
 		 * different zones.
 		 * 
 		 * @return the size of the zone.
 		 */
-		function getArea():Number;
-		
-		/**
+    function getArea() : Float;
+    
+    /**
 		 * Manages collisions between a particle and the zone. This method handles altering the
 		 * particle's position and velocity in response to the collision.
 		 * 
@@ -83,6 +85,5 @@ package org.flintparticles.twoD.zones
 		 * 
 		 * @return Whether a collision occured.
 		 */
-		function collideParticle( particle:Particle2D, bounce:Number = 1 ):Boolean;
-	}
+    function collideParticle(particle : Particle2D, bounce : Float = 1) : Bool;
 }

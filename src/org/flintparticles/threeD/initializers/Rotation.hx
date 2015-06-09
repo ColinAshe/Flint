@@ -28,30 +28,36 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.initializers;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The Rotation Initializer sets the rotation of the particle. The rotation is
 	 * relative to the rotation of the emitter.
 	 */
 
-	public class Rotation extends InitializerBase
-	{
-		private var _axis : Vector3D;
-		private var _min : Number;
-		private var _max : Number;
-		private var _rot:Quaternion;
+class Rotation extends InitializerBase
+{
+    public var axis(get, set) : Vector3D;
+    public var minAngle(get, set) : Float;
+    public var maxAngle(get, set) : Float;
+    public var angle(get, set) : Float;
 
-		/**
+    private var _axis : Vector3D;
+    private var _min : Float;
+    private var _max : Float;
+    private var _rot : Quaternion;
+    
+    /**
 		 * The constructor creates a Rotation initializer for use by 
 		 * an emitter. To add a Rotation to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -67,87 +73,92 @@ package org.flintparticles.threeD.initializers
 		 * 
  		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function Rotation( axis:Vector3D = null, minAngle:Number = 0, maxAngle:Number = NaN )
-		{
-			_rot = new Quaternion();
-			this.axis = axis ? axis : Vector3D.Z_AXIS;
-			this.minAngle = minAngle;
-			this.maxAngle = maxAngle;
-		}
-		
-		/**
+    public function new(axis : Vector3D = null, minAngle : Float = 0, maxAngle : Float = NaN)
+    {
+        super();
+        _rot = new Quaternion();
+        this.axis = (axis != null) ? axis : Vector3D.Z_AXIS;
+        this.minAngle = minAngle;
+        this.maxAngle = maxAngle;
+    }
+    
+    /**
 		 * The axis for the rotation.
 		 */
-		public function get axis():Vector3D
-		{
-			return _axis;
-		}
-		public function set axis( value:Vector3D ):void
-		{
-			_axis = Vector3DUtils.cloneUnit( value );
-		}
-		
-		/**
+    private function get_Axis() : Vector3D
+    {
+        return _axis;
+    }
+    private function set_Axis(value : Vector3D) : Vector3D
+    {
+        _axis = Vector3DUtils.cloneUnit(value);
+        return value;
+    }
+    
+    /**
 		 * The minimum angle for particles initialised by 
 		 * this initializer.
 		 */
-		public function get minAngle():Number
-		{
-			return _min;
-		}
-		public function set minAngle( value:Number ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinAngle() : Float
+    {
+        return _min;
+    }
+    private function set_MinAngle(value : Float) : Float
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum angle for particles initialised by 
 		 * this initializer.
 		 */
-		public function get maxAngle():Number
-		{
-			return _max;
-		}
-		public function set maxAngle( value:Number ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxAngle() : Float
+    {
+        return _max;
+    }
+    private function set_MaxAngle(value : Float) : Float
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minAngle and maxAngle.
 		 * When writing this sets both maxAngle and minAngle to the 
 		 * same angle value.
 		 */
-		public function get angle():Number
-		{
-			if( isNaN( _max ) || _min == _max )
-			{
-				return _min;
-			}
-			return ( _max + _min ) / 2;
-		}
-		public function set angle( value:Number ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_Angle() : Float
+    {
+        if (Math.isNaN(_max) || _min == _max) 
+        {
+            return _min;
+        }
+        return (_max + _min) / 2;
+    }
+    private function set_Angle(value : Float) : Float
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var angle:Number;
-			if( isNaN( _max ) || _min == _max )
-			{
-				angle = _min;
-			}
-			else
-			{
-				angle = _min + Math.random() * ( _max - _min );
-			}
-			_rot.setFromAxisRotation( _axis, angle );
-			p.rotation.preMultiplyBy( _rot );
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var angle : Float;
+        if (Math.isNaN(_max) || _min == _max) 
+        {
+            angle = _min;
+        }
+        else 
+        {
+            angle = _min + Math.random() * (_max - _min);
+        }
+        _rot.setFromAxisRotation(_axis, angle);
+        p.rotation.preMultiplyBy(_rot);
+    }
 }
+

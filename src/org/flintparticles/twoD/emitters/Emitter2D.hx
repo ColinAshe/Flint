@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.emitters
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
-	import org.flintparticles.common.utils.Maths;
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.twoD.particles.ParticleCreator2D;	
+package org.flintparticles.twod.emitters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+import org.flintparticles.common.utils.Maths;
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.twod.particles.ParticleCreator2D;
+
+/**
 	 * The Emitter class manages the creation and ongoing state of particles. It uses a number of
 	 * utility classes to customise its behaviour.
 	 * 
@@ -67,125 +68,133 @@ package org.flintparticles.twoD.emitters
 	 * affect its location in the particle system.</p>
 	 */
 
-	public class Emitter2D extends Emitter
-	{
-		/**
+class Emitter2D extends Emitter
+{
+    public static var defaultParticleFactory(get, never) : ParticleFactory;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var rotation(get, set) : Float;
+    public var rotRadians(get, set) : Float;
+
+    /**
 		 * @private
 		 * 
 		 * default factory to manage the creation, reuse and destruction of particles
 		 */
-		protected static var _creator:ParticleCreator2D = new ParticleCreator2D();
-		
-		/**
+    private static var _creator : ParticleCreator2D = new ParticleCreator2D();
+    
+    /**
 		 * The default particle factory used to manage the creation, reuse and destruction of particles.
 		 */
-		public static function get defaultParticleFactory():ParticleFactory
-		{
-			return _creator;
-		}
-		
-		/**
+    private static function get_DefaultParticleFactory() : ParticleFactory
+    {
+        return _creator;
+    }
+    
+    /**
 		 * @private
 		 */
-		protected var _x:Number = 0;
-		/**
+    private var _x : Float = 0;
+    /**
 		 * @private
 		 */
-		protected var _y:Number = 0;
-		/**
+    private var _y : Float = 0;
+    /**
 		 * @private
 		 */
-		protected var _rotation:Number = 0; // N.B. Is in radians
-		
-		/**
+    private var _rotation : Float = 0;  // N.B. Is in radians  
+    
+    /**
 		 * Identifies whether the particles should be arranged
 		 * into spacially sorted arrays - this speeds up proximity
 		 * testing for those actions that need it.
 		 */
-		public var spaceSort:Boolean = false;
-		
-		/**
+    public var spaceSort : Bool = false;
+    
+    /**
 		 * The constructor creates an emitter.
 		 */
-		public function Emitter2D()
-		{
-			super();
-			_particleFactory = _creator;
-		}
-		
-		/**
+    public function new()
+    {
+        super();
+        _particleFactory = _creator;
+    }
+    
+    /**
 		 * Indicates the x coordinate of the Emitter within the particle system's coordinate space.
 		 */
-		public function get x():Number
-		{
-			return _x;
-		}
-		public function set x( value:Number ):void
-		{
-			_x = value;
-		}
-		/**
+    private function get_X() : Float
+    {
+        return _x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _x = value;
+        return value;
+    }
+    /**
 		 * Indicates the y coordinate of the Emitter within the particle system's coordinate space.
 		 */
-		public function get y():Number
-		{
-			return _y;
-		}
-		public function set y( value:Number ):void
-		{
-			_y = value;
-		}
-		/**
+    private function get_Y() : Float
+    {
+        return _y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _y = value;
+        return value;
+    }
+    /**
 		 * Indicates the rotation of the Emitter, in degrees, within the particle system's coordinate space.
 		 */
-		public function get rotation():Number
-		{
-			return Maths.asDegrees( _rotation );
-		}
-		public function set rotation( value:Number ):void
-		{
-			_rotation = Maths.asRadians( value );
-		}
-		/**
+    private function get_Rotation() : Float
+    {
+        return Maths.asDegrees(_rotation);
+    }
+    private function set_Rotation(value : Float) : Float
+    {
+        _rotation = Maths.asRadians(value);
+        return value;
+    }
+    /**
 		 * Indicates the rotation of the Emitter, in radians, within the particle system's coordinate space.
 		 */
-		public function get rotRadians():Number
-		{
-			return _rotation;
-		}
-		public function set rotRadians( value:Number ):void
-		{
-			_rotation = value;
-		}
-		
-		/**
+    private function get_RotRadians() : Float
+    {
+        return _rotation;
+    }
+    private function set_RotRadians(value : Float) : Float
+    {
+        _rotation = value;
+        return value;
+    }
+    
+    /**
 		 * Used internally to initialise the position and rotation of a particle relative to the emitter.
 		 */
-		override protected function initParticle( particle:Particle ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.x = _x;
-			p.y = _y;
-			p.previousX = _x;
-			p.previousY = _y;
-			p.rotation = _rotation;
-		}
-		
-		/**
+    override private function initParticle(particle : Particle) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.x = _x;
+        p.y = _y;
+        p.previousX = _x;
+        p.previousY = _y;
+        p.rotation = _rotation;
+    }
+    
+    /**
 		 * Used internally and in derived classes to update the emitter.
 		 * @param time The duration, in seconds, of the current frame.
 		 */
-		override protected function sortParticles():void
-		{
-			if( spaceSort )
-			{
-				_particles.sortOn( "x", Array.NUMERIC );
-				var len:int = _particles.length;
-				for( var i:int = 0; i < len; ++i )
-				{
-					Particle2D( _particles[ i ] ).sortID = i;
-				}
-			}
-		}
-	}
+    override private function sortParticles() : Void
+    {
+        if (spaceSort) 
+        {
+            _particles.sortOn("x", Array.NUMERIC);
+            var len : Int = _particles.length;
+            for (i in 0...len){
+                cast((_particles[i]), Particle2D).sortID = i;
+            }
+        }
+    }
 }

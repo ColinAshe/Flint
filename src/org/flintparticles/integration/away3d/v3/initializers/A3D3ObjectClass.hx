@@ -1,4 +1,4 @@
-/*
+  /*
  * FLINT PARTICLE SYSTEM
  * .....................
  * 
@@ -26,13 +26,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ */  
 
-package org.flintparticles.integration.away3d.v3.initializers
-{
-	import org.flintparticles.common.initializers.ImageClass;
+package org.flintparticles.integration.away3d.v3.initializers;
 
-	/**
+
+import org.flintparticles.common.initializers.ImageClass;
+
+/**
 	 * The A3D3ObjectClass initializer sets the class of the 3D Object to use to 
 	 * draw the particle in a 3D scene. It is used with the Away3D 3 renderer when
 	 * particles should be represented by a 3D object.
@@ -50,9 +51,9 @@ package org.flintparticles.integration.away3d.v3.initializers
 	 * @see org.flintparticles.common.initializers.ImageClass
 	 * @see org.flintparticles.common.initializers.SetImageProperties
 	 */
-	public class A3D3ObjectClass extends ImageClass
-	{
-		/**
+class A3D3ObjectClass extends ImageClass
+{
+    /**
 		 * The constructor creates an A3D3ObjectClass initializer for use by 
 		 * an emitter. To add an A3D3ObjectClass to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -67,9 +68,9 @@ package org.flintparticles.integration.away3d.v3.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function A3D3ObjectClass( objectClass:Class = null, parameters:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( objectClass, parameters, usePool, fillPool );
-		}
-	}
+    public function new(objectClass : Class<Dynamic> = null, parameters : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(objectClass, parameters, usePool, fillPool);
+    }
 }
+

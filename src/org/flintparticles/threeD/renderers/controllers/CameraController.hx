@@ -1,13 +1,15 @@
-package org.flintparticles.threeD.renderers.controllers
-{
-	import org.flintparticles.threeD.renderers.Camera;
-	
-	/**
+package org.flintparticles.threed.renderers.controllers;
+
+
+import org.flintparticles.threed.renderers.Camera;
+
+/**
 	 * The interface for classes that manage the camera state based on key presses or other inputs.
 	 */
-	public interface CameraController
-	{
-		function get camera():Camera;
-		function set camera( value:Camera ):void;
-	}
+interface CameraController
+{
+    
+    
+    var camera(get, set) : Camera;
+
 }

@@ -28,66 +28,73 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.displayObjects 
-{
-	import flash.display.GradientType;
-	import flash.display.Shape;
-	import flash.geom.Matrix;	
+package org.flintparticles.common.displayobjects;
 
-	/**
+
+import flash.display.GradientType;
+import flash.display.Shape;
+import flash.geom.Matrix;
+
+/**
 	 * The RadialDot class is a DisplayObject that is a circle shape with a gradient 
 	 * fill that fades to transparency at the edge of the dot. The registration point
 	 * of this diaplay object is in the center of the Dot.
 	 */
 
-	public class RadialDot extends Shape 
-	{
-		private var _radius:Number;
-		private var _color:uint;
-		
-		/**
+class RadialDot extends Shape
+{
+    public var radius(get, set) : Float;
+    public var color(get, set) : Int;
+
+    private var _radius : Float;
+    private var _color : Int;
+    
+    /**
 		 * The constructor creates a RadialDot with the  specified radius.
 		 * 
 		 * @param radius The radius, in pixels, of the RadialDot.
 		 * @param color The color of the RadialDot
 		 * @param bm The blendMode of the RadialDot
 		 */
-		public function RadialDot( radius:Number = 1, color:uint = 0xFFFFFF, bm:String = "normal" )
-		{
-			_radius = radius;
-			_color = color;
-			draw();
-			blendMode = bm;
-		}
-		
-		private function draw():void
-		{
-			graphics.clear();
-			var matrix:Matrix = new Matrix();
-			matrix.createGradientBox( _radius * 2, _radius * 2, 0, -_radius, -_radius );
-			graphics.beginGradientFill( GradientType.RADIAL, [_color,_color], [1,0], [0,255], matrix );
-			graphics.drawCircle( 0, 0, _radius );
-			graphics.endFill();
-		}
-		
-		public function get radius():Number
-		{
-			return _radius;
-		}
-		public function set radius( value:Number ):void
-		{
-			_radius = value;
-			draw();
-		}
-		
-		public function get color():uint
-		{
-			return _color;
-		}
-		public function set color( value:uint ):void
-		{
-			_color = value;
-			draw();
-		}
-	}
+    public function new(radius : Float = 1, color : Int = 0xFFFFFF, bm : String = "normal")
+    {
+        super();
+        _radius = radius;
+        _color = color;
+        draw();
+        blendMode = bm;
+    }
+    
+    private function draw() : Void
+    {
+        graphics.clear();
+        var matrix : Matrix = new Matrix();
+        matrix.createGradientBox(_radius * 2, _radius * 2, 0, -_radius, -_radius);
+        graphics.beginGradientFill(GradientType.RADIAL, [_color, _color], [1, 0], [0, 255], matrix);
+        graphics.drawCircle(0, 0, _radius);
+        graphics.endFill();
+    }
+    
+    private function get_Radius() : Float
+    {
+        return _radius;
+    }
+    private function set_Radius(value : Float) : Float
+    {
+        _radius = value;
+        draw();
+        return value;
+    }
+    
+    private function get_Color() : Int
+    {
+        return _color;
+    }
+    private function set_Color(value : Int) : Int
+    {
+        _color = value;
+        draw();
+        return value;
+    }
 }
+

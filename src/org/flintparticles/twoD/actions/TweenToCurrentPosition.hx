@@ -28,20 +28,22 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.Initializer;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.twoD.zones.Zone2D;
+package org.flintparticles.twod.actions;
 
-	import flash.geom.Point;
 
-	[DefaultProperty("zone")]
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.Initializer;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.twod.zones.Zone2D;
 
-	/**
+import flash.geom.Point;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The TweenToCurrentPosition action adjusts the particle's position between two
 	 * locations as it ages. The start location is a random point within the specified
 	 * zone, and the end location is the particle's position when it is created or added 
@@ -50,11 +52,13 @@ package org.flintparticles.twoD.actions
 	 * function used. This action should be used in conjunction with the Age action.
 	 */
 
-	public class TweenToCurrentPosition extends ActionBase implements Initializer
-	{
-		private var _zone : Zone2D;
+class TweenToCurrentPosition extends ActionBase implements Initializer
+{
+    public var zone(get, set) : Zone2D;
 
-		/**
+    private var _zone : Zone2D;
+    
+    /**
 		 * The constructor creates a TweenToCurrentPosition action for use by an emitter. 
 		 * To add a TweenToCurrentPosition to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -63,53 +67,55 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @param zone The zone for the particle's position when its energy is 0.
 		 */
-		public function TweenToCurrentPosition( zone : Zone2D = null )
-		{
-			_zone = zone;
-			priority = -10;
-		}
-
-		/**
+    public function new(zone : Zone2D = null)
+    {
+        super();
+        _zone = zone;
+        priority = -10;
+    }
+    
+    /**
 		 * The zone for the particle's position when its energy is 0.
 		 */
-		public function get zone() : Zone2D
-		{
-			return _zone;
-		}
-
-		public function set zone( value : Zone2D ) : void
-		{
-			_zone = value;
-		}
-
-		/**
+    private function get_Zone() : Zone2D
+    {
+        return _zone;
+    }
+    
+    private function set_Zone(value : Zone2D) : Zone2D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * 
 		 */
-		override public function addedToEmitter( emitter : Emitter ) : void
-		{
-			if ( !emitter.hasInitializer( this ) )
-			{
-				emitter.addInitializer( this );
-			}
-		}
-
-		override public function removedFromEmitter( emitter : Emitter ) : void
-		{
-			emitter.removeInitializer( this );
-		}
-
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        if (!emitter.hasInitializer(this)) 
+        {
+            emitter.addInitializer(this);
+        }
+    }
+    
+    override public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        emitter.removeInitializer(this);
+    }
+    
+    /**
 		 * 
 		 */
-		public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p : Particle2D = Particle2D( particle );
-			var pt : Point = _zone.getLocation();
-			var data : TweenToPositionData = new TweenToPositionData( pt.x, pt.y, p.x, p.y );
-			p.dictionary[this] = data;
-		}
-
-		/**
+    public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var pt : Point = _zone.getLocation();
+        var data : TweenToPositionData = new TweenToPositionData(pt.x, pt.y, p.x, p.y);
+        p.dictionary[this] = data;
+    }
+    
+    /**
 		 * Calculates the current position of the particle based on it's energy.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -121,32 +127,32 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p : Particle2D = Particle2D( particle );
-			if ( !p.dictionary[this] )
-			{
-				initialize( emitter, particle );
-			}
-			var data : TweenToPositionData = p.dictionary[this];
-			p.x = data.endX + data.diffX * p.energy;
-			p.y = data.endY + data.diffY * p.energy;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        if (!p.dictionary[this]) 
+        {
+            initialize(emitter, particle);
+        }
+        var data : TweenToPositionData = p.dictionary[this];
+        p.x = data.endX + data.diffX * p.energy;
+        p.y = data.endY + data.diffY * p.energy;
+    }
 }
+
 
 class TweenToPositionData
 {
-	public var diffX : Number;
-	public var diffY : Number;
-	public var endX : Number;
-	public var endY : Number;
-
-	public function TweenToPositionData( startX : Number, startY : Number, endX : Number, endY : Number )
-	{
-		this.diffX = startX - endX;
-		this.diffY = startY - endY;
-		this.endX = endX;
-		this.endY = endY;
-	}
+    public var diffX : Float;
+    public var diffY : Float;
+    public var endX : Float;
+    public var endY : Float;
+    
+    public function new(startX : Float, startY : Float, endX : Float, endY : Float)
+    {
+        this.diffX = startX - endX;
+        this.diffY = startY - endY;
+        this.endX = endX;
+        this.endY = endY;
+    }
 }

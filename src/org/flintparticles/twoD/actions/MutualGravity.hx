@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.emitters.Emitter2D;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.emitters.Emitter2D;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The MutualGravity Action applies forces to attract each particle towards 
 	 * the other particles. The force applied is inversely proportional to the 
 	 * square of the distance between the particles, in accordance with Newton's
@@ -46,15 +47,19 @@ package org.flintparticles.twoD.actions
 	 * <p>This action has a priority of 10, so that it executes 
 	 * before other actions.</p>
 	 */
-	public class MutualGravity extends ActionBase
-	{
-		private var _power:Number;
-		private var _maxDistance:Number;
-		private var _maxDistanceSq:Number;
-		private var _epsilonSq:Number;
-		private var _gravityConst:Number = 1000; // scale sthe power
-		
-		/**
+class MutualGravity extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var maxDistance(get, set) : Float;
+    public var epsilon(get, set) : Float;
+
+    private var _power : Float;
+    private var _maxDistance : Float;
+    private var _maxDistanceSq : Float;
+    private var _epsilonSq : Float;
+    private var _gravityConst : Float = 1000;  // scale sthe power  
+    
+    /**
 		 * The constructor creates a MutualGravity action for use by an emitter. 
 		 * To add a MutualGravity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -73,59 +78,63 @@ package org.flintparticles.twoD.actions
 		 * they were this distance away. This stops the gravity effect blowing 
 		 * up as distances get small.
 		 */
-		public function MutualGravity( power:Number = 0, maxDistance:Number = 0, epsilon:Number = 1 )
-		{
-			priority = 10;
-			this.power = power;
-			this.maxDistance = maxDistance;
-			this.epsilon = epsilon;
-		}
-		
-		/**
+    public function new(power : Float = 0, maxDistance : Float = 0, epsilon : Float = 1)
+    {
+        super();
+        priority = 10;
+        this.power = power;
+        this.maxDistance = maxDistance;
+        this.epsilon = epsilon;
+    }
+    
+    /**
 		 * The strength of the gravity force.
 		 */
-		public function get power():Number
-		{
-			return _power / _gravityConst;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value * _gravityConst;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power / _gravityConst;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value * _gravityConst;
+        return value;
+    }
+    
+    /**
 		 * The maximum distance between particles for the gravitational
 		 * effect to be calculated. You can sometimes speed up the calculation 
 		 * of this action by reducing the 
 		 * maxDistance since often only the closest other particles have a 
 		 * significant effect on the motion of a particle.
 		 */
-		public function get maxDistance():Number
-		{
-			return _maxDistance;
-		}
-		public function set maxDistance( value:Number ):void
-		{
-			_maxDistance = value;
-			_maxDistanceSq = value * value;
-		}
-		
-		/**
+    private function get_MaxDistance() : Float
+    {
+        return _maxDistance;
+    }
+    private function set_MaxDistance(value : Float) : Float
+    {
+        _maxDistance = value;
+        _maxDistanceSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * The minimum distance for which the gravity force is calculated. 
 		 * Particles closer than this distance experience the gravity as it they 
 		 * were this distance away. This stops the gravity effect blowing up as 
 		 * distances get very small.
 		 */
-		public function get epsilon():Number
-		{
-			return Math.sqrt( _epsilonSq );
-		}
-		public function set epsilon( value:Number ):void
-		{
-			_epsilonSq = value * value;
-		}
-
-		/**
+    private function get_Epsilon() : Float
+    {
+        return Math.sqrt(_epsilonSq);
+    }
+    private function set_Epsilon(value : Float) : Float
+    {
+        _epsilonSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * Instructs the emitter to produce a sorted particle array for optimizing
 		 * the calculations in the update method of this action.
 		 * 
@@ -133,12 +142,12 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter2D( emitter ).spaceSort = true;
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter2D).spaceSort = true;
+    }
+    
+    /**
 		 * Checks all particles near the current particle and applies the 
 		 * gravity force between them.
 		 * 
@@ -151,48 +160,49 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			if( particle.mass == 0 )
-			{
-				return;
-			}
-			var p:Particle2D = Particle2D( particle );
-			var e:Emitter2D = Emitter2D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle2D;
-			var i:int;
-			var len:int = particles.length;
-			var factor:Number;
-			var distance:Number;
-			var distanceSq:Number;
-			var dx:Number;
-			var dy:Number;
-			for( i = p.sortID + 1; i < len; ++i )
-			{
-				other = particles[i];
-				if( other.mass == 0 )
-				{
-					continue;
-				}
-				if( ( dx = other.x - p.x ) > _maxDistance ) break;
-				dy = other.y - p.y;
-				if( dy > _maxDistance || dy < -_maxDistance ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= _maxDistanceSq && distanceSq > 0 )
-				{
-					distance = Math.sqrt( distanceSq );
-					if( distanceSq < _epsilonSq )
-					{
-						distanceSq = _epsilonSq;
-					}
-					factor = ( _power * time ) / ( distanceSq * distance );
-					p.velX += ( dx *= factor ) * other.mass;
-					p.velY += ( dy *= factor ) * other.mass;
-					other.velX -= dx * p.mass;
-					other.velY -= dy * p.mass;
-				} 
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (particle.mass == 0) 
+        {
+            return;
+        }
+        var p : Particle2D = cast((particle), Particle2D);
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle2D;
+        var i : Int;
+        var len : Int = particles.length;
+        var factor : Float;
+        var distance : Float;
+        var distanceSq : Float;
+        var dx : Float;
+        var dy : Float;
+        for (i in p.sortID + 1...len){
+            other = particles[i];
+            if (other.mass == 0) 
+            {
+                {++i;continue;
+                }
+            }
+            if ((dx = other.x - p.x) > _maxDistance)                 break;
+            dy = other.y - p.y;
+            if (dy > _maxDistance || dy < -_maxDistance)                 {++i;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= _maxDistanceSq && distanceSq > 0) 
+            {
+                distance = Math.sqrt(distanceSq);
+                if (distanceSq < _epsilonSq) 
+                {
+                    distanceSq = _epsilonSq;
+                }
+                factor = (_power * time) / (distanceSq * distance);
+                p.velX += (dx *= factor) * other.mass;
+                p.velY += (dy *= factor) * other.mass;
+                other.velX -= dx * p.mass;
+                other.velY -= dy * p.mass;
+            }
+        }
+    }
 }
+

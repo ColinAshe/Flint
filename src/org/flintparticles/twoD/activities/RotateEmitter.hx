@@ -28,20 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.activities
-{
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.twoD.emitters.Emitter2D;	
+package org.flintparticles.twod.activities;
 
-	/**
+
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.twod.emitters.Emitter2D;
+
+/**
 	 * The RotateEmitter activity rotates the emitter at a constant rate.
 	 */
-	public class RotateEmitter extends ActivityBase
-	{
-		private var _angularVelocity:Number;
-		
-		/**
+class RotateEmitter extends ActivityBase
+{
+    public var angularVelocity(get, set) : Float;
+
+    private var _angularVelocity : Float;
+    
+    /**
 		 * The constructor creates a RotateEmitter activity for use by 
 		 * an emitter. To add a RotateEmitter to an emitter, use the
 		 * emitter's addActvity method.
@@ -51,31 +54,32 @@ package org.flintparticles.twoD.activities
 		 * @para angularVelocity The angular velocity for the emitter in 
 		 * radians per second.
 		 */
-		public function RotateEmitter( angularVelocity:Number = 0 )
-		{
-			this.angularVelocity = angularVelocity;
-		}
-		
-		/**
+    public function new(angularVelocity : Float = 0)
+    {
+        super();
+        this.angularVelocity = angularVelocity;
+    }
+    
+    /**
 		 * The angular velocity for the emitter in 
 		 * radians per second.
 		 */
-		public function get angularVelocity():Number
-		{
-			return _angularVelocity;
-		}
-		public function set angularVelocity( value:Number ):void
-		{
-			_angularVelocity = value;
-		}
-		
-		/**
+    private function get_AngularVelocity() : Float
+    {
+        return _angularVelocity;
+    }
+    private function set_AngularVelocity(value : Float) : Float
+    {
+        _angularVelocity = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var e:Emitter2D = Emitter2D( emitter );
-			e.rotRadians += _angularVelocity * time;
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        e.rotRadians += _angularVelocity * time;
+    }
 }

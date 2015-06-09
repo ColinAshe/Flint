@@ -28,29 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.papervision3d.initializers
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.WeightedArray;
-	import org.flintparticles.common.utils.construct;
-	import org.papervision3d.materials.MovieMaterial;
-	import org.papervision3d.objects.primitives.Plane;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.integration.papervision3d.initializers;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.WeightedArray;
+import org.flintparticles.common.utils.Construct;
+import org.papervision3d.materials.MovieMaterial;
+import org.papervision3d.objects.primitives.Plane;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The ImageClass Initializer sets the DisplayObject to use to draw
 	 * the particle. It is used with the DisplayObjectRenderer. When using the
 	 * BitmapRenderer it is more efficient to use the SharedImage Initializer.
 	 */
 
-	public class PV3DDisplayObjectClasses extends InitializerBase
-	{
-		private var _images:WeightedArray;
-		
-		/**
+class PV3DDisplayObjectClasses extends InitializerBase
+{
+    private var _images : WeightedArray;
+    
+    /**
 		 * The constructor creates a ImageClasses initializer for use by 
 		 * an emitter. To add a ImageClasses to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -62,66 +63,67 @@ package org.flintparticles.integration.papervision3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function PV3DDisplayObjectClasses( images:Array, weights:Array = null )
-		{
-			_images = new WeightedArray;
-			var len:int = images.length;
-			var i:int;
-			if( weights != null && weights.length == len )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], weights[i] );
-				}
-			}
-			else
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], 1 );
-				}
-			}
-		}
-		
-		public function addImage( image:*, weight:Number = 1 ):void
-		{
-			if( image is Array )
-			{
-				var parameters:Array = ( image as Array ).concat();
-				var img:Class = parameters.shift();
-				_images.add( new Pair( img, parameters ), weight );
-			}
-			else
-			{
-				_images.add( new Pair( image, [] ), weight );
-			}
-		}
-		
-		public function removeImage( image:* ):void
-		{
-			_images.remove( image );
-		}
-		
-		/**
+    public function new(images : Array<Dynamic>, weights : Array<Dynamic> = null)
+    {
+        super();
+        _images = new WeightedArray();
+        var len : Int = images.length;
+        var i : Int;
+        if (weights != null && weights.length == len) 
+        {
+            for (i in 0...len){
+                addImage(images[i], weights[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                addImage(images[i], 1);
+            }
+        }
+    }
+    
+    public function addImage(image : Dynamic, weight : Float = 1) : Void
+    {
+        if (Std.is(image, Array)) 
+        {
+            var parameters : Array<Dynamic> = (try cast(image, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).concat();
+            var img : Class<Dynamic> = parameters.shift();
+            _images.add(new Pair(img, parameters), weight);
+        }
+        else 
+        {
+            _images.add(new Pair(image, []), weight);
+        }
+    }
+    
+    public function removeImage(image : Dynamic) : Void
+    {
+        _images.remove(image);
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var img:Pair = _images.getRandomValue();
-			var clip:DisplayObject = construct( img.image, img.parameters );
-			var material:MovieMaterial = new MovieMaterial( clip, true, true, false, clip.getBounds( clip ) );
-			particle.image = new Plane( material, clip.width, clip.height );
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var img : Pair = _images.getRandomValue();
+        var clip : DisplayObject = construct(img.image, img.parameters);
+        var material : MovieMaterial = new MovieMaterial(clip, true, true, false, clip.getBounds(clip));
+        particle.image = new Plane(material, clip.width, clip.height);
+    }
 }
+
 class Pair
 {
-	internal var image:Class;
-	internal var parameters:Array;
-	
-	public function Pair( image:Class, parameters:Array )
-	{
-		this.image = image;
-		this.parameters = parameters;
-	}
+    @:allow(org.flintparticles.integration.papervision3d.initializers)
+    private var image : Class<Dynamic>;
+    @:allow(org.flintparticles.integration.papervision3d.initializers)
+    private var parameters : Array<Dynamic>;
+    
+    public function new(image : Class<Dynamic>, parameters : Array<Dynamic>)
+    {
+        this.image = image;
+        this.parameters = parameters;
+    }
 }

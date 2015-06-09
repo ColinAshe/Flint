@@ -28,19 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import flash.geom.Vector3D;
+package org.flintparticles.threed.actions;
 
-	/**
+import org.flintparticles.threed.actions.GravityWell;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The AntiGravity action applies a force to the particle to push it away from
 	 * a single point - the center of the effect. The force applied is inversely 
 	 * proportional to the square of the distance from the particle to the point.
 	 */
 
-	public class AntiGravity extends GravityWell
-	{
-		/**
+class AntiGravity extends GravityWell
+{
+    /**
 		 * The constructor creates an AntiGravity action for use by an emitter. 
 		 * To add an AntiGravity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -56,22 +58,23 @@ package org.flintparticles.threeD.actions
 		 * anti-gravity as it they were this distance away. This stops the 
 		 * anti-gravity effect blowing up as distances get very small.
 		 */
-		public function AntiGravity( power:Number = 0, position:Vector3D = null, epsilon:Number = 1 )
-		{
-			super( power, position, epsilon );
-		}
-		
-		/**
+    public function new(power : Float = 0, position : Vector3D = null, epsilon : Float = 1)
+    {
+        super(power, position, epsilon);
+    }
+    
+    /**
 		 * The strength of the anti-gravity force - larger numbers produce a 
 		 * stronger force.
 		 */
-		override public function get power():Number
-		{
-			return -super.power;
-		}
-		override public function set power( value:Number ):void
-		{
-			super.power = -value;
-		}
-	}
+    override private function get_Power() : Float
+    {
+        return -super.power;
+    }
+    override private function set_Power(value : Float) : Float
+    {
+        super.power = -value;
+        return value;
+    }
 }
+

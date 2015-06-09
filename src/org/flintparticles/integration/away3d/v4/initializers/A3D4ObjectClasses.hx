@@ -28,11 +28,12 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.away3d.v4.initializers
-{
-	import org.flintparticles.common.initializers.ImageClasses;
+package org.flintparticles.integration.away3d.v4.initializers;
 
-	/**
+
+import org.flintparticles.common.initializers.ImageClasses;
+
+/**
 	 * The A3D4ObjectClasses Initializer sets the class of the 3D Object to use 
 	 * to draw the particle in a 3D scene. It selects one of multiple object 
 	 * classes that are passed to it. It is used with the Away3D 4 renderer when
@@ -60,9 +61,9 @@ package org.flintparticles.integration.away3d.v4.initializers
 	 * @see org.flintparticles.integration.away3d.v4.initializers.A3D4CloneObjects
 	 * @see org.flintparticles.common.Initializers.SetImageProperties
 	 */
-	public class A3D4ObjectClasses extends ImageClasses
-	{
-		/**
+class A3D4ObjectClasses extends ImageClasses
+{
+    /**
 		 * The constructor creates an A3D4ObjectClasses initializer for use by 
 		 * an emitter. To add an A3D4ObjectClasses to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -78,9 +79,8 @@ package org.flintparticles.integration.away3d.v4.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function A3D4ObjectClasses( objects:Array, weights:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( objects, weights, usePool, fillPool );
-		}
-	}
+    public function new(objects : Array<Dynamic>, weights : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(objects, weights, usePool, fillPool);
+    }
 }

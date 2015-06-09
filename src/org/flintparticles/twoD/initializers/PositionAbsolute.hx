@@ -28,19 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.twoD.zones.Zone2D;
-	
-	import flash.geom.Point;	
+package org.flintparticles.twod.initializers;
 
-	[DefaultProperty("zone")]
-	
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.twod.zones.Zone2D;
+
+import flash.geom.Point;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The PositionAbsolute Initializer sets the initial location of the particle.
 	 * 
 	 * <p>The class uses zones to place the particle. A zone defines a region
@@ -52,11 +54,13 @@ package org.flintparticles.twoD.initializers
 	 * in the org.flintparticles.twoD.zones package.</p>
 	 */
 
-	public class PositionAbsolute extends InitializerBase
-	{
-		private var _zone : Zone2D;
+class PositionAbsolute extends InitializerBase
+{
+    public var zone(get, set) : Zone2D;
 
-		/**
+    private var _zone : Zone2D;
+    
+    /**
 		 * The constructor creates a PositionAbsolute initializer for use by 
 		 * an emitter. To add a PositionAbsolute to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -65,34 +69,36 @@ package org.flintparticles.twoD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function PositionAbsolute( zone : Zone2D = null )
-		{
-			this.zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone2D = null)
+    {
+        super();
+        this.zone = zone;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone2D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone2D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone2D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone2D) : Zone2D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var loc:Point = _zone.getLocation();
-			p.x = loc.x;
-			p.y = loc.y;
-			p.previousX = p.x;
-			p.previousY = p.y;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var loc : Point = _zone.getLocation();
+        p.x = loc.x;
+        p.y = loc.y;
+        p.previousX = p.x;
+        p.previousY = p.y;
+    }
 }
+

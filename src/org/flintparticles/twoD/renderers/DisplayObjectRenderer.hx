@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.renderers
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.renderers.SpriteRendererBase;
-	import org.flintparticles.twoD.particles.Particle2D;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.twod.renderers;
 
-	/**
+
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.renderers.SpriteRendererBase;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The DisplayObjectRenderer adds particles to its display list 
 	 * and lets the flash player render them in its usual way.
 	 * 
@@ -55,9 +56,9 @@ package org.flintparticles.twoD.renderers
 	 * it is not suitable in situations where the same particle will be simultaneously
 	 * displayed by two different renderers.</p> 
 	 */
-	public class DisplayObjectRenderer extends SpriteRendererBase
-	{
-		/**
+class DisplayObjectRenderer extends SpriteRendererBase
+{
+    /**
 		 * The constructor creates a DisplayObjectRenderer. After creation it should
 		 * be added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage and should be applied to an Emitter using the Emitter's
@@ -65,48 +66,46 @@ package org.flintparticles.twoD.renderers
 		 * 
 		 * @see org.flintparticles.twoD.emitters.Emitter#renderer
 		 */
-		public function DisplayObjectRenderer()
-		{
-			super();
-		}
-		
-		/**
+    public function new()
+    {
+        super();
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			var particle:Particle2D;
-			var img:DisplayObject;
-			var len:int = particles.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				particle = Particle2D( particles[i] );
-				img = particle.image;
-				img.transform.colorTransform = particle.colorTransform;
-				img.transform.matrix = particle.matrixTransform;
-			}
-		}
-		
-		/**
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        var particle : Particle2D;
+        var img : DisplayObject;
+        var len : Int = particles.length;
+        for (i in 0...len){
+            particle = cast((particles[i]), Particle2D);
+            img = particle.image;
+            img.transform.colorTransform = particle.colorTransform;
+            img.transform.matrix = particle.matrixTransform;
+        }
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override protected function addParticle( particle:Particle ):void
-		{
-			super.addParticle( particle );
-			var p:Particle2D = particle as Particle2D;
-			addChildAt( p.image, 0 );
-			var img:DisplayObject = p.image;
-			img.transform.colorTransform = p.colorTransform;
-			img.transform.matrix = p.matrixTransform;
-		}
-		
-		/**
+    override private function addParticle(particle : Particle) : Void
+    {
+        super.addParticle(particle);
+        var p : Particle2D = try cast(particle, Particle2D) catch(e:Dynamic) null;
+        addChildAt(p.image, 0);
+        var img : DisplayObject = p.image;
+        img.transform.colorTransform = p.colorTransform;
+        img.transform.matrix = p.matrixTransform;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override protected function removeParticle( particle:Particle ):void
-		{
-			removeChild( particle.image );
-			super.removeParticle( particle );
-		}
-	}
+    override private function removeParticle(particle : Particle) : Void
+    {
+        removeChild(particle.image);
+        super.removeParticle(particle);
+    }
 }

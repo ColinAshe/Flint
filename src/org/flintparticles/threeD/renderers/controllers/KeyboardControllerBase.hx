@@ -28,43 +28,51 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.renderers.controllers 
-{
-	import org.flintparticles.common.events.UpdateEvent;
-	import org.flintparticles.common.utils.FrameUpdater;
-	import org.flintparticles.threeD.renderers.Camera;
+package org.flintparticles.threed.renderers.controllers;
 
-	import flash.display.DisplayObject;
-	import flash.events.KeyboardEvent;
-	import flash.ui.Keyboard;
 
-	/**
+import org.flintparticles.common.events.UpdateEvent;
+import org.flintparticles.common.utils.FrameUpdater;
+import org.flintparticles.threed.renderers.Camera;
+
+import flash.display.DisplayObject;
+import flash.events.KeyboardEvent;
+import flash.ui.Keyboard;
+
+/**
 	 * Base class for keyboard based camera controllers. Tracks the keyboard state for camera controllers.
 	 */
-	public class KeyboardControllerBase implements CameraController
-	{
-		protected var _stage:DisplayObject;
-		protected var _camera:Camera;
-		protected var _running:Boolean = false;
-		protected var _useInternalTick:Boolean = true;
-		protected var _maximumFrameTime:Number = 0.5;
-		protected var _fixedFrameTime:Number = 0;
-		
-		protected var wDown:Boolean = false;
-		protected var aDown:Boolean = false;
-		protected var sDown:Boolean = false;
-		protected var dDown:Boolean = false;
-		protected var leftDown:Boolean = false;
-		protected var rightDown:Boolean = false;
-		protected var upDown:Boolean = false;
-		protected var downDown:Boolean = false;
-		protected var pgUpDown:Boolean = false;
-		protected var pgDownDown:Boolean = false;
-		
-		[Inspectable]
-		public var autoStart:Boolean = true;
+class KeyboardControllerBase implements CameraController
+{
+    public var maximumFrameTime(get, set) : Float;
+    public var fixedFrameTime(get, set) : Float;
+    public var useInternalTick(get, set) : Bool;
+    public var camera(get, set) : Camera;
+    public var stage(get, set) : DisplayObject;
 
-		/**
+    private var _stage : DisplayObject;
+    private var _camera : Camera;
+    private var _running : Bool = false;
+    private var _useInternalTick : Bool = true;
+    private var _maximumFrameTime : Float = 0.5;
+    private var _fixedFrameTime : Float = 0;
+    
+    private var wDown : Bool = false;
+    private var aDown : Bool = false;
+    private var sDown : Bool = false;
+    private var dDown : Bool = false;
+    private var leftDown : Bool = false;
+    private var rightDown : Bool = false;
+    private var upDown : Bool = false;
+    private var downDown : Bool = false;
+    private var pgUpDown : Bool = false;
+    private var pgDownDown : Bool = false;
+    
+    @:meta(Inspectable())
+
+    public var autoStart : Bool = true;
+    
+    /**
 		 * The constructor creates an OrbitCamera controller.
 		 * 
 		 * @param stage The display object on which to listen for keyboard input. This should usually
@@ -78,11 +86,12 @@ package org.flintparticles.threeD.renderers.controllers
 		 * own tick event to update its state. The internal tick process is tied
 		 * to the framerate and updates the camera every frame.
 		 */
-		public function KeyboardControllerBase()
-		{
-		}
-		
-		/**
+    public function new()
+    {
+        
+    }
+    
+    /**
 		 * The maximum duration for a single update frame, in seconds.
 		 * 
 		 * <p>Under some circumstances related to the Flash player (e.g. on MacOSX, when the 
@@ -97,16 +106,17 @@ package org.flintparticles.threeD.renderers.controllers
 		 * this duration are ignored. The default value is 0.5 seconds. Developers don't usually
 		 * need to change this from the default value.</p>
 		 */
-		public function get maximumFrameTime() : Number
-		{
-			return _maximumFrameTime;
-		}
-		public function set maximumFrameTime( value : Number ) : void
-		{
-			_maximumFrameTime = value;
-		}
-		
-		/**
+    private function get_MaximumFrameTime() : Float
+    {
+        return _maximumFrameTime;
+    }
+    private function set_MaximumFrameTime(value : Float) : Float
+    {
+        _maximumFrameTime = value;
+        return value;
+    }
+    
+    /**
 		 * Indicates a fixed time (in seconds) to use for every frame. Setting 
 		 * this property causes the controller to bypass its frame timing 
 		 * functionality and use the given time for every frame. This enables
@@ -118,17 +128,18 @@ package org.flintparticles.threeD.renderers.controllers
 		 * <p>This feature only works if useInternalTick is true (the default).</p>
 		 * 
 		 * @see #useInternalTick
-		 */		
-		public function get fixedFrameTime():Number
-		{
-			return _fixedFrameTime;
-		}
-		public function set fixedFrameTime( value:Number ):void
-		{
-			_fixedFrameTime = value;
-		}
-
-		/**
+		 */
+    private function get_FixedFrameTime() : Float
+    {
+        return _fixedFrameTime;
+    }
+    private function set_FixedFrameTime(value : Float) : Float
+    {
+        _fixedFrameTime = value;
+        return value;
+    }
+    
+    /**
 		 * Indicates whether the controller should manage its own internal update
 		 * tick. The internal update tick is tied to the frame rate and updates
 		 * the particle system every frame.
@@ -136,188 +147,176 @@ package org.flintparticles.threeD.renderers.controllers
 		 * <p>If users choose not to use the internal tick, they have to call
 		 * the controller's update method with the appropriate time parameter every
 		 * time they want the controller to update the camera.</p>
-		 */		
-		public function get useInternalTick():Boolean
-		{
-			return _useInternalTick;
-		}
-		public function set useInternalTick( value:Boolean ):void
-		{
-			if( _useInternalTick != value )
-			{
-				_useInternalTick = value;
-				if( _running )
-				{
-					if( _useInternalTick )
-					{
-						FrameUpdater.instance.addEventListener( UpdateEvent.UPDATE, updateEventListener, false, 0, true );
-					}
-					else
-					{
-						FrameUpdater.instance.removeEventListener( UpdateEvent.UPDATE, updateEventListener );
-					}
-				}
-			}
-		}
-		
-		/**
+		 */
+    private function get_UseInternalTick() : Bool
+    {
+        return _useInternalTick;
+    }
+    private function set_UseInternalTick(value : Bool) : Bool
+    {
+        if (_useInternalTick != value) 
+        {
+            _useInternalTick = value;
+            if (_running) 
+            {
+                if (_useInternalTick) 
+                {
+                    FrameUpdater.instance.addEventListener(UpdateEvent.UPDATE, updateEventListener, false, 0, true);
+                }
+                else 
+                {
+                    FrameUpdater.instance.removeEventListener(UpdateEvent.UPDATE, updateEventListener);
+                }
+            }
+        }
+        return value;
+    }
+    
+    /**
 		 * The camera to control with this controller.
 		 */
-		public function get camera():Camera
-		{
-			return _camera;
-		}
-		public function set camera( value:Camera ):void
-		{
-			_camera = value;
-		}
-		
-		/**
+    private function get_Camera() : Camera
+    {
+        return _camera;
+    }
+    private function set_Camera(value : Camera) : Camera
+    {
+        _camera = value;
+        return value;
+    }
+    
+    /**
 		 * The stage - used for listening to keyboard events
 		 */
-		public function get stage():DisplayObject
-		{
-			return _stage;
-		}
-		public function set stage( value:DisplayObject ):void
-		{
-			if( _stage )
-			{
-				_stage.removeEventListener( KeyboardEvent.KEY_DOWN, keyDown );
-				_stage.removeEventListener( KeyboardEvent.KEY_UP, keyUp );
-			}
-			_stage = value;
-			_stage.addEventListener( KeyboardEvent.KEY_DOWN, keyDown, false, 0, true );
-			_stage.addEventListener( KeyboardEvent.KEY_UP, keyUp, false, 0, true );
-		}
-		
-		private function keyDown( ev:KeyboardEvent ):void
-		{
-			switch( ev.keyCode )
-			{
-				case Keyboard.UP:
-					upDown = true;
-					break;
-				case Keyboard.DOWN:
-					downDown = true;
-					break;
-				case Keyboard.LEFT:
-					leftDown = true;
-					break;
-				case Keyboard.RIGHT:
-					rightDown = true;
-					break;
-				case 87:
-					wDown = true;
-					break;
-				case 65:
-					aDown = true;
-					break;
-				case 83:
-					sDown = true;
-					break;
-				case 68:
-					dDown = true;
-					break;
-				case 33:
-					pgUpDown = true;
-					break;
-				case 34:
-					pgDownDown = true;
-					break;
-			}
-		}
-		
-		private function keyUp( ev:KeyboardEvent ):void
-		{
-			switch( ev.keyCode )
-			{
-				case Keyboard.UP:
-					upDown = false;
-					break;
-				case Keyboard.DOWN:
-					downDown = false;
-					break;
-				case Keyboard.LEFT:
-					leftDown = false;
-					break;
-				case Keyboard.RIGHT:
-					rightDown = false;
-					break;
-				case 87:
-					wDown = false;
-					break;
-				case 65:
-					aDown = false;
-					break;
-				case 83:
-					sDown = false;
-					break;
-				case 68:
-					dDown = false;
-					break;
-				case 33:
-					pgUpDown = false;
-					break;
-				case 34:
-					pgDownDown = false;
-					break;
-			}
-		}
-		
-		/**
+    private function get_Stage() : DisplayObject
+    {
+        return _stage;
+    }
+    private function set_Stage(value : DisplayObject) : DisplayObject
+    {
+        if (_stage != null) 
+        {
+            _stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDown);
+            _stage.removeEventListener(KeyboardEvent.KEY_UP, keyUp);
+        }
+        _stage = value;
+        _stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDown, false, 0, true);
+        _stage.addEventListener(KeyboardEvent.KEY_UP, keyUp, false, 0, true);
+        return value;
+    }
+    
+    private function keyDown(ev : KeyboardEvent) : Void
+    {
+        var _sw0_ = (ev.keyCode);        
+
+        switch (_sw0_)
+        {
+            case Keyboard.UP:
+                upDown = true;
+            case Keyboard.DOWN:
+                downDown = true;
+            case Keyboard.LEFT:
+                leftDown = true;
+            case Keyboard.RIGHT:
+                rightDown = true;
+            case 87:
+                wDown = true;
+            case 65:
+                aDown = true;
+            case 83:
+                sDown = true;
+            case 68:
+                dDown = true;
+            case 33:
+                pgUpDown = true;
+            case 34:
+                pgDownDown = true;
+        }
+    }
+    
+    private function keyUp(ev : KeyboardEvent) : Void
+    {
+        var _sw1_ = (ev.keyCode);        
+
+        switch (_sw1_)
+        {
+            case Keyboard.UP:
+                upDown = false;
+            case Keyboard.DOWN:
+                downDown = false;
+            case Keyboard.LEFT:
+                leftDown = false;
+            case Keyboard.RIGHT:
+                rightDown = false;
+            case 87:
+                wDown = false;
+            case 65:
+                aDown = false;
+            case 83:
+                sDown = false;
+            case 68:
+                dDown = false;
+            case 33:
+                pgUpDown = false;
+            case 34:
+                pgDownDown = false;
+        }
+    }
+    
+    /**
 		 * Update event listener used to fire the update function when using teh internal tick.
 		 */
-		private function updateEventListener( ev:UpdateEvent ):void
-		{
-			if( _fixedFrameTime )
-			{
-				update( _fixedFrameTime );
-			}
-			else
-			{
-				update( ev.time );
-			}
-		}
-		
-		public function update( time:Number ):void
-		{
-			if( !_running || time > _maximumFrameTime )
-			{
-				return;
-			}
-			updateCamera( time );
-		}
-		
-		protected function updateCamera( time:Number ):void
-		{
-			
-		}
-		
-		/**
+    private function updateEventListener(ev : UpdateEvent) : Void
+    {
+        if (_fixedFrameTime != 0) 
+        {
+            update(_fixedFrameTime);
+        }
+        else 
+        {
+            update(ev.time);
+        }
+    }
+    
+    public function update(time : Float) : Void
+    {
+        if (!_running || time > _maximumFrameTime) 
+        {
+            return;
+        }
+        updateCamera(time);
+    }
+    
+    private function updateCamera(time : Float) : Void
+    {
+        
+        
+    }
+    
+    /**
 		 * Starts the controller.
 		 */
-		public function start():void
-		{
-			if( _useInternalTick )
-			{
-				FrameUpdater.instance.addEventListener( UpdateEvent.UPDATE, updateEventListener, false, 0, true );
-			}
-			_running = true;
-		}
-		
-
-		
-		/**
+    public function start() : Void
+    {
+        if (_useInternalTick) 
+        {
+            FrameUpdater.instance.addEventListener(UpdateEvent.UPDATE, updateEventListener, false, 0, true);
+        }
+        _running = true;
+    }
+    
+    
+    
+    /**
 		 * Stops the controller.
 		 */
-		public function stop():void
-		{
-			if( _useInternalTick )
-			{
-				FrameUpdater.instance.removeEventListener( UpdateEvent.UPDATE, updateEventListener );
-			}
-			_running = false;
-		}
-	}
+    public function stop() : Void
+    {
+        if (_useInternalTick) 
+        {
+            FrameUpdater.instance.removeEventListener(UpdateEvent.UPDATE, updateEventListener);
+        }
+        _running = false;
+    }
 }
+

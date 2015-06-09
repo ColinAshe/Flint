@@ -28,24 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The RandomDrift action moves the particle by a random small amount every 
 	 * frame, causing the particle to drift around.
 	 */
 
-	public class RandomDrift extends ActionBase
-	{
-		private var _sizeX:Number;
-		private var _sizeY:Number;
-		
-		/**
+class RandomDrift extends ActionBase
+{
+    public var driftX(get, set) : Float;
+    public var driftY(get, set) : Float;
+
+    private var _sizeX : Float;
+    private var _sizeY : Float;
+    
+    /**
 		 * The constructor creates a RandomDrift action for use by an emitter. 
 		 * To add a RandomDrift to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -55,38 +59,40 @@ package org.flintparticles.twoD.actions
 		 * @param driftX The maximum amount of horizontal drift in pixels per second.
 		 * @param driftY The maximum amount of vertical drift in pixels per second.
 		 */
-		public function RandomDrift( driftX:Number = 0, driftY:Number = 0 )
-		{
-			this.driftX = driftX;
-			this.driftY = driftY;
-			
-		}
-		
-		/**
+    public function new(driftX : Float = 0, driftY : Float = 0)
+    {
+        super();
+        this.driftX = driftX;
+        this.driftY = driftY;
+    }
+    
+    /**
 		 * The maximum amount of horizontal drift in pixels per second.
 		 */
-		public function get driftX():Number
-		{
-			return _sizeX / 2;
-		}
-		public function set driftX( value:Number ):void
-		{
-			_sizeX = value * 2;
-		}
-		
-		/**
+    private function get_DriftX() : Float
+    {
+        return _sizeX / 2;
+    }
+    private function set_DriftX(value : Float) : Float
+    {
+        _sizeX = value * 2;
+        return value;
+    }
+    
+    /**
 		 * The maximum amount of vertical drift in pixels per second.
 		 */
-		public function get driftY():Number
-		{
-			return _sizeY / 2;
-		}
-		public function set driftY( value:Number ):void
-		{
-			_sizeY = value * 2;
-		}
-		
-		/**
+    private function get_DriftY() : Float
+    {
+        return _sizeY / 2;
+    }
+    private function set_DriftY(value : Float) : Float
+    {
+        _sizeY = value * 2;
+        return value;
+    }
+    
+    /**
 		 * Calculates a random drift for this frame and applies it for the
 		 * period of time indicated.
 		 * 
@@ -99,11 +105,11 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.velX += ( Math.random() - 0.5 ) * _sizeX * time;
-			p.velY += ( Math.random() - 0.5 ) * _sizeY * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.velX += (Math.random() - 0.5) * _sizeX * time;
+        p.velY += (Math.random() - 0.5) * _sizeY * time;
+    }
 }
+

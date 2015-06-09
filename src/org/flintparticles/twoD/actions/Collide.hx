@@ -28,18 +28,19 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.activities.FrameUpdatable;
-	import org.flintparticles.common.activities.UpdateOnFrame;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.events.ParticleEvent;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.emitters.Emitter2D;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.activities.FrameUpdatable;
+import org.flintparticles.common.activities.UpdateOnFrame;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.events.ParticleEvent;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.emitters.Emitter2D;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The Collide action detects collisions between particles and modifies their 
 	 * velocities in response to the collision. All particles are approximated to 
 	 * a circular shape for the collisions and they are assumed to be of even 
@@ -55,15 +56,17 @@ package org.flintparticles.twoD.actions
 	 * after other actions.</p>
 	 */
 
-	public class Collide extends ActionBase implements FrameUpdatable
-	{
-		private var _bounce:Number;
-		private var _maxDistance:Number;
-		private var _updateActivity:UpdateOnFrame;
-		// used to alternate the direction of parsing the collisions
-		private var _sign:int = 1;
-		
-		/**
+class Collide extends ActionBase implements FrameUpdatable
+{
+    public var bounce(get, set) : Float;
+
+    private var _bounce : Float;
+    private var _maxDistance : Float;
+    private var _updateActivity : UpdateOnFrame;
+    // used to alternate the direction of parsing the collisions
+    private var _sign : Int = 1;
+    
+    /**
 		 * The constructor creates a Collide action for use by  an emitter.
 		 * To add a Collide to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -76,29 +79,31 @@ package org.flintparticles.twoD.actions
 		 * collision. A value greater than 1 causes the particle to gain energy 
 		 * in the collision.
 		 */
-		public function Collide( bounce:Number = 1 )
-		{
-			priority = -20;
-			this.bounce = bounce;
-			_maxDistance = 0;
-		}
-		
-		/**
+    public function new(bounce : Float = 1)
+    {
+        super();
+        priority = -20;
+        this.bounce = bounce;
+        _maxDistance = 0;
+    }
+    
+    /**
 		 * The coefficient of restitution when the particles collide. A value of 
 		 * 1 gives a pure elastic collision, with no energy loss. A value
 		 * between 0 and 1 causes the particles to loose enegy in the collision. 
 		 * A value greater than 1 causes the particles to gain energy in the collision.
 		 */
-		public function get bounce():Number
-		{
-			return _bounce;
-		}
-		public function set bounce( value:Number ):void
-		{
-			_bounce = value;
-		}
-
-		/**
+    private function get_Bounce() : Float
+    {
+        return _bounce;
+    }
+    private function set_Bounce(value : Float) : Float
+    {
+        _bounce = value;
+        return value;
+    }
+    
+    /**
 		 * Instructs the emitter to produce a sorted particle array for optimizing
 		 * the calculations in the update method of this action and
 		 * adds an UpdateOnFrame activity to the emitter to call this objects
@@ -110,14 +115,14 @@ package org.flintparticles.twoD.actions
 		 * @see org.flintparticles.common.activities.UpdateOnFrame
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter2D( emitter ).spaceSort = true;
-			_updateActivity = new UpdateOnFrame( this );
-			emitter.addActivity( _updateActivity );
-		}
-
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter2D).spaceSort = true;
+        _updateActivity = new UpdateOnFrame(this);
+        emitter.addActivity(_updateActivity);
+    }
+    
+    /**
 		 * Removes the UpdateOnFrame activity that was added to the emitter in the
 		 * addedToEmitter method.
 		 * 
@@ -127,15 +132,15 @@ package org.flintparticles.twoD.actions
 		 * @see org.flintparticles.common.activities.UpdateOnFrame
 		 * @see org.flintparticles.common.actions.Action#removedFromEmitter()
 		 */
-		override public function removedFromEmitter( emitter:Emitter ):void
-		{
-			if( _updateActivity )
-			{
-				emitter.removeActivity( _updateActivity );
-			}
-		}
-		
-		/**
+    override public function removedFromEmitter(emitter : Emitter) : Void
+    {
+        if (_updateActivity != null) 
+        {
+            emitter.removeActivity(_updateActivity);
+        }
+    }
+    
+    /**
 		 * Called every frame before the particles are updated, this method
 		 * calculates the collision radius of the largest two particles, which
 		 * aids in optimizing the collision calculations.
@@ -148,29 +153,29 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.activities.UpdateOnFrame
 		 */
-		public function frameUpdate( emitter:Emitter, time:Number ):void
-		{
-			var particles:Array = emitter.particlesArray;
-			var max1:Number = 0;
-			var max2:Number = 0;
-			for each( var p:Particle in particles )
-			{
-				if( p.collisionRadius > max1 )
-				{
-					max2 = max1;
-					max1 = p.collisionRadius;
-				}
-				else if( p.collisionRadius > max2 )
-				{
-					max2 = p.collisionRadius;
-				}
-			}
-			_maxDistance = max1 + max2;
-			_sign = - _sign;
-		}
-		
-		
-		/**
+    public function frameUpdate(emitter : Emitter, time : Float) : Void
+    {
+        var particles : Array<Dynamic> = emitter.particlesArray;
+        var max1 : Float = 0;
+        var max2 : Float = 0;
+        for (p in particles)
+        {
+            if (p.collisionRadius > max1) 
+            {
+                max2 = max1;
+                max1 = p.collisionRadius;
+            }
+            else if (p.collisionRadius > max2) 
+            {
+                max2 = p.collisionRadius;
+            }
+        }
+        _maxDistance = max1 + max2;
+        _sign = -_sign;
+    }
+    
+    
+    /**
 		 * Causes the particle to check for collisions against all other particles.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -182,59 +187,66 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var e:Emitter2D = Emitter2D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle2D;
-			var i:int;
-			var len:int = particles.length;
-			var factor:Number;
-			var distanceSq:Number;
-			var collisionDist:Number;
-			var dx:Number, dy:Number;
-			var n1:Number, n2:Number;
-			var relN:Number;
-			var m1:Number, m2:Number;
-			var f1:Number, f2:Number;
-			for( i = p.sortID + _sign; i < len && i >= 0 ; i += _sign )
-			{
-				other = particles[i];
-				if( ( dx = other.x - p.x ) * _sign > _maxDistance ) break;
-				collisionDist = other.collisionRadius + p.collisionRadius;
-				if( dx * _sign > collisionDist ) continue;
-				dy = other.y - p.y;
-				if( dy > collisionDist || dy < -collisionDist ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= collisionDist * collisionDist && distanceSq > 0 )
-				{
-					factor = 1 / Math.sqrt( distanceSq );
-					dx *= factor;
-					dy *= factor;
-					n1 = dx * p.velX + dy * p.velY;
-					n2 = dx * other.velX + dy * other.velY;
-					relN = n1 - n2;
-					if( relN > 0 ) // colliding, not separating
-					{
-						m1 = p.mass;
-						m2 = other.mass;
-						factor = ( ( 1 + _bounce ) * relN ) / ( m1 + m2 );
-						f1 = factor * m2;
-						f2 = -factor * m1;
-						p.velX -= f1 * dx;
-						p.velY -= f1 * dy;
-						other.velX -= f2 * dx;
-						other.velY -= f2 * dy;
-						if ( emitter.hasEventListener( ParticleEvent.PARTICLES_COLLISION ) )
-						{
-							var ev:ParticleEvent = new ParticleEvent( ParticleEvent.PARTICLES_COLLISION, p );
-							ev.otherObject = other;
-							emitter.dispatchEvent( ev );
-						}
-					}
-				} 
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle2D;
+        var i : Int;
+        var len : Int = particles.length;
+        var factor : Float;
+        var distanceSq : Float;
+        var collisionDist : Float;
+        var dx : Float;
+        var dy : Float;
+        var n1 : Float;
+        var n2 : Float;
+        var relN : Float;
+        var m1 : Float;
+        var m2 : Float;
+        var f1 : Float;
+        var f2 : Float;
+        i = p.sortID + _sign;
+        while (i < len && i >= 0){
+            other = particles[i];
+            if ((dx = other.x - p.x) * _sign > _maxDistance)                 break;
+            collisionDist = other.collisionRadius + p.collisionRadius;
+            if (dx * _sign > collisionDist)                 {i += _sign;continue;
+            };
+            dy = other.y - p.y;
+            if (dy > collisionDist || dy < -collisionDist)                 {i += _sign;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= collisionDist * collisionDist && distanceSq > 0) 
+            {
+                factor = 1 / Math.sqrt(distanceSq);
+                dx *= factor;
+                dy *= factor;
+                n1 = dx * p.velX + dy * p.velY;
+                n2 = dx * other.velX + dy * other.velY;
+                relN = n1 - n2;
+                if (relN > 0)   // colliding, not separating  
+                {
+                    m1 = p.mass;
+                    m2 = other.mass;
+                    factor = ((1 + _bounce) * relN) / (m1 + m2);
+                    f1 = factor * m2;
+                    f2 = -factor * m1;
+                    p.velX -= f1 * dx;
+                    p.velY -= f1 * dy;
+                    other.velX -= f2 * dx;
+                    other.velY -= f2 * dy;
+                    if (emitter.hasEventListener(ParticleEvent.PARTICLES_COLLISION)) 
+                    {
+                        var ev : ParticleEvent = new ParticleEvent(ParticleEvent.PARTICLES_COLLISION, p);
+                        ev.otherObject = other;
+                        emitter.dispatchEvent(ev);
+                    }
+                }
+            }
+            i += _sign;
+        }
+    }
 }
+

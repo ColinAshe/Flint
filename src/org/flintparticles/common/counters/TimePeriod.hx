@@ -29,12 +29,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.easing.Linear;
-	import org.flintparticles.common.emitters.Emitter;	
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.easing.Linear;
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The TimePeriod counter causes the emitter to emit particles for a period of 
 	 * time and then stop. The rate of emission over that period can be modified 
 	 * using easing equations that conform to the interface defined in Robert 
@@ -43,16 +44,22 @@ package org.flintparticles.common.counters
 	 * 
 	 * @see org.flintparticles.common.easing
 	 */
-	public class TimePeriod implements Counter
-	{
-		private var _particles : uint;
-		private var _duration : Number;
-		private var _particlesPassed : uint;
-		private var _timePassed : Number;
-		private var _easing : Function;
-		private var _running : Boolean = false;
+class TimePeriod implements Counter
+{
+    public var numParticles(get, set) : Int;
+    public var duration(get, set) : Float;
+    public var easing(get, set) : Function;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
 
-		/**
+    private var _particles : Int;
+    private var _duration : Float;
+    private var _particlesPassed : Int;
+    private var _timePassed : Float;
+    private var _easing : Function;
+    private var _running : Bool = false;
+    
+    /**
 		 * The constructor creates a TimePeriod counter for use by an emitter. To
 		 * add a TimePeriod counter to an emitter use the emitter's counter property.
 		 * 
@@ -67,60 +74,63 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function TimePeriod( numParticles : uint = 0, duration : Number = 0, easing : Function = null )
-		{
-			_particles = numParticles;
-			_duration = duration;
-			if ( easing == null )
-			{
-				_easing = Linear.easeNone;
-			}
-			else
-			{
-				_easing = easing;
-			}
-		}
-
-		/**
+    public function new(numParticles : Int = 0, duration : Float = 0, easing : Function = null)
+    {
+        _particles = numParticles;
+        _duration = duration;
+        if (easing == null) 
+        {
+            _easing = Linear.easeNone;
+        }
+        else 
+        {
+            _easing = easing;
+        }
+    }
+    
+    /**
 		 * The number of particles to emit over the full duration
 		 * of the time period.
 		 */
-		public function get numParticles():uint
-		{
-			return _particles;
-		}
-		public function set numParticles( value:uint ):void
-		{
-			_particles = value;
-		}
-		
-		/**
+    private function get_NumParticles() : Int
+    {
+        return _particles;
+    }
+    private function set_NumParticles(value : Int) : Int
+    {
+        _particles = value;
+        return value;
+    }
+    
+    /**
 		 * The duration of the time period. After this time is up the
 		 * emitter will not release any more particles.
 		 */
-		public function get duration():Number
-		{
-			return _duration;
-		}
-		public function set duration( value:Number ):void
-		{
-			_duration = value;
-		}
-		
-		/**
+    private function get_Duration() : Float
+    {
+        return _duration;
+    }
+    private function set_Duration(value : Float) : Float
+    {
+        _duration = value;
+        return value;
+    }
+    
+    /**
 		 * An easing function used to distribute the emission of the
 		 * particles over the time period.
 		 */
-		public function get easing():Function
-		{
-			return _easing;
-		}
-		public function set easing( value:Function ):void
-		{
-			_easing = value;
-		}
-		
-		/**
+    private function get_Easing() : Function
+    {
+        return _easing;
+    }
+    private function set_Easing(value : Function) : Function
+    {
+        _easing = value;
+        return value;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -132,15 +142,15 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ) : uint
-		{
-			_running = true;
-			_particlesPassed = 0;
-			_timePassed = 0;
-			return 0;
-		}
-
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        _particlesPassed = 0;
+        _timePassed = 0;
+        return 0;
+    }
+    
+    /**
 		 * Uses the time, timePeriod and easing function to calculate how many
 		 * particles the emitter should emit now.
 		 * 
@@ -153,58 +163,57 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time : Number ) : uint
-		{
-			if( !_running || _timePassed >= _duration )
-			{
-				return 0;
-			}
-			
-			_timePassed += time;
-			
-			if( _timePassed >= _duration )
-			{
-				emitter.dispatchCounterComplete();
-				var newParticles:uint = _particles - _particlesPassed;
-				_particlesPassed = _particles;
-				return newParticles;
-			}
-			
-			var oldParticles:uint = _particlesPassed;
-			_particlesPassed = Math.round( _easing( _timePassed, 0, _particles, _duration ) );
-			return _particlesPassed - oldParticles;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running || _timePassed >= _duration) 
+        {
+            return 0;
+        }
+        
+        _timePassed += time;
+        
+        if (_timePassed >= _duration) 
+        {
+            emitter.dispatchCounterComplete();
+            var newParticles : Int = _particles - _particlesPassed;
+            _particlesPassed = _particles;
+            return newParticles;
+        }
+        
+        var oldParticles : Int = _particlesPassed;
+        _particlesPassed = Math.round(_easing(_timePassed, 0, _particles, _duration));
+        return _particlesPassed - oldParticles;
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles.
 		 */
-		public function get complete():Boolean
-		{
-			return _particlesPassed == _particles;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return _particlesPassed == _particles;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return (_running && _timePassed < _duration);
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return (_running && _timePassed < _duration);
+    }
 }

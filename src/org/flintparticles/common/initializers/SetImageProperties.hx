@@ -28,12 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
+package org.flintparticles.common.initializers;
 
-	/**
+import nme.errors.Error;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The SetImageProperties Initializer can be used to set any properties of a particle's
 	 * image object. This Initializer has a single property that is any object whose properties
 	 * should be copied to the image object.
@@ -42,11 +44,13 @@ package org.flintparticles.common.initializers
 	 * which have a priority of zero.
 	 */
 
-	public class SetImageProperties extends InitializerBase
-	{
-		private var _properties:Object;
-		
-		/**
+class SetImageProperties extends InitializerBase
+{
+    public var properties(get, set) : Dynamic;
+
+    private var _properties : Dynamic;
+    
+    /**
 		 * The constructor creates a SetImageProperties initializer for use by 
 		 * an emitter. To apply a SetImageProperties to all particles created by an emitter,
 		 * use the emitter's addInitializer method.
@@ -57,43 +61,45 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function SetImageProperties( properties : Object )
-		{
-			_priority = -10;
-			_properties = properties;
-		}
-		
-		/**
+    public function new(properties : Dynamic)
+    {
+        super();
+        _priority = -10;
+        _properties = properties;
+    }
+    
+    /**
 		 * An object or dictionary containing the properties to set on the particle's image 
 		 * object. The name of the properties on this object must match the names of the 
 		 * properties on the particle's image object.
 		 */
-		public function get properties():Object
-		{
-			return _properties;
-		}
-		public function set properties( value:Object ):void
-		{
-			_properties = value;
-		}
-		
-		/**
+    private function get_Properties() : Dynamic
+    {
+        return _properties;
+    }
+    private function set_Properties(value : Dynamic) : Dynamic
+    {
+        _properties = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( !particle.image )
-			{
-				throw new Error( "Attempting to set image properties when no image is set" );
-			}
-			var img:Object = particle.image;
-			for( var name:String in _properties )
-			{
-				if( img.hasOwnProperty( name ) )
-				{
-					img[name] = _properties[name];
-				}
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (!particle.image) 
+        {
+            throw new Error("Attempting to set image properties when no image is set");
+        }
+        var img : Dynamic = particle.image;
+        for (name in Reflect.fields(_properties))
+        {
+            if (img.exists(name)) 
+            {
+                Reflect.setField(img, name, Reflect.field(_properties, name));
+            }
+        }
+    }
 }
+

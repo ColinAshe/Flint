@@ -28,19 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	import org.flintparticles.twoD.zones.Zone2D;
-	
-	import flash.geom.Point;	
+package org.flintparticles.twod.initializers;
 
-	[DefaultProperty("zone")]
-	
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+import org.flintparticles.twod.zones.Zone2D;
+
+import flash.geom.Point;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The Position Initializer sets the initial location of the particle.
 	 * 
 	 * <p>The class uses zones to place the particle. A zone defines a region
@@ -50,11 +52,13 @@ package org.flintparticles.twoD.initializers
 	 * Zones interface for use when implementing custom zones) are defined
 	 * in the org.flintparticles.twoD.zones package.</p>
 	 */
-	public class Position extends InitializerBase
-	{
-		private var _zone : Zone2D;
+class Position extends InitializerBase
+{
+    public var zone(get, set) : Zone2D;
 
-		/**
+    private var _zone : Zone2D;
+    
+    /**
 		 * The constructor creates a Position initializer for use by 
 		 * an emitter. To add a Position to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -63,44 +67,46 @@ package org.flintparticles.twoD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function Position( zone : Zone2D = null )
-		{
-			this.zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone2D = null)
+    {
+        super();
+        this.zone = zone;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone2D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone2D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone2D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone2D) : Zone2D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter : Emitter, particle : Particle ) : void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var loc:Point = _zone.getLocation();
-			if( p.rotation == 0 )
-			{
-				p.x += loc.x;
-				p.y += loc.y;
-			}
-			else
-			{
-				var sin:Number = Math.sin( p.rotation );
-				var cos:Number = Math.cos( p.rotation );
-				p.x += cos * loc.x - sin * loc.y;
-				p.y += cos * loc.y + sin * loc.x;
-			}
-			p.previousX = p.x;
-			p.previousY = p.y;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var loc : Point = _zone.getLocation();
+        if (p.rotation == 0) 
+        {
+            p.x += loc.x;
+            p.y += loc.y;
+        }
+        else 
+        {
+            var sin : Float = Math.sin(p.rotation);
+            var cos : Float = Math.cos(p.rotation);
+            p.x += cos * loc.x - sin * loc.y;
+            p.y += cos * loc.y + sin * loc.x;
+        }
+        p.previousX = p.x;
+        p.previousY = p.y;
+    }
 }
+

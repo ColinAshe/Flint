@@ -1,4 +1,4 @@
-/*
+  /*
  * FLINT PARTICLE SYSTEM
  * .....................
  * 
@@ -26,27 +26,31 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ */  
 
-package org.flintparticles.integration.papervision3d.initializers
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.construct;	
+package org.flintparticles.integration.papervision3d.initializers;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.Construct;
+
+/**
 	 * The PV3DObjectClass initializer sets the 3D Object to use to 
 	 * draw the particle in a 3D scene. It is used with the Papervision3D renderer when
 	 * particles should be represented by a 3D object.
 	 */
 
-	public class PV3DObjectClass extends InitializerBase
-	{
-		private var _imageClass:Class;
-		private var _parameters:Array;
-		
-		/**
+class PV3DObjectClass extends InitializerBase
+{
+    public var imageClass(get, set) : Class<Dynamic>;
+    public var parameters(get, set) : Array<Dynamic>;
+
+    private var _imageClass : Class<Dynamic>;
+    private var _parameters : Array<Dynamic>;
+    
+    /**
 		 * The constructor creates an PV3DObjectClass initializer for use by 
 		 * an emitter. To add an ImageClass to all particles created by an emitter, 
 		 * use the emitter's addInitializer method.
@@ -58,48 +62,51 @@ package org.flintparticles.integration.papervision3d.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function PV3DObjectClass( imageClass:Class, ...parameters )
-		{
-			_imageClass = imageClass;
-			_parameters = parameters;
-		}
-		
-		/**
+    public function new(imageClass : Class<Dynamic>)
+    {
+        super();
+        _imageClass = imageClass;
+        _parameters = parameters;
+    }
+    
+    /**
 		 * The class to use when creating
 		 * the particles' DisplayObjects.
 		 */
-		public function get imageClass():Class
-		{
-			return _imageClass;
-		}
-		public function set imageClass( value:Class ):void
-		{
-			_imageClass = value;
-		}
-		
-		/**
+    private function get_ImageClass() : Class<Dynamic>
+    {
+        return _imageClass;
+    }
+    private function set_ImageClass(value : Class<Dynamic>) : Class<Dynamic>
+    {
+        _imageClass = value;
+        return value;
+    }
+    
+    /**
 		 * The parameters to pass to the constructor
 		 * for the image class.
 		 */
-		public function get parameters():Array
-		{
-			return _parameters;
-		}
-		public function set parameters( value:Array ):void
-		{
-			_parameters = value;
-		}
-		
-		/**
+    private function get_Parameters() : Array<Dynamic>
+    {
+        return _parameters;
+    }
+    private function set_Parameters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        _parameters = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			particle.image = construct( _imageClass, _parameters );
-			if( particle.image["hasOwnProperty"]( "size" ) )
-			{
-				particle.dictionary["pv3dBaseSize"] = particle.image["size"];
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        particle.image = construct(_imageClass, _parameters);
+        if (particle.image["hasOwnProperty"]("size")) 
+        {
+            particle.dictionary["pv3dBaseSize"] = particle.image["size"];
+        }
+    }
 }
+

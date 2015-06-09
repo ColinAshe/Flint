@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The Rotate action updates the rotation of the particle based on its angular 
 	 * velocity. It uses a Euler integrator to calculate the new rotation. If you 
 	 * want an emitter's particles to rotate then you must add a Rotate action, or 
@@ -44,21 +45,22 @@ package org.flintparticles.twoD.actions
 	 * <p>This action has a priority of -10, so that it executes after other actions.</p>
 	 */
 
-	public class Rotate extends ActionBase
-	{
-		/**
+class Rotate extends ActionBase
+{
+    /**
 		 * The constructor creates a Rotate action for use by an emitter. 
 		 * To add a Rotate to all particles created by an emitter, use the
 		 * emitter's addAction method.
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function Rotate()
-		{
-			priority = -10;
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        priority = -10;
+    }
+    
+    /**
 		 * Updates the particle's rotation based on its angular velocity and the period of 
 		 * time indicated.
 		 * 
@@ -71,10 +73,10 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.rotation += p.angVelocity * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.rotation += p.angVelocity * time;
+    }
 }
+

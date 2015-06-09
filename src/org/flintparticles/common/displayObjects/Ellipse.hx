@@ -28,75 +28,83 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.displayObjects
+package org.flintparticles.common.displayobjects;
+
+
+import flash.display.Shape;
+
+/**
+ * The Ellipse class is a DisplayObject with a oval shape. The registration point
+ * of this diaplay object is in the center of the Ellipse.
+ */
+
+class Ellipse extends Shape
 {
-    import flash.display.Shape;
+    public var ellipseWidth(get, set) : Float;
+    public var ellipseHeight(get, set) : Float;
+    public var color(get, set) : Int;
 
+    private var _ellipseWidth : Float;
+    private var _ellipseHeight : Float;
+    private var _color : Int;
+    
     /**
-     * The Ellipse class is a DisplayObject with a oval shape. The registration point
-     * of this diaplay object is in the center of the Ellipse.
+     * The constructor creates a Dot with a specified radius.
+     * @param radius The radius, in pixels, of the Dot.
+     * @param color The color of the Dot.
+     * @param bm The blendMode for the Dot.
      */
-
-    public class Ellipse extends Shape
+    public function new(width : Float = 1, height : Float = 1, color : Int = 0xFFFFFF, bm : String = "normal")
     {
-        private var _ellipseWidth:Number;
-        private var _ellipseHeight:Number;
-        private var _color:uint;
-
-        /**
-         * The constructor creates a Dot with a specified radius.
-         * @param radius The radius, in pixels, of the Dot.
-         * @param color The color of the Dot.
-         * @param bm The blendMode for the Dot.
-         */
-        public function Ellipse( width:Number = 1, height:Number = 1, color:uint = 0xFFFFFF, bm:String = "normal" )
+        super();
+        _ellipseWidth = width;
+        _ellipseHeight = height;
+        _color = color;
+        draw();
+        blendMode = bm;
+    }
+    
+    private function draw() : Void
+    {
+        if (_ellipseWidth > 0 && _ellipseHeight > 0) 
         {
-            _ellipseWidth = width;
-            _ellipseHeight = height;
-            _color = color;
-            draw();
-            blendMode = bm;
+            graphics.clear();
+            graphics.beginFill(_color);
+            graphics.drawEllipse(0, 0, _ellipseWidth, _ellipseHeight);
+            graphics.endFill();
         }
-
-        private function draw():void
-        {
-        	if( _ellipseWidth > 0 && _ellipseHeight > 0 )
-        	{
-	            graphics.clear();
-	            graphics.beginFill( _color );
-	            graphics.drawEllipse( 0, 0, _ellipseWidth, _ellipseHeight );
-	            graphics.endFill();
-        	}
-        }
-
-        public function get ellipseWidth():Number
-        {
-            return _ellipseWidth;
-        }
-        public function set ellipseWidth( value:Number ):void
-        {
-            _ellipseWidth = value;
-            draw();
-        }
-
-        public function get ellipseHeight():Number
-        {
-            return _ellipseHeight;
-        }
-        public function set ellipseHeight( value:Number ):void
-        {
-            _ellipseHeight = value;
-            draw();
-        }
-
-        public function get color():uint
-        {
-            return _color;
-        }
-        public function set color( value:uint ):void
-        {
-            _color = value;
-            draw();
-        }
+    }
+    
+    private function get_EllipseWidth() : Float
+    {
+        return _ellipseWidth;
+    }
+    private function set_EllipseWidth(value : Float) : Float
+    {
+        _ellipseWidth = value;
+        draw();
+        return value;
+    }
+    
+    private function get_EllipseHeight() : Float
+    {
+        return _ellipseHeight;
+    }
+    private function set_EllipseHeight(value : Float) : Float
+    {
+        _ellipseHeight = value;
+        draw();
+        return value;
+    }
+    
+    private function get_Color() : Int
+    {
+        return _color;
+    }
+    private function set_Color(value : Int) : Int
+    {
+        _color = value;
+        draw();
+        return value;
     }
 }

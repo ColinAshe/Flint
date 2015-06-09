@@ -28,24 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The TargetScale action adjusts the scale of the particle towards a 
 	 * target scale. On every update the scale of the particle moves a 
 	 * little closer to the target scale. The rate at which particles approach
 	 * the target is controlled by the rate property.
 	 */
-	public class TargetScale extends ActionBase
-	{
-		private var _scale:Number;
-		private var _rate:Number;
-		
-		/**
+class TargetScale extends ActionBase
+{
+    public var targetScale(get, set) : Float;
+    public var rate(get, set) : Float;
+
+    private var _scale : Float;
+    private var _rate : Float;
+    
+    /**
 		 * The constructor creates a TargetScale action for use by an emitter. 
 		 * To add a TargetScale to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -56,38 +60,41 @@ package org.flintparticles.common.actions
 		 * @param rate Adjusts how quickly the particle reaches the target scale.
 		 * Larger numbers cause it to approach the target scale more quickly.
 		 */
-		public function TargetScale( targetScale:Number= 1, rate:Number = 0.1 )
-		{
-			_scale = targetScale;
-			_rate = rate;
-		}
-		
-		/**
+    public function new(targetScale : Float = 1, rate : Float = 0.1)
+    {
+        super();
+        _scale = targetScale;
+        _rate = rate;
+    }
+    
+    /**
 		 * The target scale for the particle. 1 is normal size.
 		 */
-		public function get targetScale():Number
-		{
-			return _scale;
-		}
-		public function set targetScale( value:Number ):void
-		{
-			_scale = value;
-		}
-		
-		/**
+    private function get_TargetScale() : Float
+    {
+        return _scale;
+    }
+    private function set_TargetScale(value : Float) : Float
+    {
+        _scale = value;
+        return value;
+    }
+    
+    /**
 		 * Adjusts how quickly the particle reaches the target scale.
 		 * Larger numbers cause it to approach the target scale more quickly.
 		 */
-		public function get rate():Number
-		{
-			return _rate;
-		}
-		public function set rate( value:Number ):void
-		{
-			_rate = value;
-		}
-		
-		/**
+    private function get_Rate() : Float
+    {
+        return _rate;
+    }
+    private function set_Rate(value : Float) : Float
+    {
+        _rate = value;
+        return value;
+    }
+    
+    /**
 		 * Adjusts the scale of the particle based on its current scale, the target 
 		 * scale and the time elapsed.
 		 * 
@@ -100,9 +107,9 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			particle.scale += ( _scale - particle.scale ) * _rate * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        particle.scale += (_scale - particle.scale) * _rate * time;
+    }
 }
+

@@ -28,30 +28,36 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The WrapAroundBox action confines all the particles to a rectangle region. If a
 	 * particle leaves the rectangle on one side it reenters on the other.
 	 * 
 	 * This action has a priority of -20, so that it executes after 
 	 * all movement has occured.
 	 */
-	public class WrapAroundBox extends ActionBase
-	{
-		private var _left : Number;
-		private var _top : Number;
-		private var _right : Number;
-		private var _bottom : Number;
-		private var _width : Number;
-		private var _height : Number;
+class WrapAroundBox extends ActionBase
+{
+    public var left(get, set) : Float;
+    public var top(get, set) : Float;
+    public var right(get, set) : Float;
+    public var bottom(get, set) : Float;
 
-		/**
+    private var _left : Float;
+    private var _top : Float;
+    private var _right : Float;
+    private var _bottom : Float;
+    private var _width : Float;
+    private var _height : Float;
+    
+    /**
 		 * The constructor creates a WrapAroundBox action for use by 
 		 * an emitter. To add a WrapAroundBox to all particles created by an emitter, 
 		 * use the emitter's addAction method.
@@ -63,68 +69,73 @@ package org.flintparticles.twoD.actions
 		 * @param right The right coordinate of the box.
 		 * @param bottom The bottom coordinate of the box.
 		 */
-		public function WrapAroundBox( left:Number = 0, top:Number = 0, right:Number = 0, bottom:Number = 0 )
-		{
-			priority = -20;
-			this.left = left;
-			this.top = top;
-			this.right = right;
-			this.bottom = bottom;
-		}
-
-		/**
+    public function new(left : Float = 0, top : Float = 0, right : Float = 0, bottom : Float = 0)
+    {
+        super();
+        priority = -20;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+    }
+    
+    /**
 		 * The left coordinate of the box.
 		 */
-		public function get left():Number
-		{
-			return _left;
-		}
-		public function set left( value:Number ):void
-		{
-			_left = value;
-			_width = _right - _left;
-		}
-
-		/**
+    private function get_Left() : Float
+    {
+        return _left;
+    }
+    private function set_Left(value : Float) : Float
+    {
+        _left = value;
+        _width = _right - _left;
+        return value;
+    }
+    
+    /**
 		 * The top coordinate of the box.
 		 */
-		public function get top():Number
-		{
-			return _top;
-		}
-		public function set top( value:Number ):void
-		{
-			_top = value;
-			_height = _bottom - _top;
-		}
-
-		/**
+    private function get_Top() : Float
+    {
+        return _top;
+    }
+    private function set_Top(value : Float) : Float
+    {
+        _top = value;
+        _height = _bottom - _top;
+        return value;
+    }
+    
+    /**
 		 * The left coordinate of the box.
 		 */
-		public function get right():Number
-		{
-			return _right;
-		}
-		public function set right( value:Number ):void
-		{
-			_right = value;
-			_width = _right - _left;
-		}
-
-		/**
+    private function get_Right() : Float
+    {
+        return _right;
+    }
+    private function set_Right(value : Float) : Float
+    {
+        _right = value;
+        _width = _right - _left;
+        return value;
+    }
+    
+    /**
 		 * The left coordinate of the box.
 		 */
-		public function get bottom():Number
-		{
-			return _bottom;
-		}
-		public function set bottom( value:Number ):void
-		{
-			_bottom = value;
-			_height = _bottom - _top;
-		}
-
-		/**
+    private function get_Bottom() : Float
+    {
+        return _bottom;
+    }
+    private function set_Bottom(value : Float) : Float
+    {
+        _bottom = value;
+        _height = _bottom - _top;
+        return value;
+    }
+    
+    /**
 		 * Tests whether the particle has left the box and, if so, moves it
 		 * to enter on the other side.
 		 * 
@@ -137,25 +148,25 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p:Particle2D = Particle2D( particle );
-			if ( p.velX > 0 && p.x >= _right )
-			{
-				p.x -= _width;
-			}
-			else if ( p.velX < 0 && p.x <= _left )
-			{
-				p.x += _width;
-			}
-			if ( p.velY > 0 && p.y >= _bottom )
-			{
-				p.y -= _height;
-			}
-			else if ( p.velY < 0 && p.y <= _top )
-			{
-				p.y += _height;
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        if (p.velX > 0 && p.x >= _right) 
+        {
+            p.x -= _width;
+        }
+        else if (p.velX < 0 && p.x <= _left) 
+        {
+            p.x += _width;
+        }
+        if (p.velY > 0 && p.y >= _bottom) 
+        {
+            p.y -= _height;
+        }
+        else if (p.velY < 0 && p.y <= _top) 
+        {
+            p.y += _height;
+        }
+    }
 }
+

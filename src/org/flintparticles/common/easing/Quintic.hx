@@ -47,30 +47,35 @@
  * the BSD License.
  */
 
-package org.flintparticles.common.easing
-{
-	/**
+package org.flintparticles.common.easing;
+
+
+/**
 	 * Easing functions for use with ageing of particles. Based on Robert Penner's easing functions.
 	 */
-	public class Quintic
-	{
-		public static function easeIn(t : Number, b : Number, c : Number, d : Number) : Number
-		{
-			return c * ( t /= d ) * t * t * t * t + b;
-		}
+class Quintic
+{
+    public static function easeIn(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * (t /= d) * t * t * t * t + b;
+    }
+    
+    public static function easeOut(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
+    }
+    
+    public static function easeInOut(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        if ((t /= d * 0.5) < 1) 
+        {
+            return c * 0.5 * t * t * t * t * t + b;
+        }
+        return c * 0.5 * ((t -= 2) * t * t * t * t + 2) + b;
+    }
 
-		public static function easeOut(t : Number, b : Number, c : Number, d : Number) : Number 
-		{
-			return c * ( ( t = t / d - 1 ) * t * t * t * t + 1 ) + b;
-		}
-
-		public static function easeInOut(t : Number, b : Number, c : Number, d : Number) : Number
-		{
-			if ( ( t /= d * 0.5 ) < 1 )
-			{
-				return c * 0.5 * t * t * t * t * t + b;
-			}
-			return c * 0.5 * ( ( t -= 2 ) * t * t * t * t + 2 ) + b;
-		}
-	}
+    public function new()
+    {
+    }
 }
+

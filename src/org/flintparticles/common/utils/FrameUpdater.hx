@@ -1,4 +1,4 @@
-/*
+  /*
  * FLINT PARTICLE SYSTEM
  * .....................
  * 
@@ -26,18 +26,19 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */
+ */  
 
-package org.flintparticles.common.utils 
-{
-	import org.flintparticles.common.events.UpdateEvent;
-	
-	import flash.display.Shape;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.utils.getTimer;	
+package org.flintparticles.common.utils;
 
-	/**
+
+import org.flintparticles.common.events.UpdateEvent;
+
+import flash.display.Shape;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+
+
+/**
 	 * This class is used to provide a constant tick event to update the emitters
 	 * every frame. This is the internal tick that is used when the useInternalTick
 	 * property of the emitter is set to true.
@@ -47,11 +48,13 @@ package org.flintparticles.common.utils
 	 * 
 	 * @see org.flintparticles.common.emitters.Emitter.Emitter()
 	 */
-	public class FrameUpdater extends EventDispatcher
-	{
-		private static var _instance:FrameUpdater;
-		
-		/**
+class FrameUpdater extends EventDispatcher
+{
+    public static var instance(get, never) : FrameUpdater;
+
+    private static var _instance : FrameUpdater;
+    
+    /**
 		 * This is a singleton instance. There's no requirement to use this singleton -
 		 * the constructor isn't private (or in any other way restricted) and nothing
 		 * will go wrong if you create multiple instances of the class. The singleton
@@ -59,65 +62,66 @@ package org.flintparticles.common.utils
 		 * possible for all code to use the same instance and this singleton makes it
 		 * easy for code to do this by all code using this singleton instance.
 		 */
-		public static function get instance():FrameUpdater
-		{
-			if( _instance ==  null )
-			{
-				_instance = new FrameUpdater();
-			}
-			return _instance;
-		}
-		
-		private var _shape:Shape;
-		private var _time:Number;
-		private var _running:Boolean = false;
-		
-		/**
+    private static function get_Instance() : FrameUpdater
+    {
+        if (_instance == null) 
+        {
+            _instance = new FrameUpdater();
+        }
+        return _instance;
+    }
+    
+    private var _shape : Shape;
+    private var _time : Float;
+    private var _running : Bool = false;
+    
+    /**
 		 * The constructor creates an EmitterUpdater object.
 		 */
-		public function FrameUpdater()
-		{
-			_shape = new Shape();
-		}
-		
-		private function startTimer():void
-		{
-			_shape.addEventListener( Event.ENTER_FRAME, frameUpdate, false, 0, true );
-			_time = getTimer();
-			_running = true;
-		}
-		
-		private function stopTimer():void
-		{
-			_shape.removeEventListener( Event.ENTER_FRAME, frameUpdate );
-			_running = false;
-		}
-
-		private function frameUpdate( ev:Event ):void
-		{
-			var oldTime:int = _time;
-			_time = getTimer();
-			var frameTime:Number = ( _time - oldTime ) * 0.001;
-			dispatchEvent( new UpdateEvent( UpdateEvent.UPDATE, frameTime ) );
-		}
-		
-		override public function addEventListener( type:String, listener:Function,
-			useCapture:Boolean = false, priority:int = 0, weakReference:Boolean = false ):void
-		{
-			super.addEventListener( type, listener, useCapture, priority, weakReference );
-			if( ! _running && hasEventListener( UpdateEvent.UPDATE ) )
-			{
-				startTimer();
-			}
-		}
-		
-		override public function removeEventListener( type:String, listener:Function, useCapture:Boolean = false ):void
-		{
-			super.removeEventListener( type, listener, useCapture );
-			if( _running && ! hasEventListener( UpdateEvent.UPDATE ) )
-			{
-				stopTimer();
-			}
-		}
-	}
+    public function new()
+    {
+        super();
+        _shape = new Shape();
+    }
+    
+    private function startTimer() : Void
+    {
+        _shape.addEventListener(Event.ENTER_FRAME, frameUpdate, false, 0, true);
+        _time = Math.round(haxe.Timer.stamp() * 1000);
+        _running = true;
+    }
+    
+    private function stopTimer() : Void
+    {
+        _shape.removeEventListener(Event.ENTER_FRAME, frameUpdate);
+        _running = false;
+    }
+    
+    private function frameUpdate(ev : Event) : Void
+    {
+        var oldTime : Int = _time;
+        _time = Math.round(haxe.Timer.stamp() * 1000);
+        var frameTime : Float = (_time - oldTime) * 0.001;
+        dispatchEvent(new UpdateEvent(UpdateEvent.UPDATE, frameTime));
+    }
+    
+    override public function addEventListener(type : String, listener : Function,
+            useCapture : Bool = false, priority : Int = 0, weakReference : Bool = false) : Void
+    {
+        super.addEventListener(type, listener, useCapture, priority, weakReference);
+        if (!_running && hasEventListener(UpdateEvent.UPDATE)) 
+        {
+            startTimer();
+        }
+    }
+    
+    override public function removeEventListener(type : String, listener : Function, useCapture : Bool = false) : Void
+    {
+        super.removeEventListener(type, listener, useCapture);
+        if (_running && !hasEventListener(UpdateEvent.UPDATE)) 
+        {
+            stopTimer();
+        }
+    }
 }
+

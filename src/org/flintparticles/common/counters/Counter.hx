@@ -28,11 +28,12 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters 
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Counter interface must be implemented by all counters.
 	 * 
 	 * <p>A counter is a class that tells an emitter how many particles to
@@ -44,9 +45,21 @@ package org.flintparticles.common.counters
 	 * 
 	 * @see org.flintparticles.common.emitters.Emitter#counter
 	 */
-	public interface Counter 
-	{
-		/**
+interface Counter
+{
+    
+    
+    /**
+		 * Indicates if the counter has emitted all its particles
+		 */
+    var complete(get, never) : Bool;    
+    
+    /**
+		 * Indicates if the counter is currently emitting particles
+		 */
+    var running(get, never) : Bool;
+
+    /**
 		 * The startEmitter method is called when the emitter starts.
 		 * 
 		 * <p>This method is called within the emitter's start method 
@@ -55,9 +68,9 @@ package org.flintparticles.common.counters
 		 * @param emitter The emitter.
 		 * @return The number of particles the emitter should emit when it starts.
 		 */
-		function startEmitter( emitter:Emitter ):uint;
-		
-		/**
+    function startEmitter(emitter : Emitter) : Int;
+    
+    /**
 		 * The updateEmitter method is called every frame after the
 		 * emitter has started.
 		 * 
@@ -69,26 +82,16 @@ package org.flintparticles.common.counters
 		 * @return The number of particles the emitter should emit
 		 * at this time.
 		 */
-		function updateEmitter( emitter:Emitter, time:Number ):uint;
-
-		/**
+    function updateEmitter(emitter : Emitter, time : Float) : Int;
+    
+    /**
 		 * Stops the counter instructing the emitter to emit particles
 		 */
-		function stop():void;
-		
-		/**
+    function stop() : Void;
+    
+    /**
 		 * Resumes the counter after a stop
 		 */
-		function resume():void;
-		
-		/**
-		 * Indicates if the counter has emitted all its particles
-		 */
-		function get complete():Boolean;
-		
-		/**
-		 * Indicates if the counter is currently emitting particles
-		 */
-		function get running():Boolean;
-	}
+    function resume() : Void;
 }
+

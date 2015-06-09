@@ -28,25 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;	
+package org.flintparticles.threed.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+/**
 	 * The RandomDrift action moves the particle by a random small amount every frame,
 	 * causing the particle to drift around.
 	 */
 
-	public class RandomDrift extends ActionBase
-	{
-		private var _driftX:Number;
-		private var _driftY:Number;
-		private var _driftZ:Number;
-		
-		/**
+class RandomDrift extends ActionBase
+{
+    public var driftX(get, set) : Float;
+    public var driftY(get, set) : Float;
+    public var driftZ(get, set) : Float;
+
+    private var _driftX : Float;
+    private var _driftY : Float;
+    private var _driftZ : Float;
+    
+    /**
 		 * The constructor creates a RandomDrift action for use by 
 		 * an emitter. To add a RandomDrift to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -56,58 +61,62 @@ package org.flintparticles.threeD.actions
 		 * @param driftX The maximum amount of horizontal drift in pixels per second.
 		 * @param driftY The maximum amount of vertical drift in pixels per second.
 		 */
-		public function RandomDrift( driftX:Number = 0, driftY:Number = 0, driftZ:Number = 0 )
-		{
-			this.driftX = driftX;
-			this.driftY = driftY;
-			this.driftZ = driftZ;
-		}
-		
-		/**
+    public function new(driftX : Float = 0, driftY : Float = 0, driftZ : Float = 0)
+    {
+        super();
+        this.driftX = driftX;
+        this.driftY = driftY;
+        this.driftZ = driftZ;
+    }
+    
+    /**
 		 * The maximum amount of horizontal drift in pixels per second.
 		 */
-		public function get driftX():Number
-		{
-			return _driftX / 2;
-		}
-		public function set driftX( value:Number ):void
-		{
-			_driftX = value * 2;
-		}
-		
-		/**
+    private function get_DriftX() : Float
+    {
+        return _driftX / 2;
+    }
+    private function set_DriftX(value : Float) : Float
+    {
+        _driftX = value * 2;
+        return value;
+    }
+    
+    /**
 		 * The maximum amount of vertical drift in pixels per second.
 		 */
-		public function get driftY():Number
-		{
-			return _driftY / 2;
-		}
-		public function set driftY( value:Number ):void
-		{
-			_driftY = value * 2;
-		}
-		
-		/**
+    private function get_DriftY() : Float
+    {
+        return _driftY / 2;
+    }
+    private function set_DriftY(value : Float) : Float
+    {
+        _driftY = value * 2;
+        return value;
+    }
+    
+    /**
 		 * The maximum amount of vertical drift in pixels per second.
 		 */
-		public function get driftZ():Number
-		{
-			return _driftZ / 2;
-		}
-		public function set driftZ( value:Number ):void
-		{
-			_driftZ = value * 2;
-		}
-		
-		/**
+    private function get_DriftZ() : Float
+    {
+        return _driftZ / 2;
+    }
+    private function set_DriftZ(value : Float) : Float
+    {
+        _driftZ = value * 2;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			p.velocity.x += ( Math.random() - 0.5 ) * _driftX * time;
-			p.velocity.y += ( Math.random() - 0.5 ) * _driftY * time;
-			p.velocity.z += ( Math.random() - 0.5 ) * _driftZ * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        p.velocity.x += (Math.random() - 0.5) * _driftX * time;
+        p.velocity.y += (Math.random() - 0.5) * _driftY * time;
+        p.velocity.z += (Math.random() - 0.5) * _driftZ * time;
+    }
 }
+

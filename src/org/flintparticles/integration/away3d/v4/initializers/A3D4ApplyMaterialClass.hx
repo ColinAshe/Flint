@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.away3d.v4.initializers
-{
-	import away3d.core.base.Object3D;
+package org.flintparticles.integration.away3d.v4.initializers;
 
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.utils.construct;
 
-	/**
+import away3d.core.base.Object3D;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.utils.Construct;
+
+/**
 	 * The ApplyMaterialClass initializer creates a material to apply to the Away3D 4
 	 * object that is used when rendering the particle. To use this initializer,
 	 * the particle's image object must be an Away3D 4 Object3D.
@@ -45,12 +46,15 @@ package org.flintparticles.integration.away3d.v4.initializers
 	 * <p>This initializer has a priority of -10 to ensure that it is applied after 
 	 * the ImageInit classes which define the image object.</p>
 	 */
-	public class A3D4ApplyMaterialClass extends InitializerBase
-	{
-		private var _materialClass:Class;
-		private var _parameters:Array;
-		
-		/**
+class A3D4ApplyMaterialClass extends InitializerBase
+{
+    public var materialClass(get, set) : Class<Dynamic>;
+    public var parameters(get, set) : Array<Dynamic>;
+
+    private var _materialClass : Class<Dynamic>;
+    private var _parameters : Array<Dynamic>;
+    
+    /**
 		 * The constructor creates an ApplyMaterial initializer for use by 
 		 * an emitter. To add an ApplyMaterial to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -62,50 +66,53 @@ package org.flintparticles.integration.away3d.v4.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function A3D4ApplyMaterialClass( materialClass:Class, ...parameters )
-		{
-			priority = -10;
-			_materialClass = materialClass;
-			_parameters = parameters;
-		}
-		
-		/**
+    public function new(materialClass : Class<Dynamic>)
+    {
+        super();
+        priority = -10;
+        _materialClass = materialClass;
+        _parameters = parameters;
+    }
+    
+    /**
 		 * The class to use when creating the particles' material.
 		 */
-		public function get materialClass():Class
-		{
-			return _materialClass;
-		}
-		public function set materialClass( value:Class ):void
-		{
-			_materialClass = value;
-		}
-		
-		/**
+    private function get_MaterialClass() : Class<Dynamic>
+    {
+        return _materialClass;
+    }
+    private function set_MaterialClass(value : Class<Dynamic>) : Class<Dynamic>
+    {
+        _materialClass = value;
+        return value;
+    }
+    
+    /**
 		 * The parameters to pass to the constructor
 		 * for the material class.
 		 */
-		public function get parameters():Array
-		{
-			return _parameters;
-		}
-		public function set parameters( value:Array ):void
-		{
-			_parameters = value;
-		}
-		
-		/**
+    private function get_Parameters() : Array<Dynamic>
+    {
+        return _parameters;
+    }
+    private function set_Parameters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        _parameters = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( particle.image && particle.image is Object3D )
-			{
-				if( Object3D( particle.image ).hasOwnProperty( "material" ) )
-				{
-					Object3D( particle.image )["material"] = construct( _materialClass, _parameters );
-				}
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (particle.image && Std.is(particle.image, Object3D)) 
+        {
+            if (cast((particle.image), Object3D).exists("material")) 
+            {
+                cast((particle.image), Object3D)["material"] = construct(_materialClass, _parameters);
+            }
+        }
+    }
 }
+

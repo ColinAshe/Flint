@@ -28,17 +28,18 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The MinimumDistance action applies an acceleration to the particle to maintain a minimum
 	 * distance between it and its neighbours.
 	 * 
@@ -46,19 +47,22 @@ package org.flintparticles.threeD.actions
 	 * before other actions.</p>
 	 */
 
-	public class MinimumDistance extends ActionBase
-	{
-		private var _min:Number;
-		private var _acc:Number;
-		private var _minSq:Number;
-		
-		/*
+class MinimumDistance extends ActionBase
+{
+    public var minimum(get, set) : Float;
+    public var acceleration(get, set) : Float;
+
+    private var _min : Float;
+    private var _acc : Float;
+    private var _minSq : Float;
+    
+    /*
 		 * Temporary variables created as class members to avoid creating new objects all the time
 		 */
-		private var d:Vector3D;
-		private var move:Vector3D;
-		
-		/**
+    private var d : Vector3D;
+    private var move : Vector3D;
+    
+    /**
 		 * The constructor creates a ApproachNeighbours action for use by 
 		 * an emitter. To add a ApproachNeighbours to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -69,106 +73,113 @@ package org.flintparticles.threeD.actions
 		 * particles.
 		 * @param acceleration The acceleration force applied to avoid the other particles.
 		 */
-		public function MinimumDistance( minimum:Number = 0, acceleration:Number = 0 )
-		{
-			priority = 10;
-			d = new Vector3D();
-			move = new Vector3D();
-			this.minimum = minimum;
-			this.acceleration = acceleration;
-		}
-		
-		/**
+    public function new(minimum : Float = 0, acceleration : Float = 0)
+    {
+        super();
+        priority = 10;
+        d = new Vector3D();
+        move = new Vector3D();
+        this.minimum = minimum;
+        this.acceleration = acceleration;
+    }
+    
+    /**
 		 * The minimum distance, in pixels, that this action maintains between 
 		 * particles.
 		 */
-		public function get minimum():Number
-		{
-			return _min;
-		}
-		public function set minimum( value:Number ):void
-		{
-			_min = value;
-			_minSq = value * value;
-		}
-		
-		/**
+    private function get_Minimum() : Float
+    {
+        return _min;
+    }
+    private function set_Minimum(value : Float) : Float
+    {
+        _min = value;
+        _minSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * The acceleration force applied to avoid the other particles.
 		 */
-		public function get acceleration():Number
-		{
-			return _acc;
-		}
-		public function set acceleration( value:Number ):void
-		{
-			_acc = value;
-		}
-
-		/**
+    private function get_Acceleration() : Float
+    {
+        return _acc;
+    }
+    private function set_Acceleration(value : Float) : Float
+    {
+        _acc = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter3D( emitter ).spaceSort = true;
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter3D).spaceSort = true;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var e:Emitter3D = Emitter3D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle3D;
-			var i:int;
-			var len:int = particles.length;
-			var distanceInv:Number;
-			var distanceSq:Number;
-			var factor:Number;
-			
-			move.x = 0;
-			move.y = 0;
-			move.z = 0;
-			
-			for( i = p.sortID - 1; i >= 0; --i )
-			{
-				other = particles[i];
-				if( ( d.x = p.position.x - other.position.x ) > _min ) break;
-				d.y = p.position.y - other.position.y;
-				if( d.y > _min || d.y < -_min ) continue;
-				d.z = p.position.z - other.position.z;
-				if( d.z > _min || d.z < -_min ) continue;
-				distanceSq = d.lengthSquared;
-				if( distanceSq <= _minSq && distanceSq > 0 )
-				{
-					distanceInv = 1 / Math.sqrt( distanceSq );
-					d.scaleBy( distanceInv );
-					move.incrementBy( d );
-				} 
-			}
-			for( i = p.sortID + 1; i < len; ++i )
-			{
-				other = particles[i];
-				if( ( d.x = p.position.x - other.position.x ) < -_min ) break;
-				d.y = p.position.y - other.position.y;
-				if( d.y > _min || d.y < -_min ) continue;
-				d.z = p.position.z - other.position.z;
-				if( d.z > _min || d.z < -_min ) continue;
-				distanceSq = d.lengthSquared;
-				if( distanceSq <= _minSq && distanceSq > 0 )
-				{
-					distanceInv = 1 / Math.sqrt( distanceSq );
-					d.scaleBy( distanceInv );
-					move.incrementBy( d );
-				} 
-			}
-			if ( move.x != 0 || move.y != 0 || move.z != 0 )
-			{
-				factor = time * _acc / move.length;
-				move.scaleBy( factor );
-				p.velocity.incrementBy( move );
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var e : Emitter3D = cast((emitter), Emitter3D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle3D;
+        var i : Int;
+        var len : Int = particles.length;
+        var distanceInv : Float;
+        var distanceSq : Float;
+        var factor : Float;
+        
+        move.x = 0;
+        move.y = 0;
+        move.z = 0;
+        
+        i = p.sortID - 1;
+        while (i >= 0){
+            other = particles[i];
+            if ((d.x = p.position.x - other.position.x) > _min)                 break;
+            d.y = p.position.y - other.position.y;
+            if (d.y > _min || d.y < -_min)                 {--i;continue;
+            };
+            d.z = p.position.z - other.position.z;
+            if (d.z > _min || d.z < -_min)                 {--i;continue;
+            };
+            distanceSq = d.lengthSquared;
+            if (distanceSq <= _minSq && distanceSq > 0) 
+            {
+                distanceInv = 1 / Math.sqrt(distanceSq);
+                d.scaleBy(distanceInv);
+                move.incrementBy(d);
+            }
+            --i;
+        }
+        for (i in p.sortID + 1...len){
+            other = particles[i];
+            if ((d.x = p.position.x - other.position.x) < -_min)                 break;
+            d.y = p.position.y - other.position.y;
+            if (d.y > _min || d.y < -_min)                 {++i;continue;
+            };
+            d.z = p.position.z - other.position.z;
+            if (d.z > _min || d.z < -_min)                 {++i;continue;
+            };
+            distanceSq = d.lengthSquared;
+            if (distanceSq <= _minSq && distanceSq > 0) 
+            {
+                distanceInv = 1 / Math.sqrt(distanceSq);
+                d.scaleBy(distanceInv);
+                move.incrementBy(d);
+            }
+        }
+        if (move.x != 0 || move.y != 0 || move.z != 0) 
+        {
+            factor = time * _acc / move.length;
+            move.scaleBy(factor);
+            p.velocity.incrementBy(move);
+        }
+    }
 }
+

@@ -28,45 +28,47 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The Move action updates the position of the particle based on its velocity.
 	 * It uses a Euler integrator to calculate the new position, hence the name.
 	 * 
 	 * <p>This action has a priority of -10, so that it executes after other actions.</p>
 	 */
-	public class Move extends ActionBase
-	{
-		/**
+class Move extends ActionBase
+{
+    /**
 		 * The constructor creates a Move action for use by 
 		 * an emitter. To add a Move to all particles created by an emitter, use the
 		 * emitter's addAction method.
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function Move()
-		{
-			priority = -10;
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        priority = -10;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Vector3D = Particle3D( particle ).position;
-			var v:Vector3D = Particle3D( particle ).velocity;
-			p.x += v.x * time;
-			p.y += v.y * time;
-			p.z += v.z * time;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Vector3D = cast((particle), Particle3D).position;
+        var v : Vector3D = cast((particle), Particle3D).velocity;
+        p.x += v.x * time;
+        p.y += v.y * time;
+        p.z += v.z * time;
+    }
 }
+

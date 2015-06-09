@@ -28,28 +28,34 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The TweenPosition action adjusts the particle's position between two
 	 * locations as it ages. The position is relative to the particle's energy,
 	 * which changes as the particle ages in accordance with the energy easing
 	 * function used. This action should be used in conjunction with the Age action.
 	 */
 
-	public class TweenPosition extends ActionBase
-	{
-		private var _diffX:Number = 0;
-		private var _endX:Number = 0;
-		private var _diffY:Number = 0;
-		private var _endY:Number = 0;
-		
-		/**
+class TweenPosition extends ActionBase
+{
+    public var startX(get, set) : Float;
+    public var endX(get, set) : Float;
+    public var startY(get, set) : Float;
+    public var endY(get, set) : Float;
+
+    private var _diffX : Float = 0;
+    private var _endX : Float = 0;
+    private var _diffY : Float = 0;
+    private var _endY : Float = 0;
+    
+    /**
 		 * The constructor creates a TweenPosition action for use by an emitter. 
 		 * To add a TweenPosition to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -61,65 +67,70 @@ package org.flintparticles.twoD.actions
 		 * @param endX The x value of the particle's position when its energy is 0.
 		 * @param endY The y value of the particle's position when its energy is 0.
 		 */
-		public function TweenPosition( startX:Number = 0, startY:Number = 0, endX:Number = 0, endY:Number = 0 )
-		{
-			this.startX = startX;
-			this.endX = endX;
-			this.startY = startY;
-			this.endY = endY;
-		}
-		
-		/**
+    public function new(startX : Float = 0, startY : Float = 0, endX : Float = 0, endY : Float = 0)
+    {
+        super();
+        this.startX = startX;
+        this.endX = endX;
+        this.startY = startY;
+        this.endY = endY;
+    }
+    
+    /**
 		 * The x position for the particle's position when its energy is 1.
 		 */
-		public function get startX():Number
-		{
-			return _endX + _diffX;
-		}
-		public function set startX( value:Number ):void
-		{
-			_diffX = value - _endX;
-		}
-		
-		/**
+    private function get_StartX() : Float
+    {
+        return _endX + _diffX;
+    }
+    private function set_StartX(value : Float) : Float
+    {
+        _diffX = value - _endX;
+        return value;
+    }
+    
+    /**
 		 * The X value for the particle's position when its energy is 0.
 		 */
-		public function get endX():Number
-		{
-			return _endX;
-		}
-		public function set endX( value:Number ):void
-		{
-			_diffX = _endX + _diffX - value;
-			_endX = value;
-		}
-		
-		/**
+    private function get_EndX() : Float
+    {
+        return _endX;
+    }
+    private function set_EndX(value : Float) : Float
+    {
+        _diffX = _endX + _diffX - value;
+        _endX = value;
+        return value;
+    }
+    
+    /**
 		 * The y position for the particle's position when its energy is 1.
 		 */
-		public function get startY():Number
-		{
-			return _endY + _diffY;
-		}
-		public function set startY( value:Number ):void
-		{
-			_diffY = value - _endY;
-		}
-		
-		/**
+    private function get_StartY() : Float
+    {
+        return _endY + _diffY;
+    }
+    private function set_StartY(value : Float) : Float
+    {
+        _diffY = value - _endY;
+        return value;
+    }
+    
+    /**
 		 * The y value for the particle's position when its energy is 0.
 		 */
-		public function get endY():Number
-		{
-			return _endY;
-		}
-		public function set endY( value:Number ):void
-		{
-			_diffY = _endY + _diffY - value;
-			_endY = value;
-		}
-		
-		/**
+    private function get_EndY() : Float
+    {
+        return _endY;
+    }
+    private function set_EndY(value : Float) : Float
+    {
+        _diffY = _endY + _diffY - value;
+        _endY = value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the current position of the particle based on it's energy.
 		 * 
 		 * <p>This method is called by the emitter and need not be called by the 
@@ -131,11 +142,11 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.x = _endX + _diffX * p.energy;
-			p.y = _endY + _diffY * p.energy;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.x = _endX + _diffX * p.energy;
+        p.y = _endY + _diffY * p.energy;
+    }
 }
+

@@ -29,74 +29,76 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The RotateToDirection action updates the rotation of the particle 
 	 * so that it always points in the direction it is traveling.
 	 */
 
-	public class RotateToDirection extends ActionBase
-	{
-		private var _axis:Vector3D;
-		private var _temp:Vector3D;
-		private var _target:Vector3D;
-		
-		/**
+class RotateToDirection extends ActionBase
+{
+    private var _axis : Vector3D;
+    private var _temp : Vector3D;
+    private var _target : Vector3D;
+    
+    /**
 		 * The constructor creates a RotateToDirection action for use by 
 		 * an emitter. To add a RotateToDirection to all particles created by an emitter, use the
 		 * emitter's addAction method.
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function RotateToDirection()
-		{
-			_axis = new Vector3D();
-			_temp = new Vector3D();
-			_target = new Vector3D();
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        _axis = new Vector3D();
+        _temp = new Vector3D();
+        _target = new Vector3D();
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p : Particle3D = Particle3D( particle );
-			var vel : Vector3D = p.velocity;
-			var len:Number = vel.length;
-			if ( len == 0 )
-			{
-				return;
-			}
-			_target.x = vel.x / len;
-			_target.y = vel.y / len;
-			_target.z = vel.z / len;
-			
-			var faceAxis:Vector3D = p.faceAxis;
-			if( _target.x == faceAxis.x && _target.y == faceAxis.y && _target.z == faceAxis.z )
-			{
-				p.rotation.assign( Quaternion.IDENTITY );
-				return;
-			}
-			
-			if( _target.x == -faceAxis.x && _target.y == -faceAxis.y && _target.z == -faceAxis.z )
-			{
-				var v:Vector3D = Vector3DUtils.getPerpendicular( faceAxis );
-				p.rotation.reset( 0, v.x, v.y, v.z );
-				return;
-			}
-			_axis = _target.crossProduct( p.faceAxis );
-			var angle:Number = Math.acos( p.faceAxis.dotProduct( _target ) );
-			p.rotation.setFromAxisRotation( _axis, angle );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var vel : Vector3D = p.velocity;
+        var len : Float = vel.length;
+        if (len == 0) 
+        {
+            return;
+        }
+        _target.x = vel.x / len;
+        _target.y = vel.y / len;
+        _target.z = vel.z / len;
+        
+        var faceAxis : Vector3D = p.faceAxis;
+        if (_target.x == faceAxis.x && _target.y == faceAxis.y && _target.z == faceAxis.z) 
+        {
+            p.rotation.assign(Quaternion.IDENTITY);
+            return;
+        }
+        
+        if (_target.x == -faceAxis.x && _target.y == -faceAxis.y && _target.z == -faceAxis.z) 
+        {
+            var v : Vector3D = Vector3DUtils.getPerpendicular(faceAxis);
+            p.rotation.reset(0, v.x, v.y, v.z);
+            return;
+        }
+        _axis = _target.crossProduct(p.faceAxis);
+        var angle : Float = Math.acos(p.faceAxis.dotProduct(_target));
+        p.rotation.setFromAxisRotation(_axis, angle);
+    }
 }
+

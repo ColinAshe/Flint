@@ -28,13 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.utils.WeightedArray;
-	import org.flintparticles.common.utils.construct;
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.ImageInitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.utils.WeightedArray;
+import org.flintparticles.common.utils.Construct;
+
+/**
 	 * The ImageClasses Initializer sets the DisplayObject to use to draw
 	 * the particle. It selects one of multiple images that are passed to it.
 	 * It is used with the DisplayObjectRenderer. When using the
@@ -42,13 +44,16 @@ package org.flintparticles.common.initializers
 	 * 
 	 * <p>This class includes an object pool for reusing DisplayObjects when particles die.</p>
 	 */
-	public class ImageClasses extends ImageInitializerBase
-	{
-		private var _images:WeightedArray;
-		private var _mxmlImages:Array;
-		private var _mxmlWeights:Array;
-		
-		/**
+class ImageClasses extends ImageInitializerBase
+{
+    public var images(never, set) : Array<Dynamic>;
+    public var weights(never, set) : Array<Dynamic>;
+
+    private var _images : WeightedArray;
+    private var _mxmlImages : Array<Dynamic>;
+    private var _mxmlWeights : Array<Dynamic>;
+    
+    /**
 		 * The constructor creates a ImageClasses initializer for use by 
 		 * an emitter. To add a ImageClasses to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -64,137 +69,138 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function ImageClasses( images:Array = null, weights:Array = null, usePool:Boolean = false, fillPool:uint = 0 )
-		{
-			super( usePool );
-			_images = new WeightedArray();
-			if( images == null )
-			{
-				return;
-			}
-			init( images, weights );
-			if( fillPool > 0 )
-			{
-				this.fillPool( fillPool );
-			}
-			
-		}
-		
-		override public function addedToEmitter( emitter:Emitter ):void
-		{
-			super.addedToEmitter( emitter );
-			if( _mxmlImages )
-			{
-				init( _mxmlImages, _mxmlWeights );
-				_mxmlImages = null;
-				_mxmlWeights = null;
-			}
-		}
-		
-		private function init( images:Array = null, weights:Array = null ):void
-		{
-			_images.clear();
-			var len:int = images.length;
-			var i:int;
-			if( weights != null && weights.length == len )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], weights[i] );
-				}
-			}
-			else
-			{
-				for( i = 0; i < len; ++i )
-				{
-					addImage( images[i], 1 );
-				}
-			}
-		}
-		
-		public function addImage( image:*, weight:Number = 1 ):void
-		{
-			if( image is Array )
-			{
-				var parameters:Array = ( image as Array ).concat();
-				var img:Class = parameters.shift();
-				_images.add( new Pair( img, parameters ), weight );
-			}
-			else
-			{
-				_images.add( new Pair( image, [] ), weight );
-			}
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		public function removeImage( image:* ):void
-		{
-			_images.remove( image );
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-
-		public function set images( value:Array ):void
-		{
-			_mxmlImages = value;
-			checkStartValues();
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		public function set weights( value:Array ):void
-		{
-			if( value.length == 1 && value[0] is String )
-			{
-				_mxmlWeights = String( value[0] ).split( "," );
-			}
-			else
-			{
-				_mxmlWeights = value;
-			}
-			checkStartValues();
-			if( _usePool )
-			{
-				clearPool();
-			}
-		}
-		
-		private function checkStartValues():void
-		{
-			if( _mxmlImages && _mxmlWeights )
-			{
-				init( _mxmlImages, _mxmlWeights );
-				_mxmlImages = null;
-				_mxmlWeights = null;
-			}
-		}
-
-		/**
+    public function new(images : Array<Dynamic> = null, weights : Array<Dynamic> = null, usePool : Bool = false, fillPool : Int = 0)
+    {
+        super(usePool);
+        _images = new WeightedArray();
+        if (images == null) 
+        {
+            return;
+        }
+        init(images, weights);
+        if (fillPool > 0) 
+        {
+            this.fillPool(fillPool);
+        }
+    }
+    
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        super.addedToEmitter(emitter);
+        if (_mxmlImages != null) 
+        {
+            init(_mxmlImages, _mxmlWeights);
+            _mxmlImages = null;
+            _mxmlWeights = null;
+        }
+    }
+    
+    private function init(images : Array<Dynamic> = null, weights : Array<Dynamic> = null) : Void
+    {
+        _images.clear();
+        var len : Int = images.length;
+        var i : Int;
+        if (weights != null && weights.length == len) 
+        {
+            for (i in 0...len){
+                addImage(images[i], weights[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                addImage(images[i], 1);
+            }
+        }
+    }
+    
+    public function addImage(image : Dynamic, weight : Float = 1) : Void
+    {
+        if (Std.is(image, Array)) 
+        {
+            var parameters : Array<Dynamic> = (try cast(image, Array</*AS3HX WARNING no type*/>) catch(e:Dynamic) null).concat();
+            var img : Class<Dynamic> = parameters.shift();
+            _images.add(new Pair(img, parameters), weight);
+        }
+        else 
+        {
+            _images.add(new Pair(image, []), weight);
+        }
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    public function removeImage(image : Dynamic) : Void
+    {
+        _images.remove(image);
+        if (_usePool) 
+        {
+            clearPool();
+        }
+    }
+    
+    private function set_Images(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        _mxmlImages = value;
+        checkStartValues();
+        if (_usePool) 
+        {
+            clearPool();
+        }
+        return value;
+    }
+    
+    private function set_Weights(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        if (value.length == 1 && Std.is(value[0], String)) 
+        {
+            _mxmlWeights = Std.string(value[0]).split(",");
+        }
+        else 
+        {
+            _mxmlWeights = value;
+        }
+        checkStartValues();
+        if (_usePool) 
+        {
+            clearPool();
+        }
+        return value;
+    }
+    
+    private function checkStartValues() : Void
+    {
+        if (_mxmlImages != null && _mxmlWeights != null) 
+        {
+            init(_mxmlImages, _mxmlWeights);
+            _mxmlImages = null;
+            _mxmlWeights = null;
+        }
+    }
+    
+    /**
 		 * Used internally, this method creates an image object for displaying the particle 
 		 * by calling the constructor of one of the supplied image classes.
 		 */
-		override public function createImage() : Object
-		{
-			var img:Pair = _images.getRandomValue();
-			return construct( img.image, img.parameters );
-		}
-	}
+    override public function createImage() : Dynamic
+    {
+        var img : Pair = _images.getRandomValue();
+        return construct(img.image, img.parameters);
+    }
 }
+
 class Pair
 {
-	internal var image:Class;
-	internal var parameters:Array;
-	
-	public function Pair( image:Class, parameters:Array )
-	{
-		this.image = image;
-		this.parameters = parameters;
-	}
+    @:allow(org.flintparticles.common.initializers)
+    private var image : Class<Dynamic>;
+    @:allow(org.flintparticles.common.initializers)
+    private var parameters : Array<Dynamic>;
+    
+    public function new(image : Class<Dynamic>, parameters : Array<Dynamic>)
+    {
+        this.image = image;
+        this.parameters = parameters;
+    }
 }

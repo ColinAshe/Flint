@@ -28,13 +28,14 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The ScaleAll action adjusts the size of the particles image, its collision radius
 	 * and its mass as it ages. It uses the particle's energy level to decide what size 
 	 * the particle should be.
@@ -52,12 +53,15 @@ package org.flintparticles.twoD.actions
 	 * @see org.flintparticles.common.actions.Age
 	 */
 
-	public class ScaleAll extends ActionBase
-	{
-		private var _diffScale:Number = 0;
-		private var _endScale:Number = 1;
-		
-		/**
+class ScaleAll extends ActionBase
+{
+    public var startScale(get, set) : Float;
+    public var endScale(get, set) : Float;
+
+    private var _diffScale : Float = 0;
+    private var _endScale : Float = 1;
+    
+    /**
 		 * The constructor creates a ScaleImage action for use by an emitter. 
 		 * To add a ScaleImage to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -69,40 +73,43 @@ package org.flintparticles.twoD.actions
 		 * @param endScale The scale factor for the particle when its energy
 		 * is 0 - usually at the end of its lifetime. A scale of 1 is normal size.
 		 */
-		public function ScaleAll( startScale:Number = 1, endScale:Number = 1 )
-		{
-			this.startScale = startScale;
-			this.endScale = endScale;
-		}
-		
-		/**
+    public function new(startScale : Float = 1, endScale : Float = 1)
+    {
+        super();
+        this.startScale = startScale;
+        this.endScale = endScale;
+    }
+    
+    /**
 		 * The scale factor for the particle when its energy
 		 * is 1 - usually at the start of its lifetime. A scale of 1 is normal size.
 		 */
-		public function get startScale():Number
-		{
-			return _endScale + _diffScale;
-		}
-		public function set startScale( value:Number ):void
-		{
-			_diffScale = value - _endScale;
-		}
-		
-		/**
+    private function get_StartScale() : Float
+    {
+        return _endScale + _diffScale;
+    }
+    private function set_StartScale(value : Float) : Float
+    {
+        _diffScale = value - _endScale;
+        return value;
+    }
+    
+    /**
 		 * The scale factor for the particle when its energy
 		 * is 0 - usually at the end of its lifetime. A scale of 1 is normal size.
 		 */
-		public function get endScale():Number
-		{
-			return _endScale;
-		}
-		public function set endScale( value:Number ):void
-		{
-			_diffScale = _endScale + _diffScale - value;
-			_endScale = value;
-		}
-		
-		/**
+    private function get_EndScale() : Float
+    {
+        return _endScale;
+    }
+    private function set_EndScale(value : Float) : Float
+    {
+        _diffScale = _endScale + _diffScale - value;
+        _endScale = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the scale of the particle based on the values defined
 		 * and the particle's energy level.
 		 * 
@@ -115,14 +122,14 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var scale:Number = _endScale + _diffScale * particle.energy;
-			var change:Number = scale / particle.scale;
-
-			particle.scale = scale;
-			particle.mass *= change * change;
-			particle.collisionRadius *= change;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var scale : Float = _endScale + _diffScale * particle.energy;
+        var change : Float = scale / particle.scale;
+        
+        particle.scale = scale;
+        particle.mass *= change * change;
+        particle.collisionRadius *= change;
+    }
 }
+

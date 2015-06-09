@@ -28,30 +28,38 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.geom.Vector3DUtils;
-	import org.flintparticles.threeD.particles.Particle3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	/**
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.geom.Vector3DUtils;
+import org.flintparticles.threed.particles.Particle3D;
+
+import flash.geom.Vector3D;
+
+/**
 	 * The GravityWell action applies a force on the particle to draw it towards
 	 * a single point. The force applied is inversely proportional to the square
 	 * of the distance from the particle to the point.
 	 */
 
-	public class GravityWell extends ActionBase
-	{
-		private var _position:Vector3D;
-		private var _power:Number;
-		private var _epsilonSq:Number;
-		private var _gravityConst:Number = 10000; // just scales the power to a more reasonable number
-		
-		/**
+class GravityWell extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var position(get, set) : Vector3D;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var z(get, set) : Float;
+    public var epsilon(get, set) : Float;
+
+    private var _position : Vector3D;
+    private var _power : Float;
+    private var _epsilonSq : Float;
+    private var _gravityConst : Float = 10000;  // just scales the power to a more reasonable number  
+    
+    /**
 		 * The constructor creates a GravityWell action for use by 
 		 * an emitter. To add a GravityWell to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -66,109 +74,116 @@ package org.flintparticles.threeD.actions
 		 * effects you will want a small epsilon ( ~1 ), but for stable visual effects a larger
 		 * epsilon (~100) is often better.
 		 */
-		public function GravityWell( power:Number = 0, position:Vector3D = null, epsilon:Number = 100 )
-		{
-			this.power = power;
-			this.position = position ? position : new Vector3D();
-			this.epsilon = epsilon;
-		}
-		
-		/**
+    public function new(power : Float = 0, position : Vector3D = null, epsilon : Float = 100)
+    {
+        super();
+        this.power = power;
+        this.position = (position != null) ? position : new Vector3D();
+        this.epsilon = epsilon;
+    }
+    
+    /**
 		 * The strength of the gravity force.
 		 */
-		public function get power():Number
-		{
-			return _power / _gravityConst;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value * _gravityConst;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power / _gravityConst;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value * _gravityConst;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the center of the gravity force.
 		 */
-		public function get position():Vector3D
-		{
-			return _position;
-		}
-		public function set position( value:Vector3D ):void
-		{
-			_position = Vector3DUtils.clonePoint( value );
-		}
-		
-		/**
+    private function get_Position() : Vector3D
+    {
+        return _position;
+    }
+    private function set_Position(value : Vector3D) : Vector3D
+    {
+        _position = Vector3DUtils.clonePoint(value);
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the point that the force pulls the particles towards.
 		 */
-		public function get x():Number
-		{
-			return _position.x;
-		}
-		public function set x( value:Number ):void
-		{
-			_position.x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _position.x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _position.x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the point that the force pulls the particles towards.
 		 */
-		public function get y():Number
-		{
-			return _position.y;
-		}
-		public function set y( value:Number ):void
-		{
-			_position.y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _position.y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _position.y = value;
+        return value;
+    }
+    
+    /**
 		 * The z coordinate of the point that the force pulls the particles towards.
 		 */
-		public function get z():Number
-		{
-			return _position.z;
-		}
-		public function set z( value:Number ):void
-		{
-			_position.z = value;
-		}
-		
-		/**
+    private function get_Z() : Float
+    {
+        return _position.z;
+    }
+    private function set_Z(value : Float) : Float
+    {
+        _position.z = value;
+        return value;
+    }
+    
+    /**
 		 * The minimum distance for which the gravity force is calculated. 
 		 * Particles closer than this distance experience the gravity as it they were 
 		 * this distance away. This stops the gravity effect blowing up as distances get 
 		 * small.
 		 */
-		public function get epsilon():Number
-		{
-			return Math.sqrt( _epsilonSq );
-		}
-		public function set epsilon( value:Number ):void
-		{
-			_epsilonSq = value * value;
-		}
-		
-		/**
+    private function get_Epsilon() : Float
+    {
+        return Math.sqrt(_epsilonSq);
+    }
+    private function set_Epsilon(value : Float) : Float
+    {
+        _epsilonSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			if( particle.mass == 0 )
-			{
-				return;
-			}
-			var p:Particle3D = Particle3D( particle );
-			var offset:Vector3D = _position.subtract( p.position );
-			var dSq:Number = offset.lengthSquared;
-			if( dSq == 0 )
-			{
-				return;
-			}
-			var d:Number = Math.sqrt( dSq );
-			if( dSq < _epsilonSq ) dSq = _epsilonSq;
-			var factor:Number = ( _power * time ) / ( dSq * d );
-			offset.scaleBy( factor );
-			p.velocity.incrementBy( offset );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (particle.mass == 0) 
+        {
+            return;
+        }
+        var p : Particle3D = cast((particle), Particle3D);
+        var offset : Vector3D = _position.subtract(p.position);
+        var dSq : Float = offset.lengthSquared;
+        if (dSq == 0) 
+        {
+            return;
+        }
+        var d : Float = Math.sqrt(dSq);
+        if (dSq < _epsilonSq)             dSq = _epsilonSq;
+        var factor : Float = (_power * time) / (dSq * d);
+        offset.scaleBy(factor);
+        p.velocity.incrementBy(offset);
+    }
 }
+

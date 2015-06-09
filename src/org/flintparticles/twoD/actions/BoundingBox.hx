@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.events.ParticleEvent;	
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.events.ParticleEvent;
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The BoundingBox action confines each particle to a rectangle region. The 
 	 * particle bounces back off the sides of the rectangle when it reaches 
 	 * the edge. The bounce treats the particle as a circular body. By default,
@@ -47,15 +48,21 @@ package org.flintparticles.twoD.actions
 	 * all movement has occured.
 	 */
 
-	public class BoundingBox extends ActionBase
-	{
-		private var _left : Number;
-		private var _top : Number;
-		private var _right : Number;
-		private var _bottom : Number;
-		private var _bounce : Number;
+class BoundingBox extends ActionBase
+{
+    public var left(get, set) : Float;
+    public var top(get, set) : Float;
+    public var right(get, set) : Float;
+    public var bottom(get, set) : Float;
+    public var bounce(get, set) : Float;
 
-		/**
+    private var _left : Float;
+    private var _top : Float;
+    private var _right : Float;
+    private var _bottom : Float;
+    private var _bounce : Float;
+    
+    /**
 		 * The constructor creates a BoundingBox action for use by 
 		 * an emitter. To add a BoundingBox to all particles created by an emitter, 
 		 * use the emitter's addAction method.
@@ -71,80 +78,86 @@ package org.flintparticles.twoD.actions
 		 * A value between 0 and 1 causes the particle to loose enegy in the collision. A value 
 		 * greater than 1 causes the particle to gain energy in the collision.
 		 */
-		public function BoundingBox( left:Number = 0, top:Number = 0, right:Number = 0, bottom:Number = 0, bounce:Number = 1 )
-		{
-			priority = -20;
-			this.left = left;
-			this.top = top;
-			this.right = right;
-			this.bottom = bottom;
-			this.bounce = bounce;
-		}
-
-		/**
+    public function new(left : Float = 0, top : Float = 0, right : Float = 0, bottom : Float = 0, bounce : Float = 1)
+    {
+        super();
+        priority = -20;
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
+        this.bounce = bounce;
+    }
+    
+    /**
 		 * The left coordinate of the bounding box.
 		 */
-		public function get left():Number
-		{
-			return _left;
-		}
-		public function set left( value:Number ):void
-		{
-			_left = value;
-		}
-
-		/**
+    private function get_Left() : Float
+    {
+        return _left;
+    }
+    private function set_Left(value : Float) : Float
+    {
+        _left = value;
+        return value;
+    }
+    
+    /**
 		 * The top coordinate of the bounding box.
 		 */
-		public function get top():Number
-		{
-			return _top;
-		}
-		public function set top( value:Number ):void
-		{
-			_top = value;
-		}
-
-		/**
+    private function get_Top() : Float
+    {
+        return _top;
+    }
+    private function set_Top(value : Float) : Float
+    {
+        _top = value;
+        return value;
+    }
+    
+    /**
 		 * The left coordinate of the bounding box.
 		 */
-		public function get right():Number
-		{
-			return _right;
-		}
-		public function set right( value:Number ):void
-		{
-			_right = value;
-		}
-
-		/**
+    private function get_Right() : Float
+    {
+        return _right;
+    }
+    private function set_Right(value : Float) : Float
+    {
+        _right = value;
+        return value;
+    }
+    
+    /**
 		 * The left coordinate of the bounding box.
 		 */
-		public function get bottom():Number
-		{
-			return _bottom;
-		}
-		public function set bottom( value:Number ):void
-		{
-			_bottom = value;
-		}
-
-		/**
+    private function get_Bottom() : Float
+    {
+        return _bottom;
+    }
+    private function set_Bottom(value : Float) : Float
+    {
+        _bottom = value;
+        return value;
+    }
+    
+    /**
 		 * The coefficient of restitution when the particles bounce off the
 		 * sides of the box. A value of 1 gives a pure pure elastic collision, with no energy loss. 
 		 * A value between 0 and 1 causes the particle to loose enegy in the collision. A value 
 		 * greater than 1 causes the particle to gain energy in the collision.
 		 */
-		public function get bounce():Number
-		{
-			return _bounce;
-		}
-		public function set bounce( value:Number ):void
-		{
-			_bounce = value;
-		}
-
-		/**
+    private function get_Bounce() : Float
+    {
+        return _bounce;
+    }
+    private function set_Bounce(value : Float) : Float
+    {
+        _bounce = value;
+        return value;
+    }
+    
+    /**
 		 * Tests whether the particle is at the edge of the box and, if so,
 		 * adjusts its velocity to bounce in back towards the center of the
 		 * box.
@@ -158,47 +171,47 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var radius:Number = particle.collisionRadius;
-			var position:Number;
-			if ( p.velX > 0 && ( position = p.x + radius ) >= _right )
-			{
-				p.velX = -p.velX * _bounce;
-				p.x += 2 * ( _right - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			else if ( p.velX < 0 && ( position = p.x - radius ) <= _left )
-			{
-				p.velX = -p.velX * _bounce;
-				p.x += 2 * ( _left - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			if ( p.velY > 0 && ( position = p.y + radius ) >= _bottom )
-			{
-				p.velY = -p.velY * _bounce;
-				p.y += 2 * ( _bottom - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-			else if ( p.velY < 0 && ( position = p.y - radius ) <= _top )
-			{
-				p.velY = -p.velY * _bounce;
-				p.y += 2 * ( _top - position );
-				if ( emitter.hasEventListener( ParticleEvent.BOUNDING_BOX_COLLISION ) )
-				{
-					emitter.dispatchEvent( new ParticleEvent( ParticleEvent.BOUNDING_BOX_COLLISION, p ) );
-				}
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var radius : Float = particle.collisionRadius;
+        var position : Float;
+        if (p.velX > 0 && (position = p.x + radius) >= _right) 
+        {
+            p.velX = -p.velX * _bounce;
+            p.x += 2 * (_right - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        else if (p.velX < 0 && (position = p.x - radius) <= _left) 
+        {
+            p.velX = -p.velX * _bounce;
+            p.x += 2 * (_left - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        if (p.velY > 0 && (position = p.y + radius) >= _bottom) 
+        {
+            p.velY = -p.velY * _bounce;
+            p.y += 2 * (_bottom - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+        else if (p.velY < 0 && (position = p.y - radius) <= _top) 
+        {
+            p.velY = -p.velY * _bounce;
+            p.y += 2 * (_top - position);
+            if (emitter.hasEventListener(ParticleEvent.BOUNDING_BOX_COLLISION)) 
+            {
+                emitter.dispatchEvent(new ParticleEvent(ParticleEvent.BOUNDING_BOX_COLLISION, p));
+            }
+        }
+    }
 }
+

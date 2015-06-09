@@ -28,22 +28,26 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.initializers;
 
-	/**
+import org.flintparticles.common.initializers.InitializerBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The CollisionRadiusInit Initializer sets the collision radius of the particle.
 	 * During collisions the particle is treated as a sphere (3D) or circle (2D), regardless of its actual
 	 * shape. This sets the size of that sphere or circle.
 	 */
 
-	public class CollisionRadiusInit extends InitializerBase
-	{
-		private var _radius:Number;
-		
-		/**
+class CollisionRadiusInit extends InitializerBase
+{
+    public var radius(get, set) : Float;
+
+    private var _radius : Float;
+    
+    /**
 		 * The constructor creates a CollisionRadiusInit initializer for use by 
 		 * an emitter. To add a CollisionRadiusInit to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -53,30 +57,32 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function CollisionRadiusInit( radius:Number= 1 )
-		{
-			_radius = radius;
-		}
-		
-		/**
+    public function new(radius : Float = 1)
+    {
+        super();
+        _radius = radius;
+    }
+    
+    /**
 		 * The collision radius for particles
 		 * initialized by the instance.
 		 */
-		public function get radius():Number
-		{
-			return _radius;
-		}
-		public function set radius( value:Number ):void
-		{
-			_radius = value;
-		}
-		
-		/**
+    private function get_Radius() : Float
+    {
+        return _radius;
+    }
+    private function set_Radius(value : Float) : Float
+    {
+        _radius = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			particle.collisionRadius = _radius;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        particle.collisionRadius = _radius;
+    }
 }
+

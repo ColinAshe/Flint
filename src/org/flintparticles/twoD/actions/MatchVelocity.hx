@@ -28,15 +28,16 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.emitters.Emitter2D;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.emitters.Emitter2D;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The MatchVelocity action applies an acceleration to each particle to match
 	 * its velocity to that of its nearest neighbours.
 	 * 
@@ -44,13 +45,16 @@ package org.flintparticles.twoD.actions
 	 * before other actions.</p>
 	 */
 
-	public class MatchVelocity extends ActionBase
-	{
-		private var _max:Number;
-		private var _acc:Number;
-		private var _maxSq:Number;
-		
-		/**
+class MatchVelocity extends ActionBase
+{
+    public var maxDistance(get, set) : Float;
+    public var acceleration(get, set) : Float;
+
+    private var _max : Float;
+    private var _acc : Float;
+    private var _maxSq : Float;
+    
+    /**
 		 * The constructor creates a MatchVelocity action for use by an emitter. 
 		 * To add a MatchVelocity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -63,41 +67,44 @@ package org.flintparticles.twoD.actions
 		 * @param acceleration The acceleration applied to adjust each
 		 * particle's velocity to match that of the other particles near it.
 		 */
-		public function MatchVelocity( maxDistance:Number = 0, acceleration:Number = 0 )
-		{
-			priority = 10;
-			this.maxDistance = maxDistance;
-			this.acceleration = acceleration;
-		}
-		
-		/**
+    public function new(maxDistance : Float = 0, acceleration : Float = 0)
+    {
+        super();
+        priority = 10;
+        this.maxDistance = maxDistance;
+        this.acceleration = acceleration;
+    }
+    
+    /**
 		 * The maximum distance, in pixels, over which this action operates.
 		 * The particle will match its velocity other particles that are this close or closer to it.
 		 */
-		public function get maxDistance():Number
-		{
-			return _max;
-		}
-		public function set maxDistance( value:Number ):void
-		{
-			_max = value;
-			_maxSq = value * value;
-		}
-		
-		/**
+    private function get_MaxDistance() : Float
+    {
+        return _max;
+    }
+    private function set_MaxDistance(value : Float) : Float
+    {
+        _max = value;
+        _maxSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * The acceleration applied to adjust each
 		 * particle's velocity to match that of the other particles near it
 		 */
-		public function get acceleration():Number
-		{
-			return _acc;
-		}
-		public function set acceleration( value:Number ):void
-		{
-			_acc = value;
-		}
-
-		/**
+    private function get_Acceleration() : Float
+    {
+        return _acc;
+    }
+    private function set_Acceleration(value : Float) : Float
+    {
+        _acc = value;
+        return value;
+    }
+    
+    /**
 		 * Instructs the emitter to produce a sorted particle array for optimizing
 		 * the calculations in the update method of this action.
 		 * 
@@ -105,12 +112,12 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#addedToEmitter()
 		 */
-		override public function addedToEmitter( emitter:Emitter ) : void
-		{
-			Emitter2D( emitter ).spaceSort = true;
-		}
-		
-		/**
+    override public function addedToEmitter(emitter : Emitter) : Void
+    {
+        cast((emitter), Emitter2D).spaceSort = true;
+    }
+    
+    /**
 		 * Checks all particles near the current particle and applies the 
 		 * acceleration to alter the particle's velocity
 		 * towards their average velocity.
@@ -124,61 +131,63 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var e:Emitter2D = Emitter2D( emitter );
-			var particles:Array = e.particlesArray;
-			var other:Particle2D;
-			var i:int;
-			var len:int = particles.length;
-			var distanceSq:Number;
-			var dx:Number;
-			var dy:Number;
-			var velX:Number = 0;
-			var velY:Number = 0;
-			var count:int = 0;
-			var factor:Number;
-			for( i = p.sortID - 1; i >= 0; --i )
-			{
-				other = particles[i];
-				if( ( dx = p.x - other.x ) > _max ) break;
-				dy = other.y - p.y;
-				if( dy > _max || dy < -_max ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= _maxSq )
-				{
-					velX += other.velX;
-					velY += other.velY;
-					++count;
-				}
-			}
-			for( i = p.sortID + 1; i < len; ++i )
-			{
-				other = particles[i];
-				if( ( dx = other.x - p.x ) > _max ) break;
-				dy = other.y - p.y;
-				if( dy > _max || dy < -_max ) continue;
-				distanceSq = dy * dy + dx * dx;
-				if( distanceSq <= _maxSq )
-				{
-					velX += other.velX;
-					velY += other.velY;
-					++count;
-				}
-			}
-			if( count != 0 )
-			{
-				velX = velX / count - p.velX;
-				velY = velY / count - p.velY;
-				if( velX != 0 || velY != 0 )
-				{
-					factor = time * _acc / Math.sqrt( velX * velX + velY * velY );
-					if( factor > 1 ) factor = 1;
-					p.velX += factor * velX;
-					p.velY += factor * velY;
-				}
-			}
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        var particles : Array<Dynamic> = e.particlesArray;
+        var other : Particle2D;
+        var i : Int;
+        var len : Int = particles.length;
+        var distanceSq : Float;
+        var dx : Float;
+        var dy : Float;
+        var velX : Float = 0;
+        var velY : Float = 0;
+        var count : Int = 0;
+        var factor : Float;
+        i = p.sortID - 1;
+        while (i >= 0){
+            other = particles[i];
+            if ((dx = p.x - other.x) > _max)                 break;
+            dy = other.y - p.y;
+            if (dy > _max || dy < -_max)                 {--i;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= _maxSq) 
+            {
+                velX += other.velX;
+                velY += other.velY;
+                ++count;
+            }
+            --i;
+        }
+        for (i in p.sortID + 1...len){
+            other = particles[i];
+            if ((dx = other.x - p.x) > _max)                 break;
+            dy = other.y - p.y;
+            if (dy > _max || dy < -_max)                 {++i;continue;
+            };
+            distanceSq = dy * dy + dx * dx;
+            if (distanceSq <= _maxSq) 
+            {
+                velX += other.velX;
+                velY += other.velY;
+                ++count;
+            }
+        }
+        if (count != 0) 
+        {
+            velX = velX / count - p.velX;
+            velY = velY / count - p.velY;
+            if (velX != 0 || velY != 0) 
+            {
+                factor = time * _acc / Math.sqrt(velX * velX + velY * velY);
+                if (factor > 1)                     factor = 1;
+                p.velX += factor * velX;
+                p.velY += factor * velY;
+            }
+        }
+    }
 }
+

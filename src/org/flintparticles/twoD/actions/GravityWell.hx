@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The GravityWell action applies a force on the particle to draw it towards
 	 * a single point. The force applied is inversely proportional to the square
 	 * of the distance from the particle to the point, in accordance with Newton's
@@ -49,15 +50,20 @@ package org.flintparticles.twoD.actions
 	 * @see Acceleration
 	 */
 
-	public class GravityWell extends ActionBase
-	{
-		private var _x:Number;
-		private var _y:Number;
-		private var _power:Number;
-		private var _epsilonSq:Number;
-		private var _gravityConst:Number = 10000; // just scales the power to a more reasonable number
-		
-		/**
+class GravityWell extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+    public var epsilon(get, set) : Float;
+
+    private var _x : Float;
+    private var _y : Float;
+    private var _power : Float;
+    private var _epsilonSq : Float;
+    private var _gravityConst : Float = 10000;  // just scales the power to a more reasonable number  
+    
+    /**
 		 * The constructor creates a GravityWell action for use by an emitter.
 		 * To add a GravityWell to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -77,54 +83,58 @@ package org.flintparticles.twoD.actions
 		 * a small epsilon ( ~1 ), but for stable visual effects a larger
 		 * epsilon (~100) is often better.
 		 */
-		public function GravityWell( power:Number = 0, x:Number = 0, y:Number = 0, epsilon:Number = 100 )
-		{
-			this.power = power;
-			this.x = x;
-			this.y = y;
-			this.epsilon = epsilon;
-		}
-		
-		/**
+    public function new(power : Float = 0, x : Float = 0, y : Float = 0, epsilon : Float = 100)
+    {
+        super();
+        this.power = power;
+        this.x = x;
+        this.y = y;
+        this.epsilon = epsilon;
+    }
+    
+    /**
 		 * The strength of the gravity force - larger numbers produce a 
 		 * stronger force.
 		 */
-		public function get power():Number
-		{
-			return _power / _gravityConst;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value * _gravityConst;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power / _gravityConst;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value * _gravityConst;
+        return value;
+    }
+    
+    /**
 		 * The x coordinate of the point towards which the force draws 
 		 * the particles.
 		 */
-		public function get x():Number
-		{
-			return _x;
-		}
-		public function set x( value:Number ):void
-		{
-			_x = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _x;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _x = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the point towards which the force draws 
 		 * the particles.
 		 */
-		public function get y():Number
-		{
-			return _y;
-		}
-		public function set y( value:Number ):void
-		{
-			_y = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _y;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _y = value;
+        return value;
+    }
+    
+    /**
 		 * The minimum distance for which the gravity force is calculated. 
 		 * Particles closer than this distance experience the gravity as if
 		 * they were this distance away. This stops the gravity effect blowing 
@@ -132,16 +142,17 @@ package org.flintparticles.twoD.actions
 		 * a small epsilon ( ~1 ), but for stable visual effects a larger
 		 * epsilon (~100) is often better.
 		 */
-		public function get epsilon():Number
-		{
-			return Math.sqrt( _epsilonSq );
-		}
-		public function set epsilon( value:Number ):void
-		{
-			_epsilonSq = value * value;
-		}
-		
-		/**
+    private function get_Epsilon() : Float
+    {
+        return Math.sqrt(_epsilonSq);
+    }
+    private function set_Epsilon(value : Float) : Float
+    {
+        _epsilonSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the gravity force on the particle and applies it for
 		 * the period of time indicated.
 		 * 
@@ -154,25 +165,25 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			if( particle.mass == 0 )
-			{
-				return;
-			}
-			var p:Particle2D = Particle2D( particle );
-			var x:Number = _x - p.x;
-			var y:Number = _y - p.y;
-			var dSq:Number = x * x + y * y;
-			if( dSq == 0 )
-			{
-				return;
-			}
-			var d:Number = Math.sqrt( dSq );
-			if( dSq < _epsilonSq ) dSq = _epsilonSq;
-			var factor:Number = ( _power * time ) / ( dSq * d );
-			p.velX += x * factor;
-			p.velY += y * factor;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (particle.mass == 0) 
+        {
+            return;
+        }
+        var p : Particle2D = cast((particle), Particle2D);
+        var x : Float = _x - p.x;
+        var y : Float = _y - p.y;
+        var dSq : Float = x * x + y * y;
+        if (dSq == 0) 
+        {
+            return;
+        }
+        var d : Float = Math.sqrt(dSq);
+        if (dSq < _epsilonSq)             dSq = _epsilonSq;
+        var factor : Float = (_power * time) / (dSq * d);
+        p.velX += x * factor;
+        p.velY += y * factor;
+    }
 }
+

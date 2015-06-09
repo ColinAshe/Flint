@@ -28,30 +28,35 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;
-	
-	import flash.display.DisplayObject;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.display.DisplayObject;
+
+/**
 	 * The MouseGravity action applies a force on the particle to draw it towards
 	 * the mouse. The force applied is inversely proportional to the square
 	 * of the distance from the particle to the mouse, in accordance with Newton's
 	 * law of gravity.
 	 */
 
-	public class MouseGravity extends ActionBase
-	{
-		private var _power:Number;
-		private var _epsilonSq:Number;
-		private var _gravityConst:Number = 10000; // scales the power to more useable levels
-		private var _renderer:DisplayObject;
-		
-		/**
+class MouseGravity extends ActionBase
+{
+    public var power(get, set) : Float;
+    public var renderer(get, set) : DisplayObject;
+    public var epsilon(get, set) : Float;
+
+    private var _power : Float;
+    private var _epsilonSq : Float;
+    private var _gravityConst : Float = 10000;  // scales the power to more useable levels  
+    private var _renderer : DisplayObject;
+    
+    /**
 		 * The constructor creates a MouseGravity action for use by an emitter.
 		 * To add a MouseGravity to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -70,55 +75,59 @@ package org.flintparticles.twoD.actions
 		 * small epsilon ( ~1 ), but for stable visual effects a larger epsilon 
 		 * (~100) is often better.
 		 */
-		public function MouseGravity( power:Number = 0, renderer:DisplayObject = null, epsilon:Number = 100 )
-		{
-			this.power = power;
-			this.epsilon = epsilon;
-			this.renderer = renderer;
-		}
-		
-		/**
+    public function new(power : Float = 0, renderer : DisplayObject = null, epsilon : Float = 100)
+    {
+        super();
+        this.power = power;
+        this.epsilon = epsilon;
+        this.renderer = renderer;
+    }
+    
+    /**
 		 * The strength of the gravity force.
 		 */
-		public function get power():Number
-		{
-			return _power / _gravityConst;
-		}
-		public function set power( value:Number ):void
-		{
-			_power = value * _gravityConst;
-		}
-		
-		/**
+    private function get_Power() : Float
+    {
+        return _power / _gravityConst;
+    }
+    private function set_Power(value : Float) : Float
+    {
+        _power = value * _gravityConst;
+        return value;
+    }
+    
+    /**
 		 * The display object whose coordinate system the mouse position is 
 		 * converted to. This is usually the renderer for the particle system 
 		 * created by the emitter.
 		 */
-		public function get renderer():DisplayObject
-		{
-			return _renderer;
-		}
-		public function set renderer( value:DisplayObject ):void
-		{
-			_renderer = value;
-		}
-		
-		/**
+    private function get_Renderer() : DisplayObject
+    {
+        return _renderer;
+    }
+    private function set_Renderer(value : DisplayObject) : DisplayObject
+    {
+        _renderer = value;
+        return value;
+    }
+    
+    /**
 		 * The minimum distance for which the gravity force is calculated. 
 		 * Particles closer than this distance experience the gravity as it they were 
 		 * this distance away. This stops the gravity effect blowing up as distances get 
 		 * small.
 		 */
-		public function get epsilon():Number
-		{
-			return Math.sqrt( _epsilonSq );
-		}
-		public function set epsilon( value:Number ):void
-		{
-			_epsilonSq = value * value;
-		}
-
-		/**
+    private function get_Epsilon() : Float
+    {
+        return Math.sqrt(_epsilonSq);
+    }
+    private function set_Epsilon(value : Float) : Float
+    {
+        _epsilonSq = value * value;
+        return value;
+    }
+    
+    /**
 		 * Calculates the gravity force on the particle and applies it for the
 		 * period of time indicated.
 		 * 
@@ -131,21 +140,21 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle2D = Particle2D( particle );
-			var x:Number = _renderer.mouseX - p.x;
-			var y:Number = _renderer.mouseY - p.y;
-			var dSq:Number = x * x + y * y;
-			if( dSq == 0 )
-			{
-				return;
-			}
-			var d:Number = Math.sqrt( dSq );
-			if( dSq < _epsilonSq ) dSq = _epsilonSq;
-			var factor:Number = ( _power * time ) / ( dSq * d );
-			p.velX += x * factor;
-			p.velY += y * factor;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        var x : Float = _renderer.mouseX - p.x;
+        var y : Float = _renderer.mouseY - p.y;
+        var dSq : Float = x * x + y * y;
+        if (dSq == 0) 
+        {
+            return;
+        }
+        var d : Float = Math.sqrt(dSq);
+        if (dSq < _epsilonSq)             dSq = _epsilonSq;
+        var factor : Float = (_power * time) / (dSq * d);
+        p.velX += x * factor;
+        p.velY += y * factor;
+    }
 }
+

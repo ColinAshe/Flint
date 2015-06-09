@@ -28,22 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Random counter causes the emitter to emit particles continuously
 	 * at a variable random rate between two limits.
 	 */
-	public class Random implements Counter
-	{
-		private var _timeToNext:Number;
-		private var _minRate:Number;
-		private var _maxRate:Number;
-		private var _running:Boolean;
-		
-		/**
+class Random implements Counter
+{
+    public var minRate(get, set) : Float;
+    public var maxRate(get, set) : Float;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _timeToNext : Float;
+    private var _minRate : Float;
+    private var _maxRate : Float;
+    private var _running : Bool;
+    
+    /**
 		 * The constructor creates a Random counter for use by an emitter. To
 		 * add a Random counter to an emitter use the emitter's counter property.
 		 * 
@@ -52,54 +58,56 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function Random( minRate:Number = 0, maxRate:Number = 0 )
-		{
-			_running = false;
-			_minRate = minRate;
-			_maxRate = maxRate;
-		}
-		
-		/**
+    public function new(minRate : Float = 0, maxRate : Float = 0)
+    {
+        _running = false;
+        _minRate = minRate;
+        _maxRate = maxRate;
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter emitting particles after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * The minimum number of particles to emit per second.
 		 */
-		public function get minRate():Number
-		{
-			return _minRate;
-		}
-		public function set minRate( value:Number ):void
-		{
-			_minRate = value;
-		}
-		
-		/**
+    private function get_MinRate() : Float
+    {
+        return _minRate;
+    }
+    private function set_MinRate(value : Float) : Float
+    {
+        _minRate = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum number of particles to emit per second.
 		 */
-		public function get maxRate():Number
-		{
-			return _maxRate;
-		}
-		public function set maxRate( value:Number ):void
-		{
-			_maxRate = value;
-		}
-		
-		/**
+    private function get_MaxRate() : Float
+    {
+        return _maxRate;
+    }
+    private function set_MaxRate(value : Float) : Float
+    {
+        _maxRate = value;
+        return value;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -111,20 +119,20 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_running = true;
-			_timeToNext = newTimeToNext();
-			return 0;
-		}
-		
-		private function newTimeToNext():Number
-		{
-			var rate:Number = Math.random() * ( _maxRate - _minRate ) + _maxRate;
-			return 1 / rate;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        _timeToNext = newTimeToNext();
+        return 0;
+    }
+    
+    private function newTimeToNext() : Float
+    {
+        var rate : Float = Math.random() * (_maxRate - _minRate) + _maxRate;
+        return 1 / rate;
+    }
+    
+    /**
 		 * Uses the time, rateMin and rateMax to calculate how many
 		 * particles the emitter should emit now.
 		 * 
@@ -137,37 +145,36 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			if( !_running )
-			{
-				return 0;
-			}
-			var count:uint = 0;
-			_timeToNext -= time;
-			while( _timeToNext <= 0 )
-			{
-				++count;
-				_timeToNext += newTimeToNext();
-			}
-			return count;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running) 
+        {
+            return 0;
+        }
+        var count : Int = 0;
+        _timeToNext -= time;
+        while (_timeToNext <= 0)
+        {
+            ++count;
+            _timeToNext += newTimeToNext();
+        }
+        return count;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles. For this counter
 		 * this will always be false.
 		 */
-		public function get complete():Boolean
-		{
-			return false;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return false;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
 }

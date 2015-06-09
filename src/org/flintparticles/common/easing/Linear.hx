@@ -47,31 +47,36 @@
  * the BSD License.
  */
 
-package org.flintparticles.common.easing
-{
-	/**
+package org.flintparticles.common.easing;
+
+
+/**
 	 * Easing functions for use with ageing of particles. Based on Robert Penner's easing functions.
 	 */
-	public class Linear
-	{
-		public static function easeNone( t : Number, b : Number, c : Number, d : Number ) : Number
-		{
-			return c * t / d + b;
-		}
+class Linear
+{
+    public static function easeNone(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * t / d + b;
+    }
+    
+    public static function easeIn(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * t / d + b;
+    }
+    
+    public static function easeOut(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * t / d + b;
+    }
+    
+    public static function easeInOut(t : Float, b : Float, c : Float, d : Float) : Float
+    {
+        return c * t / d + b;
+    }
 
-		public static function easeIn( t : Number, b : Number, c : Number, d : Number ) : Number
-		{
-			return c * t / d + b;
-		}
-
-		public static function easeOut( t : Number, b : Number, c : Number, d : Number ) : Number
-		{
-			return c * t / d + b;
-		}
-
-		public static function easeInOut( t : Number, b : Number, c : Number, d : Number ) : Number
-		{
-			return c * t / d + b;
-		}
-	}
+    public function new()
+    {
+    }
 }
+

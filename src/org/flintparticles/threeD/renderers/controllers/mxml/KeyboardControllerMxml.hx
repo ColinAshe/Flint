@@ -28,43 +28,49 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.renderers.controllers.mxml 
-{
-	import org.flintparticles.threeD.renderers.controllers.KeyboardControllerBase;
+package org.flintparticles.threed.renderers.controllers.mxml;
 
-	import mx.core.IMXMLObject;
 
-	import flash.display.DisplayObject;
-	import flash.events.Event;
+import org.flintparticles.threed.renderers.controllers.KeyboardControllerBase;
 
-	/**
+import mx.core.IMXMLObject;
+
+import flash.display.DisplayObject;
+import flash.events.Event;
+
+/**
 	 * Base class for keyboard based camera controllers. Tracks the keyboard state for camera controllers.
 	 */
-	public class KeyboardControllerMxml extends KeyboardControllerBase implements IMXMLObject
-	{		
-		public function initialized( document:Object, id:String ):void
-		{
-			var displayObj:DisplayObject = document as DisplayObject;
-			if( displayObj )
-			{
-				if( displayObj.stage )
-				{
-					this.stage = displayObj.stage;
-				}
-				else
-				{
-					displayObj.addEventListener( Event.ADDED_TO_STAGE, addedToStage );
-				}
-			}
-			if( autoStart )
-			{
-				start();
-			}
-		}
-		
-		private function addedToStage( ev:Event ):void
-		{
-			this.stage = DisplayObject( ev.target ).stage;
-		}
-	}
+class KeyboardControllerMxml extends KeyboardControllerBase implements IMXMLObject
+{
+    public function initialized(document : Dynamic, id : String) : Void
+    {
+        var displayObj : DisplayObject = try cast(document, DisplayObject) catch(e:Dynamic) null;
+        if (displayObj != null) 
+        {
+            if (displayObj.stage) 
+            {
+                this.stage = displayObj.stage;
+            }
+            else 
+            {
+                displayObj.addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+            }
+        }
+        if (autoStart) 
+        {
+            start();
+        }
+    }
+    
+    private function addedToStage(ev : Event) : Void
+    {
+        this.stage = cast((ev.target), DisplayObject).stage;
+    }
+
+    public function new()
+    {
+        super();
+    }
 }
+

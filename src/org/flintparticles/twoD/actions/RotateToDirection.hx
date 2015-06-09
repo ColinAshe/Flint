@@ -29,32 +29,35 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.twoD.particles.Particle2D;	
+package org.flintparticles.twod.actions;
 
-	/**
+
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.twod.particles.Particle2D;
+
+/**
 	 * The RotateToDirection action updates the rotation of the particle 
 	 * so that it always points in the direction it is traveling.
 	 */
 
-	public class RotateToDirection extends ActionBase
-	{
-		/**
+class RotateToDirection extends ActionBase
+{
+    /**
 		 * The constructor creates a RotateToDirection action for use by an emitter. 
 		 * To add a RotateToDirection to all particles created by an emitter, use the
 		 * emitter's addAction method.
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addAction()
 		 */
-		public function RotateToDirection()
-		{
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        
+    }
+    
+    /**
 		 * Calculates a new rotation based on the direction of the
 		 * particle's velocity and applies it to the particle.
 		 * 
@@ -67,10 +70,10 @@ package org.flintparticles.twoD.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter : Emitter, particle : Particle, time : Number ) : void
-		{
-			var p:Particle2D = Particle2D( particle );
-			p.rotation = Math.atan2( p.velY, p.velX );
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle2D = cast((particle), Particle2D);
+        p.rotation = Math.atan2(p.velY, p.velX);
+    }
 }
+

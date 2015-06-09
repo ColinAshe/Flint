@@ -28,20 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.initializers;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The MassInit Initializer sets the mass of the particle.
 	 */
 
-	public class MassInit extends InitializerBase
-	{
-		private var _mass:Number;
-		
-		/**
+class MassInit extends InitializerBase
+{
+    public var mass(get, set) : Float;
+
+    private var _mass : Float;
+    
+    /**
 		 * The constructor creates a MassInit initializer for use by 
 		 * an emitter. To add a MassInit to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -51,31 +54,33 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function MassInit( mass:Number = 1 )
-		{
-			_mass = mass;
-		}
-		
-		/**
+    public function new(mass : Float = 1)
+    {
+        super();
+        _mass = mass;
+    }
+    
+    /**
 		 * When reading, returns the average of minMass and maxMass.
 		 * When writing this sets both minMass and maxMass to the 
 		 * same mass value.
 		 */
-		public function get mass():Number
-		{
-			return _mass;
-		}
-		public function set mass( value:Number ):void
-		{
-			_mass = value;
-		}
-		
-		/**
+    private function get_Mass() : Float
+    {
+        return _mass;
+    }
+    private function set_Mass(value : Float) : Float
+    {
+        _mass = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			particle.mass = _mass;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        particle.mass = _mass;
+    }
 }
+

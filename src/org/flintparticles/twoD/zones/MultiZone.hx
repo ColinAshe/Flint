@@ -28,125 +28,125 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.zones 
-{
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.zones;
 
-	import flash.geom.Point;
+import nme.errors.Error;
+import org.flintparticles.twod.zones.Zone2D;
 
-	/**
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.geom.Point;
+
+/**
 	 * The MutiZone zone defines a zone that combines other zones into one larger zone.
 	 */
 
-	public class MultiZone implements Zone2D 
-	{
-		private var _zones : Array;
-		private var _areas : Array;
-		private var _totalArea : Number;
-		
-		/**
+class MultiZone implements Zone2D
+{
+    private var _zones : Array<Dynamic>;
+    private var _areas : Array<Dynamic>;
+    private var _totalArea : Float;
+    
+    /**
 		 * The constructor defines a MultiZone zone.
 		 */
-		public function MultiZone()
-		{
-			_zones = new Array();
-			_areas = new Array();
-			_totalArea = 0;
-		}
-		
-		/**
+    public function new()
+    {
+        _zones = new Array<Dynamic>();
+        _areas = new Array<Dynamic>();
+        _totalArea = 0;
+    }
+    
+    /**
 		 * The addZone method is used to add a zone into this MultiZone object.
 		 * 
 		 * @param zone The zone you want to add.
 		 */
-		public function addZone( zone:Zone2D ):void
-		{
-			_zones.push( zone );
-			var area:Number = zone.getArea();
-			_areas.push( area );
-			_totalArea += area;
-		}
-		
-		/**
+    public function addZone(zone : Zone2D) : Void
+    {
+        _zones.push(zone);
+        var area : Float = zone.getArea();
+        _areas.push(area);
+        _totalArea += area;
+    }
+    
+    /**
 		 * The removeZone method is used to remove a zone from this MultiZone object.
 		 * 
 		 * @param zone The zone you want to add.
 		 */
-		public function removeZone( zone:Zone2D ):void
-		{
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( _zones[i] == zone )
-				{
-					_totalArea -= _areas[i];
-					_areas.splice( i, 1 );
-					_zones.splice( i, 1 );
-					return;
-				}
-			}
-		}
-		
-		/**
+    public function removeZone(zone : Zone2D) : Void
+    {
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if (_zones[i] == zone) 
+            {
+                _totalArea -= _areas[i];
+                _areas.splice(i, 1);
+                _zones.splice(i, 1);
+                return;
+            }
+        }
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		public function contains( x:Number, y:Number ):Boolean
-		{
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( Zone2D( _zones[i] ).contains( x, y ) )
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		
-		/**
+    public function contains(x : Float, y : Float) : Bool
+    {
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if (cast((_zones[i]), Zone2D).contains(x, y)) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		public function getLocation():Point
-		{
-			var selectZone:Number = Math.random() * _totalArea;
-			var len:int = _zones.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				if( ( selectZone -= _areas[i] ) <= 0 )
-				{
-					return Zone2D( _zones[i] ).getLocation();
-				}
-			}
-			if( _zones.length == 0 )
-			{
-				throw new Error( "Attempt to use a MultiZone object that contains no Zones" );
-			}
-			else
-			{
-				return Zone2D( _zones[0] ).getLocation();
-			}
-			return null;
-		}
-		
-		/**
+    public function getLocation() : Point
+    {
+        var selectZone : Float = Math.random() * _totalArea;
+        var len : Int = _zones.length;
+        for (i in 0...len){
+            if ((selectZone -= _areas[i]) <= 0) 
+            {
+                return cast((_zones[i]), Zone2D).getLocation();
+            }
+        }
+        if (_zones.length == 0) 
+        {
+            throw new Error("Attempt to use a MultiZone object that contains no Zones");
+        }
+        else 
+        {
+            return cast((_zones[0]), Zone2D).getLocation();
+        }
+        return null;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		public function getArea():Number
-		{
-			return _totalArea;
-		}
-		
-		/**
+    public function getArea() : Float
+    {
+        return _totalArea;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		public function collideParticle( particle:Particle2D, bounce:Number = 1 ):Boolean
-		{
-			var collide:Boolean = false;
-			for each( var zone:Zone2D in _zones )
-			{
-				collide = zone.collideParticle( particle, bounce ) || collide;
-			}
-			return collide;
-		}
-	}
+    public function collideParticle(particle : Particle2D, bounce : Float = 1) : Bool
+    {
+        var collide : Bool = false;
+        for (zone in _zones)
+        {
+            collide = zone.collideParticle(particle, bounce) || collide;
+        }
+        return collide;
+    }
 }
+

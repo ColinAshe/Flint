@@ -28,11 +28,12 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.zones
-{
-	import flash.geom.Vector3D;					
+package org.flintparticles.threed.zones;
 
-	/**
+
+import flash.geom.Vector3D;
+
+/**
 	 * The Zones interface must be implemented by all zones.
 	 * 
 	 * <p>A zone is a class that defined a region in 2d space. The two required methods 
@@ -41,32 +42,32 @@ package org.flintparticles.threeD.zones
 	 * (in the Position initializer), to define the start velocity for particles (in the
 	 * Velocity initializer), and to define zones within which the particles die.</p>
 	 */
-	public interface Zone3D
-	{
-		/**
+interface Zone3D
+{
+
+    /**
 		 * The contains method determines whether a point is inside the zone.
 		 * 
 		 * @param x The x coordinate of the location to test for.
 		 * @param y The y coordinate of the location to test for.
 		 * @return true if point is inside the zone, false if it is outside.
 		 */
-		function contains( p:Vector3D ):Boolean;
-
-		/**
+    function contains(p : Vector3D) : Bool;
+    
+    /**
 		 * The getLocation method returns a random point inside the zone.
 		 * 
 		 * @return a random point inside the zone.
 		 */
-		function getLocation():Vector3D;
-		
-
-		/**
+    function getLocation() : Vector3D;
+    
+    
+    /**
 		 * The getArea method returns the size of the zone.
 		 * It's used by the MultiZone class to manage the balancing between the
 		 * different zones.
 		 * 
 		 * @return the size of the zone.
 		 */
-		function getVolume():Number;
-	}
+    function getVolume() : Float;
 }

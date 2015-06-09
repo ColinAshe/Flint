@@ -27,23 +27,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
- 
-package org.flintparticles.common.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
 
-	/**
+package org.flintparticles.common.initializers;
+
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The Lifetime Initializer sets a lifetime for the particle. It is
 	 * usually combined with the Age action to age the particle over its
 	 * lifetime and destroy the particle at the end of its lifetime.
 	 */
-	public class Lifetime extends InitializerBase
-	{
-		private var _max:Number;
-		private var _min:Number;
-		
-		/**
+class Lifetime extends InitializerBase
+{
+    public var minLifetime(get, set) : Float;
+    public var maxLifetime(get, set) : Float;
+    public var lifetime(get, set) : Float;
+
+    private var _max : Float;
+    private var _min : Float;
+    
+    /**
 		 * The constructor creates a Lifetime initializer for use by 
 		 * an emitter. To add a Lifetime to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -60,65 +65,69 @@ package org.flintparticles.common.initializers
 		 * 
 		 * @see Emitter.addInitializer.
 		 */
-		public function Lifetime( minLifetime:Number = Number.MAX_VALUE, maxLifetime:Number = NaN )
-		{
-			_max = maxLifetime;
-			_min = minLifetime;
-		}
-		
-		/**
+    public function new(minLifetime : Float = Float.MAX_VALUE, maxLifetime : Float = NaN)
+    {
+        super();
+        _max = maxLifetime;
+        _min = minLifetime;
+    }
+    
+    /**
 		 * The minimum lifetime for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get minLifetime():Number
-		{
-			return _min;
-		}
-		public function set minLifetime( value:Number ):void
-		{
-			_min = value;
-		}
-		
-		/**
+    private function get_MinLifetime() : Float
+    {
+        return _min;
+    }
+    private function set_MinLifetime(value : Float) : Float
+    {
+        _min = value;
+        return value;
+    }
+    
+    /**
 		 * The maximum lifetime for particles initialised by 
 		 * this initializer. Should be between 0 and 1.
 		 */
-		public function get maxLifetime():Number
-		{
-			return _max;
-		}
-		public function set maxLifetime( value:Number ):void
-		{
-			_max = value;
-		}
-		
-		/**
+    private function get_MaxLifetime() : Float
+    {
+        return _max;
+    }
+    private function set_MaxLifetime(value : Float) : Float
+    {
+        _max = value;
+        return value;
+    }
+    
+    /**
 		 * When reading, returns the average of minLifetime and maxLifetime.
 		 * When writing this sets both maxLifetime and minLifetime to the 
 		 * same lifetime value.
 		 */
-		public function get lifetime():Number
-		{
-			return _min == _max ? _min : ( _max + _min ) * 0.5;
-		}
-		public function set lifetime( value:Number ):void
-		{
-			_max = _min = value;
-		}
-		
-		/**
+    private function get_Lifetime() : Float
+    {
+        return _min == (_max != 0) ? _min : (_max + _min) * 0.5;
+    }
+    private function set_Lifetime(value : Float) : Float
+    {
+        _max = _min = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( isNaN( _max ) )
-			{
-				particle.lifetime = _min;
-			}
-			else
-			{
-				particle.lifetime = _min + Math.random() * ( _max - _min );
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (Math.isNaN(_max)) 
+        {
+            particle.lifetime = _min;
+        }
+        else 
+        {
+            particle.lifetime = _min + Math.random() * (_max - _min);
+        }
+    }
 }
+

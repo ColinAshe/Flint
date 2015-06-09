@@ -28,21 +28,23 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.initializers 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.emitters.Emitter3D;
-	import org.flintparticles.threeD.geom.Quaternion;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.zones.Zone3D;
+package org.flintparticles.threed.initializers;
 
-	import flash.geom.Vector3D;
 
-	[DefaultProperty("zone")]
-	
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.emitters.Emitter3D;
+import org.flintparticles.threed.geom.Quaternion;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.zones.Zone3D;
+
+import flash.geom.Vector3D;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The ColorInit Initializer sets the velocity of the particle. It is
 	 * usually combined with the Move action to move the particle
 	 * using this velocity.
@@ -58,11 +60,13 @@ package org.flintparticles.threeD.initializers
 	 * in a range of directions.</p>
 	 */
 
-	public class Velocity extends InitializerBase
-	{
-		private var _zone:Zone3D;
+class Velocity extends InitializerBase
+{
+    public var zone(get, set) : Zone3D;
 
-		/**
+    private var _zone : Zone3D;
+    
+    /**
 		 * The constructor creates a Velocity initializer for use by 
 		 * an emitter. To add a Velocity to all particles created by an emitter, use the
 		 * emitter's addInitializer method.
@@ -71,36 +75,38 @@ package org.flintparticles.threeD.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function Velocity( zone:Zone3D = null )
-		{
-			this.zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone3D = null)
+    {
+        super();
+        this.zone = zone;
+    }
+    
+    /**
 		 * The zone.
 		 */
-		public function get zone():Zone3D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone3D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone3D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone3D) : Zone3D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var e:Emitter3D = Emitter3D( emitter );
-			var v:Vector3D = zone.getLocation();
-			if( !e.rotation.equals( Quaternion.IDENTITY ) )
-			{
-				v = e.rotationTransform.transformVector( v );
-			}
-			p.velocity = v;
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var e : Emitter3D = cast((emitter), Emitter3D);
+        var v : Vector3D = zone.getLocation();
+        if (!e.rotation.equals(Quaternion.IDENTITY)) 
+        {
+            v = e.rotationTransform.transformVector(v);
+        }
+        p.velocity = v;
+    }
 }
+

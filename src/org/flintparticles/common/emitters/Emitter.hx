@@ -28,24 +28,25 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.emitters
-{
-	import org.flintparticles.common.actions.Action;
-	import org.flintparticles.common.activities.Activity;
-	import org.flintparticles.common.behaviours.Behaviour;
-	import org.flintparticles.common.counters.Counter;
-	import org.flintparticles.common.counters.ZeroCounter;
-	import org.flintparticles.common.events.EmitterEvent;
-	import org.flintparticles.common.events.ParticleEvent;
-	import org.flintparticles.common.events.UpdateEvent;
-	import org.flintparticles.common.initializers.Initializer;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
-	import org.flintparticles.common.utils.FrameUpdater;
+package org.flintparticles.common.emitters;
 
-	import flash.events.EventDispatcher;
 
-	/**
+import org.flintparticles.common.actions.Action;
+import org.flintparticles.common.activities.Activity;
+import org.flintparticles.common.behaviours.Behaviour;
+import org.flintparticles.common.counters.Counter;
+import org.flintparticles.common.counters.ZeroCounter;
+import org.flintparticles.common.events.EmitterEvent;
+import org.flintparticles.common.events.ParticleEvent;
+import org.flintparticles.common.events.UpdateEvent;
+import org.flintparticles.common.initializers.Initializer;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+import org.flintparticles.common.utils.FrameUpdater;
+
+import flash.events.EventDispatcher;
+
+/**
 	 * Dispatched when a particle dies and is about to be removed from the system.
 	 * As soon as the event has been handled the particle will be removed but at the
 	 * time of the event it still exists so its properties (e.g. its location) can be
@@ -53,23 +54,26 @@ package org.flintparticles.common.emitters
 	 * 
 	 * @eventType org.flintparticles.common.events.ParticleEvent.PARTICLE_DEAD
 	 */
-	[Event(name="particleDead", type="org.flintparticles.common.events.ParticleEvent")]
+@:meta(Event(name="particleDead",type="org.flintparticles.common.events.ParticleEvent"))
 
-	/**
+
+/**
 	 * Dispatched when a particle is created and has just been added to the emitter.
 	 * 
 	 * @eventType org.flintparticles.common.events.ParticleEvent.PARTICLE_CREATED
 	 */
-	[Event(name="particleCreated", type="org.flintparticles.common.events.ParticleEvent")]
+@:meta(Event(name="particleCreated",type="org.flintparticles.common.events.ParticleEvent"))
 
-	/**
+
+/**
 	 * Dispatched when a pre-existing particle is added to the emitter.
 	 * 
 	 * @eventType org.flintparticles.common.events.ParticleEvent.PARTICLE_ADDED
 	 */
-	[Event(name="particleAdded", type="org.flintparticles.common.events.ParticleEvent")]
+@:meta(Event(name="particleAdded",type="org.flintparticles.common.events.ParticleEvent"))
 
-	/**
+
+/**
 	 * Dispatched when an emitter attempts to update the particles' state but it 
 	 * contains no particles. This event will be dispatched every time the update 
 	 * occurs and there are no particles in the emitter. The update does not occur
@@ -85,25 +89,28 @@ package org.flintparticles.common.emitters
 	 * 
 	 * @eventType org.flintparticles.common.events.EmitterEvent.EMITTER_EMPTY
 	 */
-	[Event(name="emitterEmpty", type="org.flintparticles.common.events.EmitterEvent")]
+@:meta(Event(name="emitterEmpty",type="org.flintparticles.common.events.EmitterEvent"))
 
-	/**
+
+/**
 	 * Dispatched when the particle system has updated and the state of the particles
 	 * has changed.
 	 * 
 	 * @eventType org.flintparticles.common.events.EmitterEvent.EMITTER_UPDATED
 	 */
-	[Event(name="emitterUpdated", type="org.flintparticles.common.events.EmitterEvent")]
+@:meta(Event(name="emitterUpdated",type="org.flintparticles.common.events.EmitterEvent"))
 
-	/**
+
+/**
 	 * Dispatched when the counter for the particle system has finished its cycle and so
 	 * the system will not emit any more particles unless the counter is changed or restarted.
 	 * 
 	 * @eventType org.flintparticles.common.events.EmitterEvent.COUNTER_COMPLETE
 	 */
-	[Event(name="counterComplete", type="org.flintparticles.common.events.EmitterEvent")]
+@:meta(Event(name="counterComplete",type="org.flintparticles.common.events.EmitterEvent"))
 
-	/**
+
+/**
 	 * The Emitter class is the base class for the Emitter2D and Emitter3D classes.
 	 * The emitter class contains the common behavioour used by these two concrete
 	 * classes.
@@ -133,87 +140,100 @@ package org.flintparticles.common.emitters
 	 * the Emitter classes.</p>
 	 */
 
-	public class Emitter extends EventDispatcher
-	{
-		/**
-		 * @private
-		 */
-		protected var _particleFactory:ParticleFactory;
-		
-		/**
-		 * @private
-		 */
-		protected var _initializers:Vector.<Initializer>;
-		/**
-		 * @private
-		 */
-		protected var _actions:Vector.<Action>;
-		/**
-		 * @private
-		 */
-		protected var _activities:Vector.<Activity>;
-		/**
-		 * @private
-		 */
-		protected var _particles:Array;
-		/**
-		 * @private
-		 */
-		protected var _counter:Counter;
+class Emitter extends EventDispatcher
+{
+    public var maximumFrameTime(get, set) : Float;
+    public var initializers(get, set) : Array<Initializer>;
+    public var actions(get, set) : Array<Action>;
+    public var activities(get, set) : Array<Activity>;
+    public var counter(get, set) : Counter;
+    public var useInternalTick(get, set) : Bool;
+    public var fixedFrameTime(get, set) : Float;
+    public var running(get, never) : Bool;
+    public var particleFactory(get, set) : ParticleFactory;
+    public var particles(get, set) : Array<Particle>;
+    public var particlesArray(get, never) : Array<Dynamic>;
 
-		/**
+    /**
 		 * @private
 		 */
-		protected var _useInternalTick:Boolean = true;
-		/**
+    private var _particleFactory : ParticleFactory;
+    
+    /**
 		 * @private
 		 */
-		protected var _fixedFrameTime:Number = 0;
-		/**
+    private var _initializers : Array<Initializer>;
+    /**
 		 * @private
 		 */
-		protected var _running:Boolean = false;
-		/**
+    private var _actions : Array<Action>;
+    /**
 		 * @private
 		 */
-		protected var _started:Boolean = false;
-		/**
+    private var _activities : Array<Activity>;
+    /**
 		 * @private
 		 */
-		protected var _updating:Boolean = false;
-		/**
+    private var _particles : Array<Dynamic>;
+    /**
 		 * @private
 		 */
-		protected var _maximumFrameTime:Number = 0.1;
-		/**
+    private var _counter : Counter;
+    
+    /**
+		 * @private
+		 */
+    private var _useInternalTick : Bool = true;
+    /**
+		 * @private
+		 */
+    private var _fixedFrameTime : Float = 0;
+    /**
+		 * @private
+		 */
+    private var _running : Bool = false;
+    /**
+		 * @private
+		 */
+    private var _started : Bool = false;
+    /**
+		 * @private
+		 */
+    private var _updating : Bool = false;
+    /**
+		 * @private
+		 */
+    private var _maximumFrameTime : Float = 0.1;
+    /**
 		 * Indicates if the emitter should dispatch a counterComplete event at the
 		 * end of the next update cycle.
 		 */
-		protected var _dispatchCounterComplete:Boolean = false;
-		/**
+    private var _dispatchCounterComplete : Bool = false;
+    /**
 		 * Used to alternate the direction in which the particles in the particles
 		 * array are processed, to iron out errors from always processing them in
 		 * the same order.
 		 */
-		protected var _processLastFirst:Boolean = false;
-
-		/**
+    private var _processLastFirst : Bool = false;
+    
+    /**
 		 * The constructor creates an emitter.
 		 * 
 		 * @param useInternalTick Indicates whether the emitter should use its
 		 * own tick event to update its state. The internal tick process is tied
 		 * to the framerate and updates the particle system every frame.
 		 */
-		public function Emitter()
-		{
-			_particles = [];
-			_actions = new Vector.<Action>();
-			_initializers = new Vector.<Initializer>();
-			_activities = new Vector.<Activity>();
-			_counter = new ZeroCounter();
-		}
-
-		/**
+    public function new()
+    {
+        super();
+        _particles = [];
+        _actions = new Array<Action>();
+        _initializers = new Array<Initializer>();
+        _activities = new Array<Activity>();
+        _counter = new ZeroCounter();
+    }
+    
+    /**
 		 * The maximum duration for a single update frame, in seconds.
 		 * 
 		 * <p>Under some circumstances related to the Flash player (e.g. on MacOSX, when the 
@@ -228,38 +248,40 @@ package org.flintparticles.common.emitters
 		 * this duration are ignored. The default value is 0.5 seconds. Developers don't usually
 		 * need to change this from the default value.</p>
 		 */
-		public function get maximumFrameTime() : Number
-		{
-			return _maximumFrameTime;
-		}
-		public function set maximumFrameTime( value : Number ) : void
-		{
-			_maximumFrameTime = value;
-		}
-		
-		/**
+    private function get_MaximumFrameTime() : Float
+    {
+        return _maximumFrameTime;
+    }
+    private function set_MaximumFrameTime(value : Float) : Float
+    {
+        _maximumFrameTime = value;
+        return value;
+    }
+    
+    /**
 		 * The array of all initializers being used by this emitter.
 		 */
-		public function get initializers():Vector.<Initializer>
-		{
-			return _initializers;
-		}
-		public function set initializers( value:Vector.<Initializer> ):void
-		{
-			var initializer:Initializer;
-			for each( initializer in _initializers )
-			{
-				initializer.removedFromEmitter( this );
-			}
-			_initializers = value.slice();
-			_initializers.sort( prioritySort );
-			for each( initializer in value )
-			{
-				initializer.addedToEmitter( this );
-			}
-		}
-
-		/**
+    private function get_Initializers() : Array<Initializer>
+    {
+        return _initializers;
+    }
+    private function set_Initializers(value : Array<Initializer>) : Array<Initializer>
+    {
+        var initializer : Initializer;
+        for (initializer in _initializers)
+        {
+            initializer.removedFromEmitter(this);
+        }
+        _initializers = value.substring();
+        _initializers.sort(prioritySort);
+        for (initializer in value)
+        {
+            initializer.addedToEmitter(this);
+        }
+        return value;
+    }
+    
+    /**
 		 * Adds an Initializer object to the Emitter. Initializers set the
 		 * initial state of particles created by the emitter.
 		 * 
@@ -268,38 +290,37 @@ package org.flintparticles.common.emitters
 		 * @see removeInitializer()
 		 * @see org.flintParticles.common.initializers.Initializer.getDefaultPriority()
 		 */
-		public function addInitializer( initializer:Initializer ):void
-		{
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _initializers[i].priority < initializer.priority )
-				{
-					break;
-				}
-			}
-			_initializers.splice( i, 0, initializer );
-			initializer.addedToEmitter( this );
-		}
-		
-		/**
+    public function addInitializer(initializer : Initializer) : Void
+    {
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            if (_initializers[i].priority < initializer.priority) 
+            {
+                break;
+            }
+        }
+        _initializers.splice(i, 0, initializer);
+        initializer.addedToEmitter(this);
+    }
+    
+    /**
 		 * Removes an Initializer from the Emitter.
 		 * 
 		 * @param initializer The Initializer to remove
 		 * 
 		 * @see addInitializer()
 		 */
-		public function removeInitializer( initializer:Initializer ):void
-		{
-			var index:int = _initializers.indexOf( initializer );
-			if( index != -1 )
-			{
-				_initializers.splice( index, 1 );
-				initializer.removedFromEmitter( this );
-			}
-		}
-		
-		/**
+    public function removeInitializer(initializer : Initializer) : Void
+    {
+        var index : Int = Lambda.indexOf(_initializers, initializer);
+        if (index != -1) 
+        {
+            _initializers.splice(index, 1);
+            initializer.removedFromEmitter(this);
+        }
+    }
+    
+    /**
 		 * Detects if the emitter is using a particular initializer or not.
 		 * 
 		 * @param initializer The initializer to look for.
@@ -307,12 +328,12 @@ package org.flintparticles.common.emitters
 		 * @return true if the initializer is being used by the emitter, false 
 		 * otherwise.
 		 */
-		public function hasInitializer( initializer:Initializer ):Boolean
-		{
-			return _initializers.indexOf( initializer ) != -1;
-		}
-		
-		/**
+    public function hasInitializer(initializer : Initializer) : Bool
+    {
+        return Lambda.indexOf(_initializers, initializer) != -1;
+    }
+    
+    /**
 		 * Detects if the emitter is using an initializer of a particular class.
 		 * 
 		 * @param initializerClass The type of initializer to look for.
@@ -320,42 +341,42 @@ package org.flintparticles.common.emitters
 		 * @return true if the emitter is using an instance of the class as an
 		 * initializer, false otherwise.
 		 */
-		public function hasInitializerOfType( initializerClass:Class ):Boolean
-		{
-			var len:uint = _initializers.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _initializers[i] is initializerClass )
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/**
+    public function hasInitializerOfType(initializerClass : Class<Dynamic>) : Bool
+    {
+        var len : Int = _initializers.length;
+        for (i in 0...len){
+            if (Std.is(_initializers[i], initializerClass)) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
 		 * The array of all actions being used by this emitter.
 		 */
-		public function get actions():Vector.<Action>
-		{
-			return _actions;
-		}
-		public function set actions( value:Vector.<Action> ):void
-		{
-			var action:Action;
-			for each( action in _actions )
-			{
-				action.removedFromEmitter( this );
-			}
-			_actions = value.slice();
-			_actions.sort( prioritySort );
-			for each( action in value )
-			{
-				action.addedToEmitter( this );
-			}
-		}
-
-		/**
+    private function get_Actions() : Array<Action>
+    {
+        return _actions;
+    }
+    private function set_Actions(value : Array<Action>) : Array<Action>
+    {
+        var action : Action;
+        for (action in _actions)
+        {
+            action.removedFromEmitter(this);
+        }
+        _actions = value.substring();
+        _actions.sort(prioritySort);
+        for (action in value)
+        {
+            action.addedToEmitter(this);
+        }
+        return value;
+    }
+    
+    /**
 		 * Adds an Action to the Emitter. Actions set the behaviour of particles 
 		 * created by the emitter.
 		 * 
@@ -364,38 +385,37 @@ package org.flintparticles.common.emitters
 		 * @see removeAction();
 		 * @see org.flintParticles.common.actions.Action.getDefaultPriority()
 		 */
-		public function addAction( action:Action ):void
-		{
-			var len:uint = _actions.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _actions[i].priority < action.priority )
-				{
-					break;
-				}
-			}
-			_actions.splice( i, 0, action );
-			action.addedToEmitter( this );
-		}
-		
-		/**
+    public function addAction(action : Action) : Void
+    {
+        var len : Int = _actions.length;
+        for (i in 0...len){
+            if (_actions[i].priority < action.priority) 
+            {
+                break;
+            }
+        }
+        _actions.splice(i, 0, action);
+        action.addedToEmitter(this);
+    }
+    
+    /**
 		 * Removes an Action from the Emitter.
 		 * 
 		 * @param action The Action to remove
 		 * 
 		 * @see addAction()
 		 */
-		public function removeAction( action:Action ):void
-		{
-			var index:int = _actions.indexOf( action );
-			if( index != -1 )
-			{
-				_actions.splice( index, 1 );
-				action.removedFromEmitter( this );
-			}
-		}
-		
-		/**
+    public function removeAction(action : Action) : Void
+    {
+        var index : Int = Lambda.indexOf(_actions, action);
+        if (index != -1) 
+        {
+            _actions.splice(index, 1);
+            action.removedFromEmitter(this);
+        }
+    }
+    
+    /**
 		 * Detects if the emitter is using a particular action or not.
 		 * 
 		 * @param action The action to look for.
@@ -403,12 +423,12 @@ package org.flintparticles.common.emitters
 		 * @return true if the action is being used by the emitter, false 
 		 * otherwise.
 		 */
-		public function hasAction( action:Action ):Boolean
-		{
-			return _actions.indexOf( action ) != -1;
-		}
-		
-		/**
+    public function hasAction(action : Action) : Bool
+    {
+        return Lambda.indexOf(_actions, action) != -1;
+    }
+    
+    /**
 		 * Detects if the emitter is using an action of a particular class.
 		 * 
 		 * @param actionClass The type of action to look for.
@@ -416,42 +436,42 @@ package org.flintparticles.common.emitters
 		 * @return true if the emitter is using an instance of the class as an
 		 * action, false otherwise.
 		 */
-		public function hasActionOfType( actionClass:Class ):Boolean
-		{
-			var len:uint = _actions.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _actions[i] is actionClass )
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/**
+    public function hasActionOfType(actionClass : Class<Dynamic>) : Bool
+    {
+        var len : Int = _actions.length;
+        for (i in 0...len){
+            if (Std.is(_actions[i], actionClass)) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
 		 * The array of all actions being used by this emitter.
 		 */
-		public function get activities():Vector.<Activity>
-		{
-			return _activities;
-		}
-		public function set activities( value:Vector.<Activity> ):void
-		{
-			var activity:Activity;
-			for each( activity in _activities )
-			{
-				activity.removedFromEmitter( this );
-			}
-			_activities = value.slice();
-			_activities.sort( prioritySort );
-			for each( activity in _activities )
-			{
-				activity.addedToEmitter( this );
-			}
-		}
-
-		/**
+    private function get_Activities() : Array<Activity>
+    {
+        return _activities;
+    }
+    private function set_Activities(value : Array<Activity>) : Array<Activity>
+    {
+        var activity : Activity;
+        for (activity in _activities)
+        {
+            activity.removedFromEmitter(this);
+        }
+        _activities = value.substring();
+        _activities.sort(prioritySort);
+        for (activity in _activities)
+        {
+            activity.addedToEmitter(this);
+        }
+        return value;
+    }
+    
+    /**
 		 * Adds an Activity to the Emitter. Activities set the behaviour
 		 * of the Emitter.
 		 * 
@@ -460,38 +480,37 @@ package org.flintparticles.common.emitters
 		 * @see removeActivity()
 		 * @see org.flintParticles.common.activities.Activity.getDefaultPriority()
 		 */
-		public function addActivity( activity:Activity ):void
-		{
-			var len:uint = _activities.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _activities[i].priority < activity.priority )
-				{
-					break;
-				}
-			}
-			_activities.splice( i, 0, activity );
-			activity.addedToEmitter( this );
-		}
-		
-		/**
+    public function addActivity(activity : Activity) : Void
+    {
+        var len : Int = _activities.length;
+        for (i in 0...len){
+            if (_activities[i].priority < activity.priority) 
+            {
+                break;
+            }
+        }
+        _activities.splice(i, 0, activity);
+        activity.addedToEmitter(this);
+    }
+    
+    /**
 		 * Removes an Activity from the Emitter.
 		 * 
 		 * @param activity The Activity to remove
 		 * 
 		 * @see addActivity()
 		 */
-		public function removeActivity( activity:Activity ):void
-		{
-			var index:int = _activities.indexOf( activity );
-			if( index != -1 )
-			{
-				_activities.splice( index, 1 );
-				activity.removedFromEmitter( this );
-			}
-		}
-		
-		/**
+    public function removeActivity(activity : Activity) : Void
+    {
+        var index : Int = Lambda.indexOf(_activities, activity);
+        if (index != -1) 
+        {
+            _activities.splice(index, 1);
+            activity.removedFromEmitter(this);
+        }
+    }
+    
+    /**
 		 * Detects if the emitter is using a particular activity or not.
 		 * 
 		 * @param activity The activity to look for.
@@ -499,12 +518,12 @@ package org.flintparticles.common.emitters
 		 * @return true if the activity is being used by the emitter, false 
 		 * otherwise.
 		 */
-		public function hasActivity( activity:Activity ):Boolean
-		{
-			return _activities.indexOf( activity ) != -1;
-		}
-		
-		/**
+    public function hasActivity(activity : Activity) : Bool
+    {
+        return Lambda.indexOf(_activities, activity) != -1;
+    }
+    
+    /**
 		 * Detects if the emitter is using an activity of a particular class.
 		 * 
 		 * @param activityClass The type of activity to look for.
@@ -512,45 +531,45 @@ package org.flintparticles.common.emitters
 		 * @return true if the emitter is using an instance of the class as an
 		 * activity, false otherwise.
 		 */
-		public function hasActivityOfType( activityClass:Class ):Boolean
-		{
-			var len:uint = _activities.length;
-			for( var i:uint = 0; i < len; ++i )
-			{
-				if( _activities[i] is activityClass )
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		/**
+    public function hasActivityOfType(activityClass : Class<Dynamic>) : Bool
+    {
+        var len : Int = _activities.length;
+        for (i in 0...len){
+            if (Std.is(_activities[i], activityClass)) 
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
 		 * The Counter for the Emitter. The counter defines when and
 		 * with what frequency the emitter emits particles.
-		 */		
-		public function get counter():Counter
-		{
-			return _counter;
-		}
-		public function set counter( value:Counter ):void
-		{
-			_counter = value;
-			if( running )
-			{
-				_counter.startEmitter( this );
-			}
-		}
-		
-		/**
+		 */
+    private function get_Counter() : Counter
+    {
+        return _counter;
+    }
+    private function set_Counter(value : Counter) : Counter
+    {
+        _counter = value;
+        if (running) 
+        {
+            _counter.startEmitter(this);
+        }
+        return value;
+    }
+    
+    /**
 		 * Used by counters to tell the emitter to dispatch a counter complete event.
 		 */
-		public function dispatchCounterComplete():void
-		{
-			_dispatchCounterComplete = true;
-		}
-		
-		/**
+    public function dispatchCounterComplete() : Void
+    {
+        _dispatchCounterComplete = true;
+    }
+    
+    /**
 		 * Indicates whether the emitter should manage its own internal update
 		 * tick. The internal update tick is tied to the frame rate and updates
 		 * the particle system every frame.
@@ -558,31 +577,32 @@ package org.flintparticles.common.emitters
 		 * <p>If users choose not to use the internal tick, they have to call
 		 * the emitter's update method with the appropriate time parameter every
 		 * time they want the emitter to update the particle system.</p>
-		 */		
-		public function get useInternalTick():Boolean
-		{
-			return _useInternalTick;
-		}
-		public function set useInternalTick( value:Boolean ):void
-		{
-			if( _useInternalTick != value )
-			{
-				_useInternalTick = value;
-				if( _started )
-				{
-					if( _useInternalTick )
-					{
-						FrameUpdater.instance.addEventListener( UpdateEvent.UPDATE, updateEventListener, false, 0, true );
-					}
-					else
-					{
-						FrameUpdater.instance.removeEventListener( UpdateEvent.UPDATE, updateEventListener );
-					}
-				}
-			}
-		}
-		
-		/**
+		 */
+    private function get_UseInternalTick() : Bool
+    {
+        return _useInternalTick;
+    }
+    private function set_UseInternalTick(value : Bool) : Bool
+    {
+        if (_useInternalTick != value) 
+        {
+            _useInternalTick = value;
+            if (_started) 
+            {
+                if (_useInternalTick) 
+                {
+                    FrameUpdater.instance.addEventListener(UpdateEvent.UPDATE, updateEventListener, false, 0, true);
+                }
+                else 
+                {
+                    FrameUpdater.instance.removeEventListener(UpdateEvent.UPDATE, updateEventListener);
+                }
+            }
+        }
+        return value;
+    }
+    
+    /**
 		 * Indicates a fixed time (in seconds) to use for every frame. Setting 
 		 * this property causes the emitter to bypass its frame timing 
 		 * functionality and use the given time for every frame. This enables
@@ -594,86 +614,88 @@ package org.flintparticles.common.emitters
 		 * <p>This feature only works if useInternalTick is true (the default).</p>
 		 * 
 		 * @see #useInternalTick
-		 */		
-		public function get fixedFrameTime():Number
-		{
-			return _fixedFrameTime;
-		}
-		public function set fixedFrameTime( value:Number ):void
-		{
-			_fixedFrameTime = value;
-		}
-		
-		/**
+		 */
+    private function get_FixedFrameTime() : Float
+    {
+        return _fixedFrameTime;
+    }
+    private function set_FixedFrameTime(value : Float) : Float
+    {
+        _fixedFrameTime = value;
+        return value;
+    }
+    
+    /**
 		 * Indicates if the emitter is currently running.
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-		
-		/**
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
+    
+    /**
 		 * This is the particle factory used by the emitter to create and dispose 
 		 * of particles. The 2D and 3D libraries each have a default particle
 		 * factory that is used by the Emitter2D and Emitter3D classes. Any custom 
 		 * particle factory should implement the ParticleFactory interface.
 		 * @see org.flintparticles.common.particles.ParticleFactory
-		 */		
-		public function get particleFactory():ParticleFactory
-		{
-			return _particleFactory;
-		}
-		public function set particleFactory( value:ParticleFactory ):void
-		{
-			_particleFactory = value;
-		}
-		
-		/**
+		 */
+    private function get_ParticleFactory() : ParticleFactory
+    {
+        return _particleFactory;
+    }
+    private function set_ParticleFactory(value : ParticleFactory) : ParticleFactory
+    {
+        _particleFactory = value;
+        return value;
+    }
+    
+    /**
 		 * The collection of all particles being managed by this emitter.
 		 */
-		public function get particles():Vector.<Particle>
-		{
-			return Vector.<Particle>( _particles );
-		}
-		public function set particles( value:Vector.<Particle> ):void
-		{
-			killAllParticles();
-			addParticles( value, false );
-		}
-
-		/**
+    private function get_Particles() : Array<Particle>
+    {
+        return _particles;
+    }
+    private function set_Particles(value : Array<Particle>) : Array<Particle>
+    {
+        killAllParticles();
+        addParticles(value, false);
+        return value;
+    }
+    
+    /**
 		 * The actual array of particles used internally by this emitter. You may want to use this to manipulate
 		 * the particles array directly or to provide optimized access to the array inside a custom
 		 * behaviour. If you don't need the actual array, using the particles property is slightly safer.
 		 * 
 		 * @see #particles
 		 */
-		public function get particlesArray():Array
-		{
-			return _particles;
-		}
-
-		/*
+    private function get_ParticlesArray() : Array<Dynamic>
+    {
+        return _particles;
+    }
+    
+    /*
 		 * Used internally to create a particle.
 		 */
-		protected function createParticle():Particle
-		{
-			var particle:Particle = _particleFactory.createParticle();
-			var len:int = _initializers.length;
-			initParticle( particle );
-			for ( var i:int = 0; i < len; ++i )
-			{
-				Initializer( _initializers[i] ).initialize( this, particle );
-			}
-			_particles.push( particle );
-			if( hasEventListener( ParticleEvent.PARTICLE_CREATED ) )
-			{
-				dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_CREATED, particle ) );
-			}
-			return particle;
-		}
-		
-		/**
+    private function createParticle() : Particle
+    {
+        var particle : Particle = _particleFactory.createParticle();
+        var len : Int = _initializers.length;
+        initParticle(particle);
+        for (i in 0...len){
+            cast((_initializers[i]), Initializer).initialize(this, particle);
+        }
+        _particles.push(particle);
+        if (hasEventListener(ParticleEvent.PARTICLE_CREATED)) 
+        {
+            dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_CREATED, particle));
+        }
+        return particle;
+    }
+    
+    /**
 		 * Emitters do their own particle initialization here - usually involves 
 		 * positioning and rotating the particle to match the position and rotation 
 		 * of the emitter. This method is called before any initializers that are
@@ -682,11 +704,12 @@ package org.flintparticles.common.emitters
 		 * 
 		 * <p>The implementation of this method in this base class does nothing.</p>
 		 */
-		protected function initParticle( particle:Particle ):void
-		{
-		}
-		
-		/**
+    private function initParticle(particle : Particle) : Void
+    {
+        
+    }
+    
+    /**
 		 * Add a particle to the emitter. This enables users to create a
 		 * particle externally to the emitter and then pass the particle to this
 		 * emitter for management. Or remove a particle from one emitter and add
@@ -698,24 +721,23 @@ package org.flintparticles.common.emitters
 		 * 
 		 * @see #removeParticle()
 		 */
-		public function addParticle( particle:Particle, applyInitializers:Boolean = false ):void
-		{
-			if( applyInitializers )
-			{
-				var len:int = _initializers.length;
-				for ( var i:int = 0; i < len; ++i )
-				{
-					_initializers[i].initialize( this, particle );
-				}
-			}
-			_particles.push( particle );
-			if ( hasEventListener( ParticleEvent.PARTICLE_ADDED ) )
-			{
-				dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_ADDED, particle ) );
-			}
-		}
-		
-		/**
+    public function addParticle(particle : Particle, applyInitializers : Bool = false) : Void
+    {
+        if (applyInitializers) 
+        {
+            var len : Int = _initializers.length;
+            for (i in 0...len){
+                _initializers[i].initialize(this, particle);
+            }
+        }
+        _particles.push(particle);
+        if (hasEventListener(ParticleEvent.PARTICLE_ADDED)) 
+        {
+            dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_ADDED, particle));
+        }
+    }
+    
+    /**
 		 * Adds existing particles to the emitter. This enables users to create 
 		 * particles externally to the emitter and then pass the particles to the
 		 * emitter for management. Or remove particles from one emitter and add
@@ -727,161 +749,152 @@ package org.flintparticles.common.emitters
 		 * 
 		 * @see #removeParticles()
 		 */
-		public function addParticles( particles:Vector.<Particle>, applyInitializers:Boolean = false ):void
-		{
-			var len:int = particles.length;
-			var i:int;
-			if( applyInitializers )
-			{
-				var len2:int = _initializers.length;
-				for ( var j:int = 0; j < len2; ++j )
-				{
-					for ( i = 0; i < len; ++i )
-					{
-						_initializers[j].initialize( this, particles[i] );
-					}
-				}
-			}
-			if ( hasEventListener( ParticleEvent.PARTICLE_ADDED ) )
-			{
-				for( i = 0; i < len; ++i )
-				{
-					_particles.push( particles[i] );
-					dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_ADDED, particles[i] ) );
-				}
-			}
-			else
-			{
-				for ( i = 0; i < len; ++i )
-				{
-					_particles.push( particles[i] );
-				}
-			}
-		}
-		
-		/**
+    public function addParticles(particles : Array<Particle>, applyInitializers : Bool = false) : Void
+    {
+        var len : Int = particles.length;
+        var i : Int;
+        if (applyInitializers) 
+        {
+            var len2 : Int = _initializers.length;
+            for (j in 0...len2){
+                for (i in 0...len){
+                    _initializers[j].initialize(this, particles[i]);
+                }
+            }
+        }
+        if (hasEventListener(ParticleEvent.PARTICLE_ADDED)) 
+        {
+            for (i in 0...len){
+                _particles.push(particles[i]);
+                dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_ADDED, particles[i]));
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                _particles.push(particles[i]);
+            }
+        }
+    }
+    
+    /**
 		 * Remove a particle from this emitter.
 		 * 
 		 * @param particle The particle to remove.
 		 * @return true if the particle was removed, false if it wasn't on this emitter in the first place.
 		 */
-		public function removeParticle( particle:Particle ):Boolean
-		{
-			var index:int = _particles.indexOf( particle );
-			if( index != -1 )
-			{
-				if( _updating )
-				{
-					addEventListener( EmitterEvent.EMITTER_UPDATED, function( e:EmitterEvent ) : void
-					{
-						removeEventListener( EmitterEvent.EMITTER_UPDATED, arguments.callee );
-						removeParticle( particle );
-					});
-				}
-				else
-				{
-					_particles.splice( index, 1 );
-					dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_REMOVED, particle ) );
-				}
-				return true;
-			}
-			return false;
-		}
-		
-		/**
+    public function removeParticle(particle : Particle) : Bool
+    {
+        var index : Int = Lambda.indexOf(_particles, particle);
+        if (index != -1) 
+        {
+            if (_updating) 
+            {
+                addEventListener(EmitterEvent.EMITTER_UPDATED, function(e : EmitterEvent) : Void
+                        {
+                            removeEventListener(EmitterEvent.EMITTER_UPDATED, arguments.callee);
+                            removeParticle(particle);
+                        });
+            }
+            else 
+            {
+                _particles.splice(index, 1);
+                dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_REMOVED, particle));
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    /**
 		 * Remove a collection of particles from this emitter.
 		 * 
 		 * @param particles The particles to remove.
 		 */
-		public function removeParticles( particles:Vector.<Particle> ):void
-		{
-			if( _updating )
-			{
-				addEventListener( EmitterEvent.EMITTER_UPDATED, function( e:EmitterEvent ) : void
-				{
-					removeEventListener( EmitterEvent.EMITTER_UPDATED, arguments.callee );
-					removeParticles( particles );
-				});
-			}
-			else
-			{
-				for( var i:int = 0, len:int = particles.length; i < len; ++i )
-				{
-					var index:int = _particles.indexOf( particles[i] );
-					if( index != -1 )
-					{
-						_particles.splice( index, 1 );
-						dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_REMOVED, particles[i] ) );
-					}
-				}
-			}
-		}
-
-		/**
+    public function removeParticles(particles : Array<Particle>) : Void
+    {
+        if (_updating) 
+        {
+            addEventListener(EmitterEvent.EMITTER_UPDATED, function(e : EmitterEvent) : Void
+                    {
+                        removeEventListener(EmitterEvent.EMITTER_UPDATED, arguments.callee);
+                        removeParticles(particles);
+                    });
+        }
+        else 
+        {
+            for (i in 0...len){
+                var index : Int = Lambda.indexOf(_particles, particles[i]);
+                if (index != -1) 
+                {
+                    _particles.splice(index, 1);
+                    dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_REMOVED, particles[i]));
+                }
+            }
+        }
+    }
+    
+    /**
 		 * Kill all the particles on this emitter.
 		 */
-		public function killAllParticles():void
-		{
-			var len:int = _particles.length;
-			var i:int;
-			if ( hasEventListener( ParticleEvent.PARTICLE_DEAD ) )
-			{
-				for ( i = 0; i < len; ++i )
-				{
-					dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_DEAD, _particles[i] ) );
-					_particleFactory.disposeParticle( _particles[i] );
-				}
-			}
-			else
-			{
-				for ( i = 0; i < len; ++i )
-				{
-					_particleFactory.disposeParticle( _particles[i] );
-				}
-			}
-			_particles.length = 0;
-		}
-		
-		/**
+    public function killAllParticles() : Void
+    {
+        var len : Int = _particles.length;
+        var i : Int;
+        if (hasEventListener(ParticleEvent.PARTICLE_DEAD)) 
+        {
+            for (i in 0...len){
+                dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_DEAD, _particles[i]));
+                _particleFactory.disposeParticle(_particles[i]);
+            }
+        }
+        else 
+        {
+            for (i in 0...len){
+                _particleFactory.disposeParticle(_particles[i]);
+            }
+        }
+        _particles.length = 0;
+    }
+    
+    /**
 		 * Starts the emitter. Until start is called, the emitter will not emit or 
 		 * update any particles.
 		 */
-		public function start():void
-		{
-			if( _useInternalTick )
-			{
-				FrameUpdater.instance.addEventListener( UpdateEvent.UPDATE, updateEventListener, false, 0, true );
-			}
-			_started = true;
-			_running = true;
-			var len:int = _activities.length;
-			for ( var i:int = 0; i < len; ++i )
-			{
-				Activity( _activities[i] ).initialize( this );
-			}
-			len = _counter.startEmitter( this );
-			for ( i = 0; i < len; ++i )
-			{
-				createParticle();
-			}
-		}
-		
-		/**
+    public function start() : Void
+    {
+        if (_useInternalTick) 
+        {
+            FrameUpdater.instance.addEventListener(UpdateEvent.UPDATE, updateEventListener, false, 0, true);
+        }
+        _started = true;
+        _running = true;
+        var len : Int = _activities.length;
+        for (i in 0...len){
+            cast((_activities[i]), Activity).initialize(this);
+        }
+        len = _counter.startEmitter(this);
+        for (i in 0...len){
+            createParticle();
+        }
+    }
+    
+    /**
 		 * Update event listener used to fire the update function when using teh internal tick.
 		 */
-		private function updateEventListener( ev:UpdateEvent ):void
-		{
-			if( _fixedFrameTime )
-			{
-				update( _fixedFrameTime );
-			}
-			else
-			{
-				update( ev.time );
-			}
-		}
-		
-		/**
+    private function updateEventListener(ev : UpdateEvent) : Void
+    {
+        if (_fixedFrameTime != 0) 
+        {
+            update(_fixedFrameTime);
+        }
+        else 
+        {
+            update(ev.time);
+        }
+    }
+    
+    /**
 		 * Used to update the emitter. If using the internal tick, this method
 		 * will be called every frame without any action by the user. If not
 		 * using the internal tick, the user should call this method on a regular
@@ -897,156 +910,153 @@ package org.flintparticles.common.emitters
 		 * 
 		 * @see sortParticles();
 		 */
-		public function update( time:Number ):void
-		{
-			if( !_running )
-			{
-				return;
-			}
-			if( time > _maximumFrameTime )
-			{
-				time = _maximumFrameTime;
-			}
-			var i:int;
-			var particle:Particle;
-			_updating = true;
-			var len:int = _counter.updateEmitter( this, time );
-			for( i = 0; i < len; ++i )
-			{
-				createParticle();
-			}
-			sortParticles();
-			len = _activities.length;
-			for ( i = 0; i < len; ++i )
-			{
-				Activity( _activities[i] ).update( this, time );
-			}
-			if ( _particles.length > 0 )
-			{
-				
-				// update particle state
-				len = _actions.length;
-				var action:Action;
-				var len2:int = _particles.length;
-				var j:int;
-				if( _processLastFirst )
-				{
-					for( j = 0; j < len; ++j )
-					{
-						action = _actions[j];
-						for ( i = len2 - 1; i >= 0; --i )
-						{
-							particle = _particles[i];
-							action.update( this, particle, time );
-						}
-					}
-				}
-				else
-				{
-					for( j = 0; j < len; ++j )
-					{
-						action = _actions[j];
-						for ( i = 0; i < len2; ++i )
-						{
-							particle = _particles[i];
-							action.update( this, particle, time );
-						}
-					}
-				}
-				_processLastFirst = !_processLastFirst;
-				
-				// remove dead particles
-				if( hasEventListener( ParticleEvent.PARTICLE_DEAD ) )
-				{
-					for ( i = len2; i--; )
-					{
-						particle = _particles[i];
-						if ( particle.isDead )
-						{
-							_particles.splice( i, 1 );
-							dispatchEvent( new ParticleEvent( ParticleEvent.PARTICLE_DEAD, particle ) );
-							if( particle.isDead )
-							{
-								_particleFactory.disposeParticle( particle );
-							}
-						}
-					}
-				}
-				else 
-				{
-					for ( i = len2; i--; )
-					{
-						particle = _particles[i];
-						if ( particle.isDead )
-						{
-							_particles.splice( i, 1 );
-							_particleFactory.disposeParticle( particle );
-						}
-					}
-				}
-			}
-			else 
-			{
-				if( hasEventListener( EmitterEvent.EMITTER_EMPTY ) )
-				{
-					dispatchEvent( new EmitterEvent( EmitterEvent.EMITTER_EMPTY ) );
-				}
-			}
-			_updating = false;
-			if( hasEventListener( EmitterEvent.EMITTER_UPDATED ) )
-			{
-				dispatchEvent( new EmitterEvent( EmitterEvent.EMITTER_UPDATED ) );
-			}
-			if( _dispatchCounterComplete )
-			{
-				_dispatchCounterComplete = false;
-				if( hasEventListener( EmitterEvent.COUNTER_COMPLETE ) )
-				{
-					dispatchEvent( new EmitterEvent( EmitterEvent.COUNTER_COMPLETE ) );
-				}
-			}
-		}
-		
-		/**
+    public function update(time : Float) : Void
+    {
+        if (!_running) 
+        {
+            return;
+        }
+        if (time > _maximumFrameTime) 
+        {
+            time = _maximumFrameTime;
+        }
+        var i : Int;
+        var particle : Particle;
+        _updating = true;
+        var len : Int = _counter.updateEmitter(this, time);
+        for (i in 0...len){
+            createParticle();
+        }
+        sortParticles();
+        len = _activities.length;
+        for (i in 0...len){
+            cast((_activities[i]), Activity).update(this, time);
+        }
+        if (_particles.length > 0) 
+        {
+            
+            // update particle state
+            len = _actions.length;
+            var action : Action;
+            var len2 : Int = _particles.length;
+            var j : Int;
+            if (_processLastFirst) 
+            {
+                for (j in 0...len){
+                    action = _actions[j];
+                    i = len2 - 1;
+                    while (i >= 0){
+                        particle = _particles[i];
+                        action.update(this, particle, time);
+                        --i;
+                    }
+                }
+            }
+            else 
+            {
+                for (j in 0...len){
+                    action = _actions[j];
+                    for (i in 0...len2){
+                        particle = _particles[i];
+                        action.update(this, particle, time);
+                    }
+                }
+            }
+            _processLastFirst = !_processLastFirst;
+            
+            // remove dead particles
+            if (hasEventListener(ParticleEvent.PARTICLE_DEAD)) 
+            {
+                i = len2;
+                while (i--){
+                    particle = _particles[i];
+                    if (particle.isDead) 
+                    {
+                        _particles.splice(i, 1);
+                        dispatchEvent(new ParticleEvent(ParticleEvent.PARTICLE_DEAD, particle));
+                        if (particle.isDead) 
+                        {
+                            _particleFactory.disposeParticle(particle);
+                        }
+                    }
+                }
+            }
+            else 
+            {
+                i = len2;
+                while (i--){
+                    particle = _particles[i];
+                    if (particle.isDead) 
+                    {
+                        _particles.splice(i, 1);
+                        _particleFactory.disposeParticle(particle);
+                    }
+                }
+            }
+        }
+        else 
+        {
+            if (hasEventListener(EmitterEvent.EMITTER_EMPTY)) 
+            {
+                dispatchEvent(new EmitterEvent(EmitterEvent.EMITTER_EMPTY));
+            }
+        }
+        _updating = false;
+        if (hasEventListener(EmitterEvent.EMITTER_UPDATED)) 
+        {
+            dispatchEvent(new EmitterEvent(EmitterEvent.EMITTER_UPDATED));
+        }
+        if (_dispatchCounterComplete) 
+        {
+            _dispatchCounterComplete = false;
+            if (hasEventListener(EmitterEvent.COUNTER_COMPLETE)) 
+            {
+                dispatchEvent(new EmitterEvent(EmitterEvent.COUNTER_COMPLETE));
+            }
+        }
+    }
+    
+    /**
 		 * Used to sort the particles as required. In this base class this method 
 		 * does nothing.
 		 */
-		protected function sortParticles():void
-		{
-		}
-		
-		/**
+    private function sortParticles() : Void
+    {
+        
+    }
+    
+    /**
 		 * Pauses the emitter.
 		 */
-		public function pause():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function pause() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter after a pause.
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * Stops the emitter, killing all current particles and returning them to the 
 		 * particle factory for reuse.
 		 */
-		public function stop():void
-		{
-			if( _useInternalTick )
-			{
-				FrameUpdater.instance.removeEventListener( UpdateEvent.UPDATE, updateEventListener );
-			}
-			_started = false;
-			_running = false;
-			killAllParticles();
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        if (_useInternalTick) 
+        {
+            FrameUpdater.instance.removeEventListener(UpdateEvent.UPDATE, updateEventListener);
+        }
+        _started = false;
+        _running = false;
+        killAllParticles();
+    }
+    
+    /**
 		 * Makes the emitter skip forwards a period of time with a single update.
 		 * Used when you want the emitter to look like it's been running for a while.
 		 * 
@@ -1056,22 +1066,21 @@ package org.flintparticles.common.emitters
 		 * for the emitter and its particles. A higher frameRate will be more
 		 * accurate but will take longer to calculate.
 		 */
-		public function runAhead( time:Number, frameRate:Number= 10 ):void
-		{
-			var maxTime:Number = _maximumFrameTime;
-			var step:Number = 1 / frameRate;
-			_maximumFrameTime = step;
-			while ( time > 0 )
-			{
-				time -= step;
-				update( step );
-			}
-			_maximumFrameTime = maxTime;
-		}
-		
-		private function prioritySort( b1:Behaviour, b2:Behaviour ):Number
-		{
-			return b1.priority - b2.priority;
-		}
-	}
+    public function runAhead(time : Float, frameRate : Float = 10) : Void
+    {
+        var maxTime : Float = _maximumFrameTime;
+        var step : Float = 1 / frameRate;
+        _maximumFrameTime = step;
+        while (time > 0)
+        {
+            time -= step;
+            update(step);
+        }
+        _maximumFrameTime = maxTime;
+    }
+    
+    private function prioritySort(b1 : Behaviour, b2 : Behaviour) : Float
+    {
+        return b1.priority - b2.priority;
+    }
 }

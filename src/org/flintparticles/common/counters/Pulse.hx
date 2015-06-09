@@ -28,22 +28,28 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.counters
-{
-	import org.flintparticles.common.emitters.Emitter;		
+package org.flintparticles.common.counters;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Pulse counter causes the emitter to emit groups of particles at a regular
 	 * interval.
 	 */
-	public class Pulse implements Counter
-	{
-		private var _timeToNext:Number;
-		private var _period:Number;
-		private var _quantity:Number;
-		private var _running:Boolean;
-		
-		/**
+class Pulse implements Counter
+{
+    public var period(get, set) : Float;
+    public var quantity(get, set) : Int;
+    public var complete(get, never) : Bool;
+    public var running(get, never) : Bool;
+
+    private var _timeToNext : Float;
+    private var _period : Float;
+    private var _quantity : Float;
+    private var _running : Bool;
+    
+    /**
 		 * The constructor creates a Pulse counter for use by an emitter. To
 		 * add a Pulse counter to an emitter use the emitter's counter property.
 		 * 
@@ -52,54 +58,56 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.emitter.Emitter.counter
 		 */
-		public function Pulse( period:Number = 1, quantity:uint = 0 )
-		{
-			_running = false;
-			_quantity = quantity;
-			_period = period;
-		}
-		
-		/**
+    public function new(period : Float = 1, quantity : Int = 0)
+    {
+        _running = false;
+        _quantity = quantity;
+        _period = period;
+    }
+    
+    /**
 		 * Stops the emitter from emitting particles
 		 */
-		public function stop():void
-		{
-			_running = false;
-		}
-		
-		/**
+    public function stop() : Void
+    {
+        _running = false;
+    }
+    
+    /**
 		 * Resumes the emitter after a stop
 		 */
-		public function resume():void
-		{
-			_running = true;
-		}
-		
-		/**
+    public function resume() : Void
+    {
+        _running = true;
+    }
+    
+    /**
 		 * The time, in seconds, between each pulse.
 		 */
-		public function get period():Number
-		{
-			return _period;
-		}
-		public function set period( value:Number ):void
-		{
-			_period = value;
-		}
-		
-		/**
+    private function get_Period() : Float
+    {
+        return _period;
+    }
+    private function set_Period(value : Float) : Float
+    {
+        _period = value;
+        return value;
+    }
+    
+    /**
 		 * The number of particles to emit at each pulse.
 		 */
-		public function get quantity():uint
-		{
-			return _quantity;
-		}
-		public function set quantity( value:uint ):void
-		{
-			_quantity = value;
-		}
-		
-		/**
+    private function get_Quantity() : Int
+    {
+        return _quantity;
+    }
+    private function set_Quantity(value : Int) : Int
+    {
+        _quantity = value;
+        return value;
+    }
+    
+    /**
 		 * Initilizes the counter. Returns 0 to indicate that the emitter should 
 		 * emit no particles when it starts.
 		 * 
@@ -111,14 +119,14 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#startEmitter()
 		 */
-		public function startEmitter( emitter:Emitter ):uint
-		{
-			_running = true;
-			_timeToNext = _period;
-			return _quantity;
-		}
-		
-		/**
+    public function startEmitter(emitter : Emitter) : Int
+    {
+        _running = true;
+        _timeToNext = _period;
+        return _quantity;
+    }
+    
+    /**
 		 * Uses the time, period and quantity to calculate how many
 		 * particles the emitter should emit now.
 		 * 
@@ -131,37 +139,36 @@ package org.flintparticles.common.counters
 		 * 
 		 * @see org.flintparticles.common.counters.Counter#updateEmitter()
 		 */
-		public function updateEmitter( emitter:Emitter, time:Number ):uint
-		{
-			if( !_running )
-			{
-				return 0;
-			}
-			var count:uint = 0;
-			_timeToNext -= time;
-			while( _timeToNext <= 0 )
-			{
-				count += _quantity;
-				_timeToNext += _period;
-			}
-			return count;
-		}
-
-		/**
+    public function updateEmitter(emitter : Emitter, time : Float) : Int
+    {
+        if (!_running) 
+        {
+            return 0;
+        }
+        var count : Int = 0;
+        _timeToNext -= time;
+        while (_timeToNext <= 0)
+        {
+            count += _quantity;
+            _timeToNext += _period;
+        }
+        return count;
+    }
+    
+    /**
 		 * Indicates if the counter has emitted all its particles. For this counter
 		 * this will always be false.
 		 */
-		public function get complete():Boolean
-		{
-			return false;
-		}
-		
-		/**
+    private function get_Complete() : Bool
+    {
+        return false;
+    }
+    
+    /**
 		 * Indicates if the counter is currently emitting particles
 		 */
-		public function get running():Boolean
-		{
-			return _running;
-		}
-	}
+    private function get_Running() : Bool
+    {
+        return _running;
+    }
 }

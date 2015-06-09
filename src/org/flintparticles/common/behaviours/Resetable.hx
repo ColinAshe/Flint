@@ -28,17 +28,19 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.behaviours 
-{
-	/**
+package org.flintparticles.common.behaviours;
+
+
+/**
 	 * This interface is for behaviours whose state changes over time. It enables
 	 * them to be reset to their original state.
 	 */
-	public interface Resetable 
-	{
-		/**
+interface Resetable
+{
+
+    /**
 		 * Resets the behaviours state to its original condition.
 		 */
-		function reset():void;
-	}
+    function reset() : Void;
 }
+

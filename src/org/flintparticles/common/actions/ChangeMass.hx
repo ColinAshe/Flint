@@ -28,12 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The ChangeMass action adjusts the mass of the particle as it ages.
 	 * It uses the particle's energy level to decide what mass the particle
 	 * should be.
@@ -47,12 +48,15 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.actions.Age
 	 */
 
-	public class ChangeMass extends ActionBase
-	{
-		private var _diffMass:Number;
-		private var _endMass:Number;
-		
-		/**
+class ChangeMass extends ActionBase
+{
+    public var startMass(get, set) : Float;
+    public var endMass(get, set) : Float;
+
+    private var _diffMass : Float;
+    private var _endMass : Float;
+    
+    /**
 		 * The constructor creates a ChangeMass action for use by an emitter. 
 		 * To add a Mass to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -64,40 +68,43 @@ package org.flintparticles.common.actions
 		 * @param endMass The mass for the particle when its energy
 		 * is 0 - usually at the end of its lifetime.
 		 */
-		public function ChangeMass( startMass:Number = 1, endMass:Number = 1 )
-		{
-			_diffMass = startMass - endMass;
-			_endMass = endMass;
-		}
-		
-		/**
+    public function new(startMass : Float = 1, endMass : Float = 1)
+    {
+        super();
+        _diffMass = startMass - endMass;
+        _endMass = endMass;
+    }
+    
+    /**
 		 * The mass for the particle when its energy
 		 * is 1 - usually at the start of its lifetime.
 		 */
-		public function get startMass():Number
-		{
-			return _endMass + _diffMass;
-		}
-		public function set startMass( value:Number ):void
-		{
-			_diffMass = value - _endMass;
-		}
-		
-		/**
+    private function get_StartMass() : Float
+    {
+        return _endMass + _diffMass;
+    }
+    private function set_StartMass(value : Float) : Float
+    {
+        _diffMass = value - _endMass;
+        return value;
+    }
+    
+    /**
 		 * The mass for the particle when its energy
 		 * is 0 - usually at the end of its lifetime.
 		 */
-		public function get endMass():Number
-		{
-			return _endMass;
-		}
-		public function set endMass( value:Number ):void
-		{
-			_diffMass = _endMass + _diffMass - value;
-			_endMass = value;
-		}
-		
-		/**
+    private function get_EndMass() : Float
+    {
+        return _endMass;
+    }
+    private function set_EndMass(value : Float) : Float
+    {
+        _diffMass = _endMass + _diffMass - value;
+        _endMass = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the mass of the particle based on the values defined
 		 * and the particle's energy level.
 		 * 
@@ -110,9 +117,9 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			particle.mass = _endMass + _diffMass * particle.energy;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        particle.mass = _endMass + _diffMass * particle.energy;
+    }
 }
+

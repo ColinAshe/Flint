@@ -28,12 +28,13 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The ChangeCollisionRadius action adjusts the collision radius of the particle as it ages.
 	 * It uses the particle's energy level to decide what radius the particle
 	 * should have.
@@ -47,12 +48,15 @@ package org.flintparticles.common.actions
 	 * @see org.flintparticles.common.actions.Age
 	 */
 
-	public class ChangeCollisionRadius extends ActionBase
-	{
-		private var _diffRadius:Number;
-		private var _endRadius:Number;
-		
-		/**
+class ChangeCollisionRadius extends ActionBase
+{
+    public var startRadius(get, set) : Float;
+    public var endRadius(get, set) : Float;
+
+    private var _diffRadius : Float;
+    private var _endRadius : Float;
+    
+    /**
 		 * The constructor creates a ChangeCollisionRadius action for use by an emitter. 
 		 * To add a Radius to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -64,40 +68,43 @@ package org.flintparticles.common.actions
 		 * @param endRadius The collision radius for the particle when its energy
 		 * is 0 - usually at the end of its lifetime.
 		 */
-		public function ChangeCollisionRadius( startRadius:Number = 1, endRadius:Number = 1 )
-		{
-			_diffRadius = startRadius - endRadius;
-			_endRadius = endRadius;
-		}
-		
-		/**
+    public function new(startRadius : Float = 1, endRadius : Float = 1)
+    {
+        super();
+        _diffRadius = startRadius - endRadius;
+        _endRadius = endRadius;
+    }
+    
+    /**
 		 * The collision radius for the particle when its energy
 		 * is 1 - usually at the start of its lifetime.
 		 */
-		public function get startRadius():Number
-		{
-			return _endRadius + _diffRadius;
-		}
-		public function set startRadius( value:Number ):void
-		{
-			_diffRadius = value - _endRadius;
-		}
-		
-		/**
+    private function get_StartRadius() : Float
+    {
+        return _endRadius + _diffRadius;
+    }
+    private function set_StartRadius(value : Float) : Float
+    {
+        _diffRadius = value - _endRadius;
+        return value;
+    }
+    
+    /**
 		 * The collision radius for the particle when its energy
 		 * is 0 - usually at the end of its lifetime.
 		 */
-		public function get endRadius():Number
-		{
-			return _endRadius;
-		}
-		public function set endRadius( value:Number ):void
-		{
-			_diffRadius = _endRadius + _diffRadius - value;
-			_endRadius = value;
-		}
-		
-		/**
+    private function get_EndRadius() : Float
+    {
+        return _endRadius;
+    }
+    private function set_EndRadius(value : Float) : Float
+    {
+        _diffRadius = _endRadius + _diffRadius - value;
+        _endRadius = value;
+        return value;
+    }
+    
+    /**
 		 * Sets the collision radius of the particle based on the values defined
 		 * and the particle's energy level.
 		 * 
@@ -110,9 +117,9 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			particle.collisionRadius = _endRadius + _diffRadius * particle.energy;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        particle.collisionRadius = _endRadius + _diffRadius * particle.energy;
+    }
 }
+

@@ -28,21 +28,25 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.activities
-{
-	import org.flintparticles.common.activities.ActivityBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.twoD.emitters.Emitter2D;	
+package org.flintparticles.twod.activities;
 
-	/**
+
+import org.flintparticles.common.activities.ActivityBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.twod.emitters.Emitter2D;
+
+/**
 	 * The MoveEmitter activity moves the emitter at a constant velocity.
 	 */
-	public class MoveEmitter extends ActivityBase
-	{
-		private var _velX:Number;
-		private var _velY:Number;
-		
-		/**
+class MoveEmitter extends ActivityBase
+{
+    public var x(get, set) : Float;
+    public var y(get, set) : Float;
+
+    private var _velX : Float;
+    private var _velY : Float;
+    
+    /**
 		 * The constructor creates a MoveEmitter activity for use by 
 		 * an emitter. To add a MoveEmitter to an emitter, use the
 		 * emitter's addActvity method.
@@ -54,46 +58,48 @@ package org.flintparticles.twoD.activities
 		 * @param y The y coordinate of the velocity to move the emitter, 
 		 * in pixels per second.
 		 */
-		public function MoveEmitter( x:Number = 0, y:Number = 0 )
-		{
-			this.x = x;
-			this.y = y;
-		}
-		
-		/**
+    public function new(x : Float = 0, y : Float = 0)
+    {
+        super();
+        this.x = x;
+        this.y = y;
+    }
+    
+    /**
 		 * The x coordinate of the velocity to move the emitter, 
 		 * in pixels per second
 		 */
-		public function get x():Number
-		{
-			return _velX;
-		}
-		public function set x( value:Number ):void
-		{
-			_velX = value;
-		}
-		
-		/**
+    private function get_X() : Float
+    {
+        return _velX;
+    }
+    private function set_X(value : Float) : Float
+    {
+        _velX = value;
+        return value;
+    }
+    
+    /**
 		 * The y coordinate of the velocity to move the emitter, 
 		 * in pixels per second
 		 */
-		public function get y():Number
-		{
-			return _velY;
-		}
-		public function set y( value:Number ):void
-		{
-			_velY = value;
-		}
-		
-		/**
+    private function get_Y() : Float
+    {
+        return _velY;
+    }
+    private function set_Y(value : Float) : Float
+    {
+        _velY = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter : Emitter, time : Number ) : void
-		{
-			var e:Emitter2D = Emitter2D( emitter );
-			e.x += _velX * time;
-			e.y += _velY * time;
-		}
-	}
+    override public function update(emitter : Emitter, time : Float) : Void
+    {
+        var e : Emitter2D = cast((emitter), Emitter2D);
+        e.x += _velX * time;
+        e.y += _velY * time;
+    }
 }

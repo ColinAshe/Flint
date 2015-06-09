@@ -28,26 +28,30 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.actions 
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;	
+package org.flintparticles.common.actions;
 
-	/**
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The TargetColor action adjusts the color of the particle towards a 
 	 * target color. On every update the color of the particle moves a 
 	 * little closer to the target color. The rate at which particles approach
 	 * the target is controlled by the rate property.
 	 */
-	public class TargetColor extends ActionBase
-	{
-		private var _red:uint;
-		private var _green:uint;
-		private var _blue:uint;
-		private var _alpha:uint;
-		private var _rate:Number;
-		
-		/**
+class TargetColor extends ActionBase
+{
+    public var targetColor(get, set) : Float;
+    public var rate(get, set) : Float;
+
+    private var _red : Int;
+    private var _green : Int;
+    private var _blue : Int;
+    private var _alpha : Int;
+    private var _rate : Float;
+    
+    /**
 		 * The constructor creates a TargetColor action for use by an emitter. 
 		 * To add a TargetColor to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -59,44 +63,47 @@ package org.flintparticles.common.actions
 		 * @param rate Adjusts how quickly the particle reaches the target color.
 		 * Larger numbers cause it to approach the target color more quickly.
 		 */
-		public function TargetColor( targetColor:uint= 0xFFFFFF, rate:Number = 0.1 )
-		{
-			_red = ( targetColor >>> 16 ) & 255;
-			_green = ( targetColor >>> 8 ) & 255;
-			_blue = ( targetColor ) & 255;
-			_alpha = ( targetColor >>> 24 ) & 255;
-			_rate = rate;
-		}
-		
-		/**
+    public function new(targetColor : Int = 0xFFFFFF, rate : Float = 0.1)
+    {
+        super();
+        _red = (targetColor >>> 16) & 255;
+        _green = (targetColor >>> 8) & 255;
+        _blue = (targetColor) & 255;
+        _alpha = (targetColor >>> 24) & 255;
+        _rate = rate;
+    }
+    
+    /**
 		 * The target color. This is a 32 bit color of the form 0xAARRGGBB.
 		 */
-		public function get targetColor():Number
-		{
-			return ( _alpha << 24 ) | ( _red << 16 ) | ( _green << 8 ) | _blue;
-		}
-		public function set targetColor( value:Number ):void
-		{
-			_red = ( value >>> 16 ) & 255;
-			_green = ( value >>> 8 ) & 255;
-			_blue = ( value ) & 255;
-			_alpha = ( value >>> 24 ) & 255;
-		}
-		
-		/**
+    private function get_TargetColor() : Float
+    {
+        return (_alpha << 24) | (_red << 16) | (_green << 8) | _blue;
+    }
+    private function set_TargetColor(value : Float) : Float
+    {
+        _red = (value >>> 16) & 255;
+        _green = (value >>> 8) & 255;
+        _blue = (value) & 255;
+        _alpha = (value >>> 24) & 255;
+        return value;
+    }
+    
+    /**
 		 * Adjusts how quickly the particle reaches the target color.
 		 * Larger numbers cause it to approach the target color more quickly.
 		 */
-		public function get rate():Number
-		{
-			return _rate;
-		}
-		public function set rate( value:Number ):void
-		{
-			_rate = value;
-		}
-		
-		/**
+    private function get_Rate() : Float
+    {
+        return _rate;
+    }
+    private function set_Rate(value : Float) : Float
+    {
+        _rate = value;
+        return value;
+    }
+    
+    /**
 		 * Adjusts the color of the particle based on its current color, the target 
 		 * color and the time elapsed.
 		 * 
@@ -109,47 +116,47 @@ package org.flintparticles.common.actions
 		 * 
 		 * @see org.flintparticles.common.actions.Action#update()
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			if( ! particle.dictionary[this] )
-			{
-				particle.dictionary[this] = new ColorFloat( particle.color );
-			}
-			var dicObj:ColorFloat = ColorFloat( particle.dictionary[this] );
-			
-			var inv:Number = _rate * time;
-			if( inv > 1 )
-			{
-				inv = 1;
-			}
-			var ratio:Number = 1 - inv;
-			
-			dicObj.red = dicObj.red * ratio + _red * inv;
-			dicObj.green = dicObj.green * ratio + _green * inv;
-			dicObj.blue = dicObj.blue * ratio + _blue * inv;
-			dicObj.alpha = dicObj.alpha * ratio + _alpha * inv;
-			particle.color = dicObj.getColor();
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        if (!particle.dictionary[this]) 
+        {
+            particle.dictionary[this] = new ColorFloat(particle.color);
+        }
+        var dicObj : ColorFloat = cast((particle.dictionary[this]), ColorFloat);
+        
+        var inv : Float = _rate * time;
+        if (inv > 1) 
+        {
+            inv = 1;
+        }
+        var ratio : Float = 1 - inv;
+        
+        dicObj.red = dicObj.red * ratio + _red * inv;
+        dicObj.green = dicObj.green * ratio + _green * inv;
+        dicObj.blue = dicObj.blue * ratio + _blue * inv;
+        dicObj.alpha = dicObj.alpha * ratio + _alpha * inv;
+        particle.color = dicObj.getColor();
+    }
 }
+
 
 class ColorFloat
 {
-	public var red:Number;
-	public var green:Number;
-	public var blue:Number;
-	public var alpha:Number;
-	
-	public function ColorFloat( color:uint )
-	{
-		red = ( color >>> 16 ) & 255;
-		green = ( color >>> 8 ) & 255;
-		blue = ( color ) & 255;
-		alpha = ( color >>> 24 ) & 255;
-	}
-	
-	public function getColor():uint
-	{
-		return ( Math.round( alpha ) << 24 ) | ( Math.round( red ) << 16 ) | ( Math.round( green ) << 8 ) | Math.round( blue );
-	}
+    public var red : Float;
+    public var green : Float;
+    public var blue : Float;
+    public var alpha : Float;
+    
+    public function new(color : Int)
+    {
+        red = (color >>> 16) & 255;
+        green = (color >>> 8) & 255;
+        blue = (color) & 255;
+        alpha = (color >>> 24) & 255;
+    }
+    
+    public function getColor() : Int
+    {
+        return (Math.round(alpha) << 24) | (Math.round(red) << 16) | (Math.round(green) << 8) | Math.round(blue);
+    }
 }

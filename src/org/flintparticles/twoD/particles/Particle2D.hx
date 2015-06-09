@@ -28,14 +28,15 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.particles
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.particles.ParticleFactory;
-	
-	import flash.geom.Matrix;	
+package org.flintparticles.twod.particles;
 
-	/**
+
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.particles.ParticleFactory;
+
+import flash.geom.Matrix;
+
+/**
 	 * The Particle class is a set of public properties shared by all particles.
 	 * It is deliberately lightweight, with only one method. The Initializers
 	 * and Actions modify these properties directly. This means that the same
@@ -46,124 +47,127 @@ package org.flintparticles.twoD.particles
 	 * just simplifies the reuse of Particle objects which speeds up the
 	 * application. 
 	 */
-	public class Particle2D extends Particle
-	{
-		/**
+class Particle2D extends Particle
+{
+    public var inertia(get, never) : Float;
+    public var matrixTransform(get, never) : Matrix;
+
+    /**
 		 * The x coordinate of the particle in pixels.
 		 */
-		public var x:Number = 0;
-		/**
+    public var x : Float = 0;
+    /**
 		 * The y coordinate of the particle in pixels.
 		 */
-		public var y:Number = 0;
-		/**
+    public var y : Float = 0;
+    /**
 		 * The x coordinate of the particle prior to the latest update.
 		 */
-		public var previousX:Number = 0;
-		/**
+    public var previousX : Float = 0;
+    /**
 		 * The y coordinate of the particle prior to the latest update.
 		 */
-		public var previousY:Number = 0;
-		/**
+    public var previousY : Float = 0;
+    /**
 		 * The x coordinate of the velocity of the particle in pixels per second.
 		 */
-		public var velX:Number = 0;
-		/**
+    public var velX : Float = 0;
+    /**
 		 * The y coordinate of the velocity of the particle in pixels per second.
 		 */
-		public var velY:Number = 0;
-		
-		/**
+    public var velY : Float = 0;
+    
+    /**
 		 * The rotation of the particle in radians.
 		 */
-		public var rotation:Number = 0;
-		/**
+    public var rotation : Float = 0;
+    /**
 		 * The angular velocity of the particle in radians per second.
 		 */
-		public var angVelocity:Number = 0;
-
-		private var _previousMass:Number;
-		private var _previousRadius:Number;
-		private var _inertia:Number;
-		
-		/**
+    public var angVelocity : Float = 0;
+    
+    private var _previousMass : Float;
+    private var _previousRadius : Float;
+    private var _inertia : Float;
+    
+    /**
 		 * The moment of inertia of the particle about its center point
 		 */
-		public function get inertia():Number
-		{
-			if( mass != _previousMass || collisionRadius != _previousRadius )
-			{
-				_inertia = mass * collisionRadius * collisionRadius * 0.5;
-				_previousMass = mass;
-				_previousRadius = collisionRadius;
-			}
-			return _inertia;
-		}
-
-		/**
+    private function get_Inertia() : Float
+    {
+        if (mass != _previousMass || collisionRadius != _previousRadius) 
+        {
+            _inertia = mass * collisionRadius * collisionRadius * 0.5;
+            _previousMass = mass;
+            _previousRadius = collisionRadius;
+        }
+        return _inertia;
+    }
+    
+    /**
 		 * The position in the emitter's horizontal spacial sorted array
 		 */
-		public var sortID:int = -1;
-		
-		/**
+    public var sortID : Int = -1;
+    
+    /**
 		 * Creates a particle. Alternatively particles can be reused by using the ParticleCreator to create
 		 * and manage them. Usually the emitter will create the particles and the user doesn't need
 		 * to create them.
 		 */
-		public function Particle2D()
-		{
-			super();
-		}
-		
-		/**
+    public function new()
+    {
+        super();
+    }
+    
+    /**
 		 * Sets the particles properties to their default values.
 		 */
-		override public function initialize():void
-		{
-			super.initialize();
-			x = 0;
-			y = 0;
-			previousX = 0;
-			previousY = 0;
-			velX = 0;
-			velY = 0;
-			rotation = 0;
-			angVelocity = 0;
-			sortID = -1;
-		}
-		
-		/**
+    override public function initialize() : Void
+    {
+        super.initialize();
+        x = 0;
+        y = 0;
+        previousX = 0;
+        previousY = 0;
+        velX = 0;
+        velY = 0;
+        rotation = 0;
+        angVelocity = 0;
+        sortID = -1;
+    }
+    
+    /**
 		 * A transformation matrix for the position, scale and rotation of the particle.
 		 */
-		public function get matrixTransform():Matrix
-		{
-			var cos:Number = scale * Math.cos( rotation );
-			var sin:Number = scale * Math.sin( rotation );
-			return new Matrix( cos, sin, -sin, cos, x, y );
-		}
-		
-		/**
+    private function get_MatrixTransform() : Matrix
+    {
+        var cos : Float = scale * Math.cos(rotation);
+        var sin : Float = scale * Math.sin(rotation);
+        return new Matrix(cos, sin, -sin, cos, x, y);
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function clone( factory:ParticleFactory = null ):Particle
-		{
-			var p:Particle2D;
-			if( factory )
-			{
-				p = factory.createParticle() as Particle2D;
-			}
-			else
-			{
-				p = new Particle2D();
-			}
-			cloneInto( p );
-			p.x = x;
-			p.y = y;
-			p.velX = velX;
-			p.velY = velY;
-			p.rotation = rotation;
-			p.angVelocity = angVelocity;
-			return p;
-		}
-	}
+    override public function clone(factory : ParticleFactory = null) : Particle
+    {
+        var p : Particle2D;
+        if (factory != null) 
+        {
+            p = try cast(factory.createParticle(), Particle2D) catch(e:Dynamic) null;
+        }
+        else 
+        {
+            p = new Particle2D();
+        }
+        cloneInto(p);
+        p.x = x;
+        p.y = y;
+        p.velX = velX;
+        p.velY = velY;
+        p.rotation = rotation;
+        p.angVelocity = angVelocity;
+        return p;
+    }
 }
+

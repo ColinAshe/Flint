@@ -27,16 +27,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.utils 
-{
-	import flash.display.DisplayObject;		
+package org.flintparticles.common.utils;
 
-	/**
+
+import flash.display.DisplayObject;
+
+/**
 	 * Utility methods for use with display objects.
 	 */
-	public class DisplayObjectUtils 
-	{
-		/**
+class DisplayObjectUtils
+{
+    /**
 		 * Converts a rotation in the coordinate system of a display object 
 		 * to a global rotation relative to the stage.
 		 * 
@@ -45,17 +46,18 @@ package org.flintparticles.common.utils
 		 * 
 		 * @return The rotation relative to the stage's coordinate system.
 		 */
-		public static function localToGlobalRotation( obj:DisplayObject, rotation:Number ):Number
-		{
-			var rot:Number = rotation + obj.rotation;
-			for( var current:DisplayObject = obj.parent; current && current != obj.stage; current = current.parent )
-			{
-				rot += current.rotation;
-			}
-			return rot;
-		}
-
-		/**
+    public static function localToGlobalRotation(obj : DisplayObject, rotation : Float) : Float
+    {
+        var rot : Float = rotation + obj.rotation;
+        var current : DisplayObject = obj.parent;
+        while (current && current != obj.stage){
+            rot += current.rotation;
+            current = current.parent;
+        }
+        return rot;
+    }
+    
+    /**
 		 * Converts a global rotation in the coordinate system of the stage 
 		 * to a local rotation in the coordinate system of a display object.
 		 * 
@@ -64,14 +66,19 @@ package org.flintparticles.common.utils
 		 * 
 		 * @return The rotation relative to the display object's coordinate system.
 		 */
-		public static function globalToLocalRotation( obj:DisplayObject, rotation:Number ):Number
-		{
-			var rot:Number = rotation - obj.rotation;
-			for( var current:DisplayObject = obj.parent; current && current != obj.stage; current = current.parent )
-			{
-				rot -= current.rotation;
-			}
-			return rot;
-		}
-	}
+    public static function globalToLocalRotation(obj : DisplayObject, rotation : Float) : Float
+    {
+        var rot : Float = rotation - obj.rotation;
+        var current : DisplayObject = obj.parent;
+        while (current && current != obj.stage){
+            rot -= current.rotation;
+            current = current.parent;
+        }
+        return rot;
+    }
+
+    public function new()
+    {
+    }
 }
+

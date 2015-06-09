@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.away3d.v4.initializers
-{
-	import away3d.core.base.Object3D;
-	import away3d.materials.MaterialBase;
+package org.flintparticles.integration.away3d.v4.initializers;
 
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.initializers.InitializerBase;
-	import org.flintparticles.common.particles.Particle;
 
-	/**
+import away3d.core.base.Object3D;
+import away3d.materials.MaterialBase;
+
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.initializers.InitializerBase;
+import org.flintparticles.common.particles.Particle;
+
+/**
 	 * The A3D4ApplyMaterial initializer sets a material to apply to the Away3D 4
 	 * object that is used when rendering the particle. To use this initializer,
 	 * the particle's image object must be an Away3D 4 Object3D.
@@ -45,11 +46,13 @@ package org.flintparticles.integration.away3d.v4.initializers
 	 * <p>This initializer has a priority of -10 to ensure that it is applied after 
 	 * the ImageInit classes which define the image object.</p>
 	 */
-	public class A3D4ApplyMaterial extends InitializerBase
-	{
-		private var _material:MaterialBase;
-		
-		/**
+class A3D4ApplyMaterial extends InitializerBase
+{
+    public var material(get, set) : MaterialBase;
+
+    private var _material : MaterialBase;
+    
+    /**
 		 * The constructor creates an A3D4ApplyMaterial initializer for use by 
 		 * an emitter. To add an A3D4ApplyMaterial to all particles created by 
 		 * an emitter, use the emitter's addInitializer method.
@@ -58,36 +61,38 @@ package org.flintparticles.integration.away3d.v4.initializers
 		 * 
 		 * @see org.flintparticles.common.emitters.Emitter#addInitializer()
 		 */
-		public function A3D4ApplyMaterial( material:MaterialBase )
-		{
-			priority = -10;
-			_material = material;
-		}
-		
-		/**
+    public function new(material : MaterialBase)
+    {
+        super();
+        priority = -10;
+        _material = material;
+    }
+    
+    /**
 		 * The material to apply to the particles.
 		 */
-		public function get material():MaterialBase
-		{
-			return _material;
-		}
-		public function set material( value:MaterialBase ):void
-		{
-			_material = value;
-		}
-		
-		/**
+    private function get_Material() : MaterialBase
+    {
+        return _material;
+    }
+    private function set_Material(value : MaterialBase) : MaterialBase
+    {
+        _material = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function initialize( emitter:Emitter, particle:Particle ):void
-		{
-			if( particle.image && particle.image is Object3D )
-			{
-				if( Object3D( particle.image ).hasOwnProperty( "material" ) )
-				{
-					Object3D( particle.image )["material"] = _material;
-				}
-			}
-		}
-	}
+    override public function initialize(emitter : Emitter, particle : Particle) : Void
+    {
+        if (particle.image && Std.is(particle.image, Object3D)) 
+        {
+            if (cast((particle.image), Object3D).exists("material")) 
+            {
+                cast((particle.image), Object3D)["material"] = _material;
+            }
+        }
+    }
 }
+

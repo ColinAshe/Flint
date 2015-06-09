@@ -28,17 +28,20 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.common.behaviours
-{
-	import org.flintparticles.common.emitters.Emitter;	
-	
-	/**
+package org.flintparticles.common.behaviours;
+
+
+import org.flintparticles.common.emitters.Emitter;
+
+/**
 	 * The Behaviour interface is the base for the Action, Initializer and 
 	 * Activity interfaces.
 	 */
-	public interface Behaviour
-	{
-		/**
+interface Behaviour
+{
+    
+    
+    /**
 		 * The priority property is used to order the execution of behaviours.
 		 * 
 		 * <p>The behaviours within the Flint library use 0 as the default priority. 
@@ -49,10 +52,10 @@ package org.flintparticles.common.behaviours
 		 * should be performed last, after other actions have made changes
 		 * to the particle's velocity.</p>
 		 */
-		function get priority():int;
-		function set priority( value:int ):void;
-		
-		/**
+    var priority(get, set) : Int;
+
+    
+    /**
 		 * The addedToEmitter method is called by the emitter when the Behaviour is 
 		 * added to it. It is an opportunity for a behaviour to do any initializing
 		 * that is relative to the emitter. Only a few behaviours make use of this
@@ -60,9 +63,9 @@ package org.flintparticles.common.behaviours
 		 * 
 		 * @param emitter The Emitter that the Behaviour was added to.
 		 */
-		function addedToEmitter( emitter:Emitter ):void;
-		
-		/**
+    function addedToEmitter(emitter : Emitter) : Void;
+    
+    /**
 		 * The removedFromEmitter method is called by the emitter when the Behaviour 
 		 * is removed from it. It is an opportunity for a behaviour to do any finalizing
 		 * that is relative to the emitter. Only a few behaviours make use of this
@@ -70,6 +73,5 @@ package org.flintparticles.common.behaviours
 		 * 
 		 * @param emitter The Emitter that the Behaviour was removed from.
 		 */
-		function removedFromEmitter( emitter:Emitter ):void;
-	}
+    function removedFromEmitter(emitter : Emitter) : Void;
 }

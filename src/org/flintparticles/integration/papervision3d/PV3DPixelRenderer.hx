@@ -27,28 +27,29 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.integration.papervision3d 
-{
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.common.renderers.RendererBase;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.papervision3d.core.geom.Pixels;
-	import org.papervision3d.core.geom.renderables.Pixel3D;	
+package org.flintparticles.integration.papervision3d;
 
-	/**
+
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.common.renderers.RendererBase;
+import org.flintparticles.threed.particles.Particle3D;
+import org.papervision3d.core.geom.Pixels;
+import org.papervision3d.core.geom.renderables.Pixel3D;
+
+/**
 	 * Renders the particles as pixels in a Papervision3D Pixels object.
 	 */
-	public class PV3DPixelRenderer extends RendererBase
-	{
-		private var _container:Pixels;
-		
-		public function PV3DPixelRenderer( container:Pixels )
-		{
-			super();
-			_container = container;
-		}
-		
-		/**
+class PV3DPixelRenderer extends RendererBase
+{
+    private var _container : Pixels;
+    
+    public function new(container : Pixels)
+    {
+        super();
+        _container = container;
+    }
+    
+    /**
 		 * This method applies the particle's state to the associated image object.
 		 * 
 		 * <p>This method is called internally by Flint and shouldn't need to be called
@@ -56,15 +57,15 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particles The particles to be rendered.
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			for each( var p:Particle3D in particles )
-			{
-				renderParticle( p );
-			}
-		}
-		
-		/**
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        for (p in particles)
+        {
+            renderParticle(p);
+        }
+    }
+    
+    /**
 		 * This method is called when a particle is added to an emitter -
 		 * usually because the emitter has just created the particle. The
 		 * method adds the particle's image to the container's display list.
@@ -72,23 +73,23 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particle The particle being added to the emitter.
 		 */
-		override protected function addParticle( particle:Particle ):void
-		{
-			particle.image = new Pixel3D( 0 );
-			_container.addPixel3D( Pixel3D( particle.image ) );
-			renderParticle( particle as Particle3D );
-		}
-		
-		protected function renderParticle( particle:Particle3D ):void
-		{
-			var o:Pixel3D = particle.image;
-			o.x = particle.position.x;
-			o.y = particle.position.y;
-			o.z = particle.position.z;
-			o.color = particle.color;
-		}
-		
-		/**
+    override private function addParticle(particle : Particle) : Void
+    {
+        particle.image = new Pixel3D(0);
+        _container.addPixel3D(cast((particle.image), Pixel3D));
+        renderParticle(try cast(particle, Particle3D) catch(e:Dynamic) null);
+    }
+    
+    private function renderParticle(particle : Particle3D) : Void
+    {
+        var o : Pixel3D = particle.image;
+        o.x = particle.position.x;
+        o.y = particle.position.y;
+        o.z = particle.position.z;
+        o.color = particle.color;
+    }
+    
+    /**
 		 * This method is called when a particle is removed from an emitter -
 		 * usually because the particle is dying. The method removes the 
 		 * particle's image from the container's display list. It is called 
@@ -96,9 +97,9 @@ package org.flintparticles.integration.papervision3d
 		 * 
 		 * @param particle The particle being removed from the emitter.
 		 */
-		override protected function removeParticle( particle:Particle ):void
-		{
-			_container.removePixel3D( Pixel3D( particle.image ) );
-		}
-	}
+    override private function removeParticle(particle : Particle) : Void
+    {
+        _container.removePixel3D(cast((particle.image), Pixel3D));
+    }
 }
+

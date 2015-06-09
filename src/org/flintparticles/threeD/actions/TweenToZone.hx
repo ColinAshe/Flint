@@ -28,19 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.threeD.actions 
-{
-	import org.flintparticles.common.actions.ActionBase;
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.particles.Particle;
-	import org.flintparticles.threeD.particles.Particle3D;
-	import org.flintparticles.threeD.zones.Zone3D;
+package org.flintparticles.threed.actions;
 
-	import flash.geom.Vector3D;
 
-	[DefaultProperty("zone")]
+import org.flintparticles.common.actions.ActionBase;
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.particles.Particle;
+import org.flintparticles.threed.particles.Particle3D;
+import org.flintparticles.threed.zones.Zone3D;
 
-	/**
+import flash.geom.Vector3D;
+
+@:meta(DefaultProperty(name="zone"))
+
+
+/**
 	 * The TweenToZone action adjusts the particle's position between two
 	 * locations as it ages. The start location is wherever the particle starts
 	 * from, depending on the emitter and the initializers. The end position is
@@ -50,11 +52,16 @@ package org.flintparticles.threeD.actions
 	 * function used. This action should be used in conjunction with the Age action.
 	 */
 
-	public class TweenToZone extends ActionBase
-	{
-		private var _zone:Zone3D;
-		
-		/**
+
+
+
+class TweenToZone extends ActionBase
+{
+    public var zone(get, set) : Zone3D;
+
+    private var _zone : Zone3D;
+    
+    /**
 		 * The constructor creates a TweenToZone action for use by an emitter. 
 		 * To add a TweenToZone to all particles created by an emitter, use the
 		 * emitter's addAction method.
@@ -63,61 +70,62 @@ package org.flintparticles.threeD.actions
 		 * 
 		 * @param zone The zone for the particle's position when its energy is 0.
 		 */
-		public function TweenToZone( zone:Zone3D = null )
-		{
-			_zone = zone;
-		}
-		
-		/**
+    public function new(zone : Zone3D = null)
+    {
+        super();
+        _zone = zone;
+    }
+    
+    /**
 		 * The zone for the particle's position when its energy is 0.
 		 */
-		public function get zone():Zone3D
-		{
-			return _zone;
-		}
-		public function set zone( value:Zone3D ):void
-		{
-			_zone = value;
-		}
-		
-		/**
+    private function get_Zone() : Zone3D
+    {
+        return _zone;
+    }
+    private function set_Zone(value : Zone3D) : Zone3D
+    {
+        _zone = value;
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override public function update( emitter:Emitter, particle:Particle, time:Number ):void
-		{
-			var p:Particle3D = Particle3D( particle );
-			var data:TweenToZoneData;
-			if( ! p.dictionary[this] )
-			{
-				var pt:Vector3D = _zone.getLocation();
-				data = new TweenToZoneData( p.position, pt );
-				p.dictionary[this] = data;
-			}
-			else
-			{
-				data = p.dictionary[this];
-			}
-			
-			var pos:Vector3D = p.position;
-			var diff:Vector3D = data.diff;
-			var end:Vector3D = data.end;
-			var energy:Number = p.energy;
-			pos.x = diff.x * energy + end.x;
-			pos.y = diff.y * energy + end.y;
-			pos.z = diff.z * energy + end.z;
-		}
-	}
+    override public function update(emitter : Emitter, particle : Particle, time : Float) : Void
+    {
+        var p : Particle3D = cast((particle), Particle3D);
+        var data : TweenToZoneData;
+        if (!p.dictionary[this]) 
+        {
+            var pt : Vector3D = _zone.getLocation();
+            data = new TweenToZoneData(p.position, pt);
+            p.dictionary[this] = data;
+        }
+        else 
+        {
+            data = p.dictionary[this];
+        }
+        
+        var pos : Vector3D = p.position;
+        var diff : Vector3D = data.diff;
+        var end : Vector3D = data.end;
+        var energy : Float = p.energy;
+        pos.x = diff.x * energy + end.x;
+        pos.y = diff.y * energy + end.y;
+        pos.z = diff.z * energy + end.z;
+    }
 }
-import flash.geom.Vector3D;
+
 
 class TweenToZoneData
 {
-	public var diff:Vector3D;
-	public var end:Vector3D;
-	
-	public function TweenToZoneData( start:Vector3D, end:Vector3D )
-	{
-		this.diff = start.subtract( end );
-		this.end = end.clone();
-	}
+    public var diff : Vector3D;
+    public var end : Vector3D;
+    
+    public function new(start : Vector3D, end : Vector3D)
+    {
+        this.diff = start.subtract(end);
+        this.end = end.clone();
+    }
 }

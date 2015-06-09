@@ -1,4 +1,4 @@
-﻿/*
+/*
  * FLINT PARTICLE SYSTEM
  * .....................
  * 
@@ -28,16 +28,17 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.renderers
-{
-	import org.flintparticles.common.emitters.Emitter;
-	import org.flintparticles.common.events.EmitterEvent;
-	import org.flintparticles.common.renderers.SpriteRendererBase;
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.renderers;
 
-	import flash.events.Event;
 
-	/**
+import org.flintparticles.common.emitters.Emitter;
+import org.flintparticles.common.events.EmitterEvent;
+import org.flintparticles.common.renderers.SpriteRendererBase;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.events.Event;
+
+/**
 	 * The VectorLineRenderer draws particles as continuous lines mapping the 
 	 * path the particle travels. This is useful for effects like hair and
 	 * grass.
@@ -51,9 +52,9 @@ package org.flintparticles.twoD.renderers
 	 * 
 	 * @see org.flintparticles.common.emitters.Emitter#runAhead()
 	 */
-	public class VectorLineRenderer extends SpriteRendererBase
-	{
-		/**
+class VectorLineRenderer extends SpriteRendererBase
+{
+    /**
 		 * The constructor creates a VectorLineRenderer. After creation it should
 		 * be added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage and should be applied to an Emitter using the Emitter's
@@ -61,33 +62,32 @@ package org.flintparticles.twoD.renderers
 		 * 
 		 * @see org.flintparticles.twoD.emitters.Emitter#renderer
 		 */
-		public function VectorLineRenderer()
-		{
-			super();
-		}
-		
-		/**
+    public function new()
+    {
+        super();
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			var particle:Particle2D;
-			var len:int = particles.length;
-			for( var i:int = 0; i < len; ++i )
-			{
-				particle = Particle2D( particles[i] );
-				graphics.lineStyle( particle.scale, particle.color & 0xFFFFFF, particle.color >>> 24 );
-				graphics.moveTo( particle.previousX, particle.previousY );
-				graphics.lineTo( particle.x, particle.y );
-			}
-		}
-
-		override protected function emitterUpdated( ev:EmitterEvent ):void
-		{
-			renderParticles( Emitter( ev.target ).particlesArray );
-		}
-		override protected function updateParticles( ev:Event ):void
-		{
-		}
-	}
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        var particle : Particle2D;
+        var len : Int = particles.length;
+        for (i in 0...len){
+            particle = cast((particles[i]), Particle2D);
+            graphics.lineStyle(particle.scale, particle.color & 0xFFFFFF, particle.color >>> 24);
+            graphics.moveTo(particle.previousX, particle.previousY);
+            graphics.lineTo(particle.x, particle.y);
+        }
+    }
+    
+    override private function emitterUpdated(ev : EmitterEvent) : Void
+    {
+        renderParticles(cast((ev.target), Emitter).particlesArray);
+    }
+    override private function updateParticles(ev : Event) : Void
+    {
+        
+    }
 }

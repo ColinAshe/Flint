@@ -28,20 +28,21 @@
  * THE SOFTWARE.
  */
 
-package org.flintparticles.twoD.renderers
-{
-	import org.flintparticles.common.renderers.SpriteRendererBase;
-	import org.flintparticles.twoD.particles.Particle2D;
+package org.flintparticles.twod.renderers;
 
-	import flash.display.Bitmap;
-	import flash.display.BitmapData;
-	import flash.display.DisplayObject;
-	import flash.filters.BitmapFilter;
-	import flash.geom.Matrix;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
 
-	/**
+import org.flintparticles.common.renderers.SpriteRendererBase;
+import org.flintparticles.twod.particles.Particle2D;
+
+import flash.display.Bitmap;
+import flash.display.BitmapData;
+import flash.display.DisplayObject;
+import flash.filters.BitmapFilter;
+import flash.geom.Matrix;
+import flash.geom.Point;
+import flash.geom.Rectangle;
+
+/**
 	 * The BitmapRenderer draws particles onto a single Bitmap display object. The
 	 * region of the particle system covered by this bitmap object must be defined
 	 * in the canvas property of the BitmapRenderer. Particles outside this region
@@ -66,42 +67,49 @@ package org.flintparticles.twoD.renderers
 	 * display objects in its display list. To enable mouse events for the renderer
 	 * or its children set the mouseEnabled or mouseChildren properties to true.</p>
 	 */
-	public class BitmapRenderer extends SpriteRendererBase
-	{
-		protected static var ZERO_POINT:Point = new Point( 0, 0 );
-		
-		/**
-		 * @private
-		 */
-		protected var _bitmap:Bitmap;
-		
-		protected var _bitmapData:BitmapData;
-		/**
-		 * @private
-		 */
-		protected var _preFilters:Array;
-		/**
-		 * @private
-		 */
-		protected var _postFilters:Array;
-		/**
-		 * @private
-		 */
-		protected var _colorMap:Array;
-		/**
-		 * @private
-		 */
-		protected var _smoothing:Boolean;
-		/**
-		 * @private
-		 */
-		protected var _canvas:Rectangle;
-		/**
-		 * @private
-		 */
-		protected var _clearBetweenFrames:Boolean;
+class BitmapRenderer extends SpriteRendererBase
+{
+    public var preFilters(get, set) : Array<Dynamic>;
+    public var postFilters(get, set) : Array<Dynamic>;
+    public var canvas(get, set) : Rectangle;
+    public var clearBetweenFrames(get, set) : Bool;
+    public var smoothing(get, set) : Bool;
+    public var bitmapData(get, never) : BitmapData;
 
-		/**
+    private static var ZERO_POINT : Point = new Point(0, 0);
+    
+    /**
+		 * @private
+		 */
+    private var _bitmap : Bitmap;
+    
+    private var _bitmapData : BitmapData;
+    /**
+		 * @private
+		 */
+    private var _preFilters : Array<Dynamic>;
+    /**
+		 * @private
+		 */
+    private var _postFilters : Array<Dynamic>;
+    /**
+		 * @private
+		 */
+    private var _colorMap : Array<Dynamic>;
+    /**
+		 * @private
+		 */
+    private var _smoothing : Bool;
+    /**
+		 * @private
+		 */
+    private var _canvas : Rectangle;
+    /**
+		 * @private
+		 */
+    private var _clearBetweenFrames : Bool;
+    
+    /**
 		 * The constructor creates a BitmapRenderer. After creation it should be
 		 * added to the display list of a DisplayObjectContainer to place it on 
 		 * the stage and should be applied to an Emitter using the Emitter's
@@ -116,20 +124,20 @@ package org.flintparticles.twoD.renderers
 		 * 
 		 * @see org.flintparticles.twoD.emitters.Emitter#renderer
 		 */
-		public function BitmapRenderer( canvas:Rectangle, smoothing:Boolean = false )
-		{
-			super();
-			mouseEnabled = false;
-			mouseChildren = false;
-			_smoothing = smoothing;
-			_preFilters = new Array();
-			_postFilters = new Array();
-			_canvas = canvas;
-			createBitmap();
-			_clearBetweenFrames = true;
-		}
-		
-		/**
+    public function new(canvas : Rectangle, smoothing : Bool = false)
+    {
+        super();
+        mouseEnabled = false;
+        mouseChildren = false;
+        _smoothing = smoothing;
+        _preFilters = new Array<Dynamic>();
+        _postFilters = new Array<Dynamic>();
+        _canvas = canvas;
+        createBitmap();
+        _clearBetweenFrames = true;
+    }
+    
+    /**
 		 * The addFilter method adds a BitmapFilter to the renderer. These filters
 		 * are applied each frame, before or after the new particle positions are 
 		 * drawn, instead of wiping the display clear. Use of a blur filter, for 
@@ -140,148 +148,149 @@ package org.flintparticles.twoD.renderers
 		 * @param postRender If false, the filter is applied before drawing the particles
 		 * in their new positions. If true the filter is applied after drawing the particles.
 		 */
-		public function addFilter( filter:BitmapFilter, postRender:Boolean = false ):void
-		{
-			if( postRender )
-			{
-				_postFilters.push( filter );
-			}
-			else
-			{
-				_preFilters.push( filter );
-			}
-		}
-		
-		/**
+    public function addFilter(filter : BitmapFilter, postRender : Bool = false) : Void
+    {
+        if (postRender) 
+        {
+            _postFilters.push(filter);
+        }
+        else 
+        {
+            _preFilters.push(filter);
+        }
+    }
+    
+    /**
 		 * Removes a BitmapFilter object from the Renderer.
 		 * 
 		 * @param filter The BitmapFilter to remove
 		 * 
 		 * @see addFilter()
 		 */
-		public function removeFilter( filter:BitmapFilter ):void
-		{
-			for( var i:int = 0; i < _preFilters.length; ++i )
-			{
-				if( _preFilters[i] == filter )
-				{
-					_preFilters.splice( i, 1 );
-					return;
-				}
-			}
-			for( i = 0; i < _postFilters.length; ++i )
-			{
-				if( _postFilters[i] == filter )
-				{
-					_postFilters.splice( i, 1 );
-					return;
-				}
-			}
-		}
-		
-		/**
+    public function removeFilter(filter : BitmapFilter) : Void
+    {
+        for (i in 0..._preFilters.length){
+            if (_preFilters[i] == filter) 
+            {
+                _preFilters.splice(i, 1);
+                return;
+            }
+        }
+        for (i in 0..._postFilters.length){
+            if (_postFilters[i] == filter) 
+            {
+                _postFilters.splice(i, 1);
+                return;
+            }
+        }
+    }
+    
+    /**
 		 * The array of all filters being applied before rendering.
 		 */
-		public function get preFilters():Array
-		{
-			return _preFilters.slice();
-		}
-		public function set preFilters( value:Array ):void
-		{
-			var filter:BitmapFilter;
-			for each( filter in _preFilters )
-			{
-				removeFilter( filter );
-			}
-			for each( filter in value )
-			{
-				addFilter( filter, false );
-			}
-		}
-
-		/**
+    private function get_PreFilters() : Array<Dynamic>
+    {
+        return _preFilters.substring();
+    }
+    private function set_PreFilters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        var filter : BitmapFilter;
+        for (filter in _preFilters)
+        {
+            removeFilter(filter);
+        }
+        for (filter in value)
+        {
+            addFilter(filter, false);
+        }
+        return value;
+    }
+    
+    /**
 		 * The array of all filters being applied before rendering.
 		 */
-		public function get postFilters():Array
-		{
-			return _postFilters.slice();
-		}
-		public function set postFilters( value:Array ):void
-		{
-			var filter:BitmapFilter;
-			for each( filter in _postFilters )
-			{
-				removeFilter( filter );
-			}
-			for each( filter in value )
-			{
-				addFilter( filter, true );
-			}
-		}
-
-		/**
+    private function get_PostFilters() : Array<Dynamic>
+    {
+        return _postFilters.substring();
+    }
+    private function set_PostFilters(value : Array<Dynamic>) : Array<Dynamic>
+    {
+        var filter : BitmapFilter;
+        for (filter in _postFilters)
+        {
+            removeFilter(filter);
+        }
+        for (filter in value)
+        {
+            addFilter(filter, true);
+        }
+        return value;
+    }
+    
+    /**
 		 * Sets a palette map for the renderer. See the paletteMap method in flash's BitmapData object for
 		 * information about how palette maps work. The palette map will be applied to the full canvas of the 
 		 * renderer after all filters have been applied and the particles have been drawn.
 		 */
-		public function setPaletteMap( red : Array = null , green : Array = null , blue : Array = null, alpha : Array = null ) : void
-		{
-			_colorMap = new Array(4);
-			_colorMap[0] = alpha;
-			_colorMap[1] = red;
-			_colorMap[2] = green;
-			_colorMap[3] = blue;
-		}
-		/**
+    public function setPaletteMap(red : Array<Dynamic> = null, green : Array<Dynamic> = null, blue : Array<Dynamic> = null, alpha : Array<Dynamic> = null) : Void
+    {
+        _colorMap = new Array<Dynamic>(4);
+        _colorMap[0] = alpha;
+        _colorMap[1] = red;
+        _colorMap[2] = green;
+        _colorMap[3] = blue;
+    }
+    /**
 		 * Clears any palette map that has been set for the renderer.
 		 */
-		public function clearPaletteMap() : void
-		{
-			_colorMap = null;
-		}
-		
-		/**
+    public function clearPaletteMap() : Void
+    {
+        _colorMap = null;
+    }
+    
+    /**
 		 * Create the Bitmap and BitmapData objects
 		 */
-		protected function createBitmap():void
-		{
-			if( !_canvas )
-			{
-				return;
-			}
-			if( _bitmap && _bitmapData )
-			{
-				_bitmapData.dispose();
-				_bitmapData = null;
-			}
-			if( _bitmap )
-			{
-				removeChild( _bitmap );
-				_bitmap = null;
-			}
-			_bitmap = new Bitmap( null, "auto", _smoothing);
-			_bitmapData = new BitmapData( Math.ceil( _canvas.width ), Math.ceil( _canvas.height ), true, 0 );
-			_bitmap.bitmapData = _bitmapData;
-			addChild( _bitmap );
-			_bitmap.x = _canvas.x;
-			_bitmap.y = _canvas.y;
-		}
-		
-		/**
+    private function createBitmap() : Void
+    {
+        if (_canvas == null) 
+        {
+            return;
+        }
+        if (_bitmap != null && _bitmapData != null) 
+        {
+            _bitmapData.dispose();
+            _bitmapData = null;
+        }
+        if (_bitmap != null) 
+        {
+            removeChild(_bitmap);
+            _bitmap = null;
+        }
+        _bitmap = new Bitmap(null, "auto", _smoothing);
+        _bitmapData = new BitmapData(Math.ceil(_canvas.width), Math.ceil(_canvas.height), true, 0);
+        _bitmap.bitmapData = _bitmapData;
+        addChild(_bitmap);
+        _bitmap.x = _canvas.x;
+        _bitmap.y = _canvas.y;
+    }
+    
+    /**
 		 * The canvas is the area within the renderer on which particles can be drawn.
 		 * Particles outside this area will not be drawn.
 		 */
-		public function get canvas():Rectangle
-		{
-			return _canvas;
-		}
-		public function set canvas( value:Rectangle ):void
-		{
-			_canvas = value;
-			createBitmap();
-		}
-		
-		/**
+    private function get_Canvas() : Rectangle
+    {
+        return _canvas;
+    }
+    private function set_Canvas(value : Rectangle) : Rectangle
+    {
+        _canvas = value;
+        createBitmap();
+        return value;
+    }
+    
+    /**
 		 * Controls whether the display is cleared between each render frame.
 		 * If you use pre-render filters, this value is ignored and the display is
 		 * not cleared. If you use no filters or only post-render filters, this value 
@@ -290,89 +299,90 @@ package org.flintparticles.twoD.renderers
 		 * <p>For BitmapRenderer and PixelRenderer, this value defaults to true.
 		 * For BitmapLineRenderer it defaults to false.</p>
 		 */
-		public function get clearBetweenFrames():Boolean
-		{
-			return _clearBetweenFrames;
-		}
-		public function set clearBetweenFrames( value:Boolean ):void
-		{
-			_clearBetweenFrames = value;
-		}
-		
-		public function get smoothing():Boolean
-		{
-			return _smoothing;
-		}
-		public function set smoothing( value:Boolean ):void
-		{
-			_smoothing = value;
-			if( _bitmap )
-			{
-				_bitmap.smoothing = value;
-			}
-		}
-		
-		/**
+    private function get_ClearBetweenFrames() : Bool
+    {
+        return _clearBetweenFrames;
+    }
+    private function set_ClearBetweenFrames(value : Bool) : Bool
+    {
+        _clearBetweenFrames = value;
+        return value;
+    }
+    
+    private function get_Smoothing() : Bool
+    {
+        return _smoothing;
+    }
+    private function set_Smoothing(value : Bool) : Bool
+    {
+        _smoothing = value;
+        if (_bitmap != null) 
+        {
+            _bitmap.smoothing = value;
+        }
+        return value;
+    }
+    
+    /**
 		 * @inheritDoc
 		 */
-		override protected function renderParticles( particles:Array ):void
-		{
-			if( !_bitmap )
-			{
-				return;
-			}
-			var i:int;
-			var len:int;
-			_bitmapData.lock();
-			len = _preFilters.length;
-			for( i = 0; i < len; ++i )
-			{
-				_bitmapData.applyFilter( _bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _preFilters[i] );
-			}
-			if( _clearBetweenFrames && len == 0 )
-			{
-				_bitmapData.fillRect( _bitmap.bitmapData.rect, 0 );
-			}
-			len = particles.length;
-			if ( len )
-			{
-				for( i = len; i--; ) // draw new particles first so they are behind old particles
-				{
-					drawParticle( Particle2D( particles[i] ) );
-				}
-			}
-			len = _postFilters.length;
-			for( i = 0; i < len; ++i )
-			{
-				_bitmapData.applyFilter( _bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _postFilters[i] );
-			}
-			if( _colorMap )
-			{
-				_bitmapData.paletteMap( _bitmapData, _bitmapData.rect, ZERO_POINT, _colorMap[1] , _colorMap[2] , _colorMap[3] , _colorMap[0] );
-			}
-			_bitmapData.unlock();
-		}
-		
-		/**
+    override private function renderParticles(particles : Array<Dynamic>) : Void
+    {
+        if (_bitmap == null) 
+        {
+            return;
+        }
+        var i : Int;
+        var len : Int;
+        _bitmapData.lock();
+        len = _preFilters.length;
+        for (i in 0...len){
+            _bitmapData.applyFilter(_bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _preFilters[i]);
+        }
+        if (_clearBetweenFrames && len == 0) 
+        {
+            _bitmapData.fillRect(_bitmap.bitmapData.rect, 0);
+        }
+        len = particles.length;
+        if (len != 0) 
+        {
+            i = len;
+            while (i--){  // draw new particles first so they are behind old particles  
+                {
+                    drawParticle(cast((particles[i]), Particle2D));
+                }
+            }
+        }
+        len = _postFilters.length;
+        for (i in 0...len){
+            _bitmapData.applyFilter(_bitmapData, _bitmapData.rect, BitmapRenderer.ZERO_POINT, _postFilters[i]);
+        }
+        if (_colorMap != null) 
+        {
+            _bitmapData.paletteMap(_bitmapData, _bitmapData.rect, ZERO_POINT, _colorMap[1], _colorMap[2], _colorMap[3], _colorMap[0]);
+        }
+        _bitmapData.unlock();
+    }
+    
+    /**
 		 * Used internally here and in derived classes to alter the manner of 
 		 * the particle rendering.
 		 * 
 		 * @param particle The particle to draw on the bitmap.
 		 */
-		protected function drawParticle( particle:Particle2D ):void
-		{
-			var matrix:Matrix;
-			matrix = particle.matrixTransform;
-			matrix.translate( -_canvas.x, -_canvas.y );
-			_bitmapData.draw( particle.image, matrix, particle.colorTransform, DisplayObject( particle.image ).blendMode, null, _smoothing );
-		}
-		
-		/**
+    private function drawParticle(particle : Particle2D) : Void
+    {
+        var matrix : Matrix;
+        matrix = particle.matrixTransform;
+        matrix.translate(-_canvas.x, -_canvas.y);
+        _bitmapData.draw(particle.image, matrix, particle.colorTransform, cast((particle.image), DisplayObject).blendMode, null, _smoothing);
+    }
+    
+    /**
 		 * The bitmap data of the renderer.
 		 */
-		public function get bitmapData() : BitmapData
-		{
-			return _bitmapData;
-		}
-	}
+    private function get_BitmapData() : BitmapData
+    {
+        return _bitmapData;
+    }
 }

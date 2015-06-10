@@ -61,9 +61,5 @@ class Convert
     {
         return new org.flintparticles.threed.geom.Quaternion(q.w, q.x, q.y, q.z);
     }
-
-    public function new()
-    {
-    }
 }
 

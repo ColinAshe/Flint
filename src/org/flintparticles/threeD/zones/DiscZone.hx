@@ -32,7 +32,7 @@ package org.flintparticles.threed.zones;
 
 import org.flintparticles.threed.zones.Zone3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 import org.flintparticles.threed.geom.Vector3DUtils;
 
 /**

@@ -60,9 +60,5 @@ class Maths
     {
         return degrees * DEGTORAD;
     }
-
-    public function new()
-    {
-    }
 }
 

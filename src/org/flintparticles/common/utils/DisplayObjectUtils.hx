@@ -30,7 +30,7 @@
 package org.flintparticles.common.utils;
 
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * Utility methods for use with display objects.
@@ -75,10 +75,6 @@ class DisplayObjectUtils
             current = current.parent;
         }
         return rot;
-    }
-
-    public function new()
-    {
     }
 }
 

@@ -35,8 +35,8 @@ import org.flintparticles.threed.renderers.controllers.KeyboardControllerBase;
 
 import mx.core.IMXMLObject;
 
-import flash.display.DisplayObject;
-import flash.events.Event;
+import openfl.display.DisplayObject;
+import openfl.events.Event;
 
 /**
 	 * Base class for keyboard based camera controllers. Tracks the keyboard state for camera controllers.

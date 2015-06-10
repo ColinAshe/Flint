@@ -81,9 +81,5 @@ class Exponential
         }
         return c * 0.5 * (-Math.pow(2, -10 * --t) + 2) + b;
     }
-
-    public function new()
-    {
-    }
 }
 

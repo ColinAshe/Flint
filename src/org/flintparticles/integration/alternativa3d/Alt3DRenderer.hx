@@ -44,8 +44,8 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.renderers.RendererBase;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.display.BitmapData;
-import flash.geom.Vector3D;
+import openfl.display.BitmapData;
+import openfl.geom.Vector3D;
 
 /**
 	 * Renders the particles in an Alternativa3D scene.

@@ -39,7 +39,7 @@ import org.flintparticles.common.utils.Construct;
 import org.papervision3d.materials.MovieMaterial;
 import org.papervision3d.objects.primitives.Plane;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * The ImageClass Initializer sets the DisplayObject to use to draw

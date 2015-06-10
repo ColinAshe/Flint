@@ -31,7 +31,7 @@
 package org.flintparticles.common.displayobjects;
 
 
-import flash.display.Shape;
+import openfl.display.Shape;
 
 /**
  * The Ellipse class is a DisplayObject with a oval shape. The registration point

@@ -3,7 +3,7 @@ package org.flintparticles.integration.flare3d.utils;
 
 import org.flintparticles.threed.geom.Quaternion;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * @author Richard
@@ -41,10 +41,6 @@ class Convert
         result.z = Math.atan2(2 * quarternion.x * quarternion.w - 2 * quarternion.y * quarternion.z, 1 - 2 * sqx - 2 * sqz);
         
         return result;
-    }
-
-    public function new()
-    {
     }
 }
 

@@ -35,12 +35,12 @@ import org.flintparticles.common.particles.ParticleFactory;
 import org.flintparticles.common.utils.DisplayObjectUtils;
 import org.flintparticles.common.utils.Maths;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.display.Sprite;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 /**
 	 * Utility methods for working with two-d particles.
@@ -215,8 +215,5 @@ class Particle2DUtils
         return particles;
     }
 
-    public function new()
-    {
-    }
 }
 

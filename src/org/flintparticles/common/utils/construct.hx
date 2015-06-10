@@ -75,8 +75,5 @@ package org.flintparticles.common.utils;
         }
     }
 
-    public function new()
-    {
-    }
 }
 

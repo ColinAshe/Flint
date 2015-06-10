@@ -33,9 +33,9 @@ package org.flintparticles.twod.zones;
 import org.flintparticles.twod.zones.Zone2D;
 
 import org.flintparticles.twod.particles.Particle2D;
-import flash.display.DisplayObject;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.DisplayObject;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 /**
 	 * The DisplayObjectZone zone defines a shaped zone based on a DisplayObject.

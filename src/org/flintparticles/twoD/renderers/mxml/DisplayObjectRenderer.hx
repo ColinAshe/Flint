@@ -35,7 +35,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.renderers.FlexRendererBase;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * The DisplayObjectRenderer adds particles to its display list 

@@ -34,7 +34,7 @@ package org.flintparticles.twod.particles;
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.particles.ParticleFactory;
 
-import flash.geom.Matrix;
+import openfl.geom.Matrix;
 
 /**
 	 * The Particle class is a set of public properties shared by all particles.

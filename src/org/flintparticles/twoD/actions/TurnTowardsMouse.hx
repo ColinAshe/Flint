@@ -36,7 +36,7 @@ import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * The TurnTowardsMouse action causes the particle to constantly adjust its direction

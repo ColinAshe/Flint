@@ -36,7 +36,7 @@ import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The RotationalFriction action applies friction to the particle's rotational movement

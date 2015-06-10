@@ -144,8 +144,5 @@ class Elastic
         return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
     }
 
-    public function new()
-    {
-    }
 }
 

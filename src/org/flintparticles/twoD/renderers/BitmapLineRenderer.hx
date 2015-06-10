@@ -32,14 +32,14 @@ package org.flintparticles.twod.renderers;
 
 import org.flintparticles.twod.renderers.BitmapRenderer;
 
-import flash.events.Event;
+import openfl.events.Event;
 
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.events.EmitterEvent;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.display.Shape;
-import flash.geom.Rectangle;
+import openfl.display.Shape;
+import openfl.geom.Rectangle;
 
 /**
 	 * The BitmapLineRenderer draws particles as continuous lines on a Bitmap display object.

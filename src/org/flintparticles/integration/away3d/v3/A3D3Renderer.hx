@@ -38,7 +38,7 @@ import away3d.core.base.Object3D;
 import away3d.core.math.Vector3DUtils;
 import away3d.sprites.MovieClipSprite;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.renderers.RendererBase;
@@ -100,7 +100,7 @@ class A3D3Renderer extends RendererBase
             cast((o), Object3D).z = particle.position.z;
             cast((o), Object3D).scaleX = cast((o), Object3D).scaleY = cast((o), Object3D).scaleZ = particle.scale;
             
-            var rotation : flash.geom.Vector3D = away3d.core.math.Vector3DUtils.quaternion2euler(Convert.QuaternionToA3D(particle.rotation));
+            var rotation : openfl.geom.Vector3D = away3d.core.math.Vector3DUtils.quaternion2euler(Convert.QuaternionToA3D(particle.rotation));
             cast((o), Object3D).rotationX = Maths.asDegrees(rotation.x);
             cast((o), Object3D).rotationY = Maths.asDegrees(rotation.y);
             cast((o), Object3D).rotationZ = Maths.asDegrees(rotation.z);

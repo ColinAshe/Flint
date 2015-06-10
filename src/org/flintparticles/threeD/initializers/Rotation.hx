@@ -38,7 +38,7 @@ import org.flintparticles.threed.geom.Quaternion;
 import org.flintparticles.threed.geom.Vector3DUtils;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The Rotation Initializer sets the rotation of the particle. The rotation is

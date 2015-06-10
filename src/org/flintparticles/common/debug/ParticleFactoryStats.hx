@@ -7,9 +7,5 @@ package org.flintparticles.common.debug;
 class ParticleFactoryStats
 {
     public static var numParticles : Int = 0;
-
-    public function new()
-    {
-    }
 }
 

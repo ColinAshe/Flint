@@ -34,8 +34,8 @@ package org.flintparticles.common.actions;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 
-import flash.display.Stage;
-import flash.events.KeyboardEvent;
+import openfl.display.Stage;
+import openfl.events.KeyboardEvent;
 
 /**
 	 * The KeyDownAction Action uses another action. It applies the other action

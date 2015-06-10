@@ -42,7 +42,7 @@ import org.flintparticles.common.renderers.RendererBase;
 import org.flintparticles.common.utils.Maths;
 import org.flintparticles.integration.flare3d.utils.Convert;
 import org.flintparticles.threed.particles.Particle3D;
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * @author Richard

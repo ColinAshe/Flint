@@ -54,9 +54,5 @@ package org.flintparticles.common.utils;
         var alpha : Int = Math.round(((color1 >>> 24) & 255) * ratio + ((color2 >>> 24) & 255) * inv);
         return (alpha << 24) | (red << 16) | (green << 8) | blue;
     }
-
-    public function new()
-    {
-    }
 }
 

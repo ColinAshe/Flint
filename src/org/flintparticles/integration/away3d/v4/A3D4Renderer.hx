@@ -41,7 +41,7 @@ import org.flintparticles.common.utils.Maths;
 import org.flintparticles.integration.away3d.v4.utils.Convert;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * Renders the particles in an Away3D4 scene.

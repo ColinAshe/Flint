@@ -31,8 +31,8 @@ package org.flintparticles.threed.geom;
 
 import nme.errors.Error;
 
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * Quaternion represents a rotational transform in three-dimensional cartesian 

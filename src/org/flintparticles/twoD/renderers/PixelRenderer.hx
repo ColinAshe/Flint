@@ -33,7 +33,7 @@ package org.flintparticles.twod.renderers;
 
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 /**
 	 * The PixelRenderer draws particles as single pixels on a Bitmap display object. The

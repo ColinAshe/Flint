@@ -36,8 +36,8 @@ import org.flintparticles.common.events.ParticleEvent;
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.renderers.Renderer;
 
-import flash.display.Sprite;
-import flash.events.Event;
+import openfl.display.Sprite;
+import openfl.events.Event;
 
 /**
 	 * The base class used by all the Flint renderers. This class manages

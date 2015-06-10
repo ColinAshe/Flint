@@ -37,9 +37,9 @@ import org.flintparticles.threed.geom.Quaternion;
 import org.flintparticles.threed.particles.Particle3D;
 import org.flintparticles.threed.renderers.Camera;
 
-import flash.display.DisplayObject;
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.display.DisplayObject;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The DisplayObjectRenderer is a native Flint 3D renderer that draws particles

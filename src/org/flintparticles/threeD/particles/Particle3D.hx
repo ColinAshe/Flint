@@ -35,7 +35,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.particles.ParticleFactory;
 import org.flintparticles.threed.geom.Quaternion;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The Particle3D class extends the Particle class to include state properties 

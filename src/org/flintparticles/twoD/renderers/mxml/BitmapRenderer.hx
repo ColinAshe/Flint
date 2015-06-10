@@ -34,13 +34,13 @@ package org.flintparticles.twod.renderers.mxml;
 import org.flintparticles.common.renderers.FlexRendererBase;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.filters.BitmapFilter;
-import flash.geom.Matrix;
-import flash.geom.Point;
-import flash.geom.Rectangle;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
 
 /**
 	 * The BitmapRenderer draws particles onto a single Bitmap display object. The

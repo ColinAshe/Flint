@@ -73,9 +73,5 @@ class Quintic
         }
         return c * 0.5 * ((t -= 2) * t * t * t * t + 2) + b;
     }
-
-    public function new()
-    {
-    }
 }
 

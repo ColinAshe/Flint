@@ -31,7 +31,7 @@
 package org.flintparticles.common.events;
 
 
-import flash.events.Event;
+import openfl.events.Event;
 
 /**
 	 * The UpdateEvent is dispatched from the FrameUpdater utility every frame, to all emitters that are

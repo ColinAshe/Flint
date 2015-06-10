@@ -38,8 +38,8 @@ import org.flintparticles.threed.geom.Quaternion;
 import org.flintparticles.threed.particles.Particle3D;
 import org.flintparticles.threed.particles.ParticleCreator3D;
 
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The Emitter3D class defines an emitter that exists in 3D space. It is the

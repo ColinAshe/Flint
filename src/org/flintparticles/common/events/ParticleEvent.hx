@@ -33,7 +33,7 @@ package org.flintparticles.common.events;
 
 import org.flintparticles.common.particles.Particle;
 
-import flash.events.Event;
+import openfl.events.Event;
 
 /**
 	 * The class for particle related events dispatched by classes in the Flint project.

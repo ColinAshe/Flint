@@ -34,7 +34,7 @@ package org.flintparticles.common.initializers;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 @:meta(DefaultProperty(name="image"))
 

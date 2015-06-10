@@ -37,7 +37,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.threed.emitters.Emitter3D;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The MatchRotateVelocity action applies an angular acceleration to the particle to match

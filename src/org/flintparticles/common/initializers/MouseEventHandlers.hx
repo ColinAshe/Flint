@@ -32,8 +32,8 @@ package org.flintparticles.common.initializers;
 
 
 import org.flintparticles.common.events.ParticleEvent;
-import flash.events.IEventDispatcher;
-import flash.events.MouseEvent;
+import openfl.events.IEventDispatcher;
+import openfl.events.MouseEvent;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 

@@ -31,7 +31,7 @@
 package org.flintparticles.threed.renderers.controllers;
 
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 import org.flintparticles.threed.renderers.Camera;
 

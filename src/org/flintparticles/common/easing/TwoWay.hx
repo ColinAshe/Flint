@@ -105,9 +105,5 @@ class TwoWay
         if (t < 0)             t = -t;
         return t * t * t * t * t * c + b;
     }
-
-    public function new()
-    {
-    }
 }
 

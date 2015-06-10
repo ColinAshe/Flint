@@ -35,7 +35,7 @@ import org.flintparticles.twod.zones.Zone2D;
 
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 /**
 	 * The DiscSectorZone zone defines a section of a Disc zone. The disc

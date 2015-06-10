@@ -38,7 +38,7 @@ import org.flintparticles.common.renderers.Renderer;
 
 import mx.core.UIComponent;
 
-import flash.events.Event;
+import openfl.events.Event;
 
 /**
 	 * The base class used by all the Flex compatible renderers. This class manages

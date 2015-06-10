@@ -36,8 +36,8 @@ import org.flintparticles.threed.geom.Matrix3DUtils;
 import org.flintparticles.threed.geom.Vector3DUtils;
 import org.flintparticles.threed.renderers.controllers.CameraController;
 
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The camera class is used by Flint's internal 3D renderers to manage the view on the 3D

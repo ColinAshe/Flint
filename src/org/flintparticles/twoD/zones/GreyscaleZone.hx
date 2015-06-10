@@ -35,8 +35,8 @@ import org.flintparticles.twod.zones.Zone2D;
 import org.flintparticles.twod.particles.Particle2D;
 import org.flintparticles.common.utils.FastWeightedArray;
 
-import flash.display.BitmapData;
-import flash.geom.Point;
+import openfl.display.BitmapData;
+import openfl.geom.Point;
 
 /**
 	 * The Greyscale zone defines a shaped zone based on a BitmapData object.

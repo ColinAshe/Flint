@@ -32,7 +32,7 @@ package org.flintparticles.threed.actions;
 
 import org.flintparticles.threed.actions.GravityWell;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The AntiGravity action applies a force to the particle to push it away from

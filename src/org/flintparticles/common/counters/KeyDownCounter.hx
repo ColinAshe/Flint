@@ -33,8 +33,8 @@ package org.flintparticles.common.counters;
 
 import org.flintparticles.common.emitters.Emitter;
 
-import flash.display.Stage;
-import flash.events.KeyboardEvent;
+import openfl.display.Stage;
+import openfl.events.KeyboardEvent;
 
 /**
 	 * The KeyDownCounter Counter modifies another counter to only emit particles when a specific key

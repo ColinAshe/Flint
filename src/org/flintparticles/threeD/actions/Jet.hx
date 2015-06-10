@@ -38,7 +38,7 @@ import org.flintparticles.threed.geom.Vector3DUtils;
 import org.flintparticles.threed.particles.Particle3D;
 import org.flintparticles.threed.zones.Zone3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The Jet Action applies an acceleration to the particle only if it is in the specified zone. 

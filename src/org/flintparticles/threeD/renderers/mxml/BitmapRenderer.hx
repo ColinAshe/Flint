@@ -36,15 +36,15 @@ import org.flintparticles.threed.geom.Quaternion;
 import org.flintparticles.threed.particles.Particle3D;
 import org.flintparticles.threed.renderers.Camera;
 
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.filters.BitmapFilter;
-import flash.geom.Matrix;
-import flash.geom.Matrix3D;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.geom.Vector3D;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.filters.BitmapFilter;
+import openfl.geom.Matrix;
+import openfl.geom.Matrix3D;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.geom.Vector3D;
 
 /**
 	 * The BitmapRenderer is a native Flint 3D renderer that draws particles

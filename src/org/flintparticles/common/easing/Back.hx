@@ -73,9 +73,5 @@ class Back
         }
         return c * 0.5 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
     }
-
-    public function new()
-    {
-    }
 }
 

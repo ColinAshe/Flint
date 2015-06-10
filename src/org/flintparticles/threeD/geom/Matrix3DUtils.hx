@@ -1,8 +1,8 @@
 package org.flintparticles.threed.geom;
 
 
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * Utility methods for working with the Matrix3D class.
@@ -87,10 +87,6 @@ class Matrix3DUtils
                 0, 0, 0, 1]);
         m.invert();
         return m;
-    }
-
-    public function new()
-    {
     }
 }
 

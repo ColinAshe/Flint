@@ -35,7 +35,7 @@ import org.flintparticles.common.activities.ActivityBase;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.twod.emitters.Emitter2D;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * The FollowMouse activity causes the emitter to follow

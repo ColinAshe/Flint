@@ -35,7 +35,7 @@ import org.flintparticles.threed.geom.Vector3DUtils;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.initializers.InitializerBase;
 import org.flintparticles.common.particles.Particle;
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 import org.flintparticles.threed.particles.Particle3D;
 
 /**

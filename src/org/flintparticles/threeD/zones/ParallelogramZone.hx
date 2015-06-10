@@ -35,8 +35,8 @@ import org.flintparticles.threed.zones.Zone3D;
 import org.flintparticles.threed.geom.Matrix3DUtils;
 import org.flintparticles.threed.geom.Vector3DUtils;
 
-import flash.geom.Matrix3D;
-import flash.geom.Vector3D;
+import openfl.geom.Matrix3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The PrallelogramZone zone defines a four sided zone n which opposite sides are parallel.

@@ -35,8 +35,8 @@ import org.flintparticles.common.initializers.InitializerBase;
 import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 
-import flash.display.DisplayObject;
-import flash.filters.BitmapFilter;
+import openfl.display.DisplayObject;
+import openfl.filters.BitmapFilter;
 
 /**
 	 * The ApplyFilter Initializer applies a filter to the particle's image.

@@ -30,7 +30,7 @@
 package org.flintparticles.common.displayobjects;
 
 
-import flash.display.Shape;
+import openfl.display.Shape;
 
 /**
  * The Ring class is a DisplayObject with a circle shape that contains a hole. 

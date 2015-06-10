@@ -44,7 +44,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.common.particles.ParticleFactory;
 import org.flintparticles.common.utils.FrameUpdater;
 
-import flash.events.EventDispatcher;
+import openfl.events.EventDispatcher;
 
 /**
 	 * Dispatched when a particle dies and is about to be removed from the system.

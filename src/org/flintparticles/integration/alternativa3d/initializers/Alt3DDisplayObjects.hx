@@ -38,11 +38,11 @@ import alternativa.engine3d.resources.BitmapTextureResource;
 import org.flintparticles.common.initializers.ImageInitializerBase;
 import org.flintparticles.common.utils.WeightedArray;
 
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.geom.Matrix;
-import flash.geom.Rectangle;
-import flash.utils.Dictionary;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
+import openfl.utils.Dictionary;
 
 /**
 	 * The Alt3DDisplayObjects Initializer sets the DisplayObject to use to 

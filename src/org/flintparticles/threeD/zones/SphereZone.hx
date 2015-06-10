@@ -34,7 +34,7 @@ import org.flintparticles.threed.zones.Zone3D;
 
 import org.flintparticles.threed.geom.Vector3DUtils;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The SphereZone zone defines a zone that contains all the points in a sphere.

@@ -36,7 +36,7 @@ import org.flintparticles.common.emitters.Emitter;
 import org.flintparticles.common.particles.Particle;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.display.DisplayObject;
+import openfl.display.DisplayObject;
 
 /**
 	 * The MouseGravity action applies a force on the particle to draw it towards

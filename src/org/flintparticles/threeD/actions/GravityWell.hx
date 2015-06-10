@@ -37,7 +37,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.threed.geom.Vector3DUtils;
 import org.flintparticles.threed.particles.Particle3D;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The GravityWell action applies a force on the particle to draw it towards

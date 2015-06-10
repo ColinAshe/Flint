@@ -31,8 +31,8 @@
 package org.flintparticles.common.displayobjects;
 
 
-import flash.display.Shape;
-import flash.geom.Point;
+import openfl.display.Shape;
+import openfl.geom.Point;
 
 /**
 	 * The Star class is a DisplayObject that is the shape of a five point star. 

@@ -74,9 +74,5 @@ class Linear
     {
         return c * t / d + b;
     }
-
-    public function new()
-    {
-    }
 }
 

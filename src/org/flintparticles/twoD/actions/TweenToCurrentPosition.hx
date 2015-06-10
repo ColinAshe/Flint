@@ -38,7 +38,7 @@ import org.flintparticles.common.particles.Particle;
 import org.flintparticles.twod.particles.Particle2D;
 import org.flintparticles.twod.zones.Zone2D;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 @:meta(DefaultProperty(name="zone"))
 

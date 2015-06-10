@@ -37,7 +37,7 @@ import org.flintparticles.threed.emitters.Emitter3D;
 import org.flintparticles.threed.geom.Quaternion;
 import org.flintparticles.threed.geom.Vector3DUtils;
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * The RotateEmitter activity rotates the emitter at a constant rate.

@@ -32,8 +32,8 @@ package org.flintparticles.common.particles;
 
 import org.flintparticles.common.particles.ParticleFactory;
 
-import flash.geom.ColorTransform;
-import flash.utils.Dictionary;
+import openfl.geom.ColorTransform;
+import openfl.utils.Dictionary;
 
 /**
 	 * The Particle class is a set of public properties shared by all particles.

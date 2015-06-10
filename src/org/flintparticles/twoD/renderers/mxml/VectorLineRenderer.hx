@@ -36,7 +36,7 @@ import org.flintparticles.common.events.EmitterEvent;
 import org.flintparticles.common.renderers.FlexRendererBase;
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.events.Event;
+import openfl.events.Event;
 
 /**
 	 * The VectorLineRenderer draws particles as continuous lines mapping the 

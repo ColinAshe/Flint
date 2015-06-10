@@ -37,10 +37,10 @@ import alternativa.engine3d.resources.BitmapTextureResource;
 
 import org.flintparticles.common.initializers.ImageInitializerBase;
 
-import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.geom.Matrix;
-import flash.geom.Rectangle;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
 
 /**
 	 * The A3D4DisplayObject initializer sets the DisplayObject to use to 

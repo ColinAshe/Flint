@@ -33,7 +33,7 @@ package org.flintparticles.twod.zones;
 
 import org.flintparticles.twod.particles.Particle2D;
 
-import flash.geom.Point;
+import openfl.geom.Point;
 
 /**
 	 * The Zones interface must be implemented by all zones.

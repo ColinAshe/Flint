@@ -30,7 +30,7 @@
 package org.flintparticles.threed.geom;
 
 
-import flash.geom.Vector3D;
+import openfl.geom.Vector3D;
 
 /**
 	 * Utility methods for working with the Vector3D class.
@@ -82,10 +82,6 @@ class Vector3DUtils
             temp.normalize();
             return temp;
         }
-    }
-
-    public function new()
-    {
     }
 }
 

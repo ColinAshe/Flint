@@ -33,9 +33,9 @@ package org.flintparticles.common.utils;
 
 import org.flintparticles.common.events.UpdateEvent;
 
-import flash.display.Shape;
-import flash.events.Event;
-import flash.events.EventDispatcher;
+import openfl.display.Shape;
+import openfl.events.Event;
+import openfl.events.EventDispatcher;
 
 
 /**

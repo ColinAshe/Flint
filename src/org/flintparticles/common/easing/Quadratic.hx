@@ -73,9 +73,5 @@ class Quadratic
         }
         return -c * 0.5 * ((--t) * (t - 2) - 1) + b;
     }
-
-    public function new()
-    {
-    }
 }
 

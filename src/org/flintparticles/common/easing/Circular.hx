@@ -73,9 +73,5 @@ class Circular
         }
         return c * 0.5 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
     }
-
-    public function new()
-    {
-    }
 }
 
